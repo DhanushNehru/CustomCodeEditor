@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# React Code Builder
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a React-based code builder that utilizes the Monaco Editor. It allows users to write and execute code snippets within a web browser.
 
-## Available Scripts
+## Getting Started
+Follow these instructions to get the project up and running on your local machine.
 
-In the project directory, you can run:
+## Prerequisites
+Node.js installed on your machine
+npm or yarn package manager
 
-### `npm start`
+## Installation
+Clone the repository to your local machine:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
+git clone <repository-url>
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Install dependencies using npm or yarn:
+bash
+```
+npm install
+# or
+yarn install
+```
 
-### `npm test`
+## Configuration
+Create a .env file in the root directory of your project if it doesn't already exist.
+Set the JUDGE0_SUBMISSION_URL environment variable in the .env file. This variable should point to the URL of the Judge0 API endpoint you want to use for code execution. For example:
+plaintext
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+JUDGE0_SUBMISSION_URL=https://api.judge0.com/submissions
+```
 
-### `npm run build`
+Replace https://api.judge0.com/submissions with the appropriate URL for your Judge0 API endpoint.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Running the Development Server
+Once the configuration is complete, you can start the development server to see the React code builder in action.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+npm start
+# or
+yarn start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Open your web browser and navigate to http://localhost:3000 to access the application.
 
-### `npm run eject`
+## Usage
+Write your code in the Monaco Editor.
+Execute the code snippet by clicking the "Run" button.
+View the output in the console or output panel.
+Contributing
+Contributions are welcome! Feel free to submit pull requests or open issues.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Gitpod
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+In the cloud-free development environment where you can directly start coding.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The below command will open up the index.html in a browser in gitpod 
+`python -m http.server 8000`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+You can use Gitpod in the cloud [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/DhanushNehru/CustomCodeEditor/)
 
-## Learn More
+----
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Feel free to customize this README.md according to your project's specific requirements and features. Let me know if you need further assistance!
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Connect 👉 [**Twitter**](https://twitter.com/Dhanush_Nehru) **/** [**Instagram**](https://www.instagram.com/dhanush_nehru/) **/** [**Github**](https://github.com/DhanushNehru/) **/** [**Youtube**](https://www.youtube.com/@dhanushnehru?sub_confirmation=1) **/** [**Newsletter**](https://dhanushn.substack.com/) **/** [**Discord**](https://discord.com/invite/Yn9g6KuWyA)
