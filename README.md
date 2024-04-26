@@ -1,6 +1,6 @@
-# React Code Builder
+# Custom Code Builder
 
-This project is a React-based code builder that utilizes the Monaco Editor. It allows users to write and execute code snippets within a web browser.
+This project is a React-based code builder that utilizes the Monaco Editor. It allows users to write and execute code snippets within a web browser. It uses Judge0 as a code execution system
 
 ## Getting Started
 Follow these instructions to get the project up and running on your local machine.
