@@ -1,23 +1,28 @@
-Python3 Code:
+## Python3 Code:
 
 Business case problem: calculating the total revenue from a list of sales transactions.
 
+```
 def calculate_total_revenue(sales):
     total_revenue = 0
     for item, price in sales:
         total_revenue += price
     return total_revenue
+```
 
-# Example usage: This would be given as inputs
+### Example usage: This would be given as inputs
+
+```
 sales = [("Product A", 10), ("Product B", 20), ("Product C", 15)]
 total_revenue = calculate_total_revenue(sales)
 print("Total Revenue:", total_revenue)
+```
 
-
-Javascript Code:
+## Javascript Code:
 
 Shortest path between multiple locations on a map
 
+```
 function calculateTotalDistance(locations) {
     // Helper function to calculate distance between two points (using Euclidean distance for simplicity)
     function distance(point1, point2) {
@@ -60,8 +65,11 @@ function calculateTotalDistance(locations) {
 
     return shortestDistance;
 }
+```
 
-// Example usage: Would be passed as inputs
+### Example usage: Would be passed as inputs
+
+```
 const locations = [
     { x: 0, y: 0 },
     { x: 1, y: 2 },
@@ -71,4 +79,4 @@ const locations = [
 
 const totalDistance = calculateTotalDistance(locations);
 console.log("Total Distance in meters:", totalDistance);
-
+```

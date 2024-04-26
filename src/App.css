@@ -40,24 +40,3 @@
     transform: rotate(360deg);
   }
 }
-
-/**
-.output pre {
-
-  background-color: #e35757;
-
-  padding: 10px;
-
-  border-radius: 5px;
-
-  transition: background-color 0.3s ease;
-
-}
-
-
-
-.output pre:hover {
-
-  background-color: #9d4444;
-}
-**/

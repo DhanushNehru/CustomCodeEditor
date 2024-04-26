@@ -3,13 +3,11 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-// import EmbeddedUrl from "./EmbeddedUrl";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
-    {/* <EmbeddedUrl url="https://www.google.com" /> */}
   </React.StrictMode>
 );
 
