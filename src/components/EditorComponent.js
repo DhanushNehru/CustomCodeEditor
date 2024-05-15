@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import Editor from "@monaco-editor/react";
-import './EditorComponent.css'  // Optional for styling
+import './EditorComponent.css';  // Optional for styling
+import '@fortawesome/fontawesome-free/css/all.css';
 
 const judge0SubmitUrl = process.env.JUDGE0_SUMBISSION_URL;
 
@@ -91,7 +92,7 @@ function EditorComponent() {
   }
 
   return (
-      <div className="editor-container">
+      <div className="editor-container" style={styles.container}>
       {error && <div className="error-message">{error}</div>}
 
       {/* Language toggle button (top right corner) */}
@@ -110,15 +111,33 @@ function EditorComponent() {
         onChange={(value) => setCode(value)} // Update code state on change
         language={DEFAULT_LANGUAGE} // Set default language to JavaScript
       />
-      <button onClick={submitCode}>
-        Run {LANGUAGE_NAME} Code
+      <button onClick={submitCode} style={styles.button}>
+      <i class="fa fa-play"></i> Run {LANGUAGE_NAME} Code
       </button>
-
       <div className="output">
         <pre><p>{output}</p></pre>
       </div>
       </div>
   )
 }
+
+const styles = {
+  
+  //container:{
+   // textAlign: 'center',
+  //},
+  button: {
+    marginLeft: '5px',
+    marginTop: '5px',
+    padding: '10px 20px',
+    backgroundColor: '#252525',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    fontSize: '1.2em',
+    cursor: 'pointer',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+};
 
 export default EditorComponent;

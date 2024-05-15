@@ -29,7 +29,7 @@ const styles = {
   button: {
     marginTop: '20px',
     padding: '10px 20px',
-    backgroundColor: '#007bff',
+    backgroundColor: '#252525',
     color: '#fff',
     border: 'none',
     borderRadius: '10px',
