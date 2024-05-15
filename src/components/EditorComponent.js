@@ -127,7 +127,7 @@ const styles = {
    // textAlign: 'center',
   //},
   button: {
-    marginLeft: '42%',
+    marginLeft: '5px',
     marginTop: '5px',
     padding: '10px 20px',
     backgroundColor: '#252525',
