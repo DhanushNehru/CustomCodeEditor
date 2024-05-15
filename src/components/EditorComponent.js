@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import Editor from "@monaco-editor/react";
 import './EditorComponent.css';  // Optional for styling
+import '@fortawesome/fontawesome-free/css/all.css';
 
 const judge0SubmitUrl = process.env.JUDGE0_SUMBISSION_URL;
 
@@ -111,9 +112,8 @@ function EditorComponent() {
         language={DEFAULT_LANGUAGE} // Set default language to JavaScript
       />
       <button onClick={submitCode} style={styles.button}>
-        Run {LANGUAGE_NAME} Code
+      <i class="fa fa-play"></i> Run {LANGUAGE_NAME} Code
       </button>
-
       <div className="output">
         <pre><p>{output}</p></pre>
       </div>
@@ -126,7 +126,6 @@ const styles = {
   //container:{
    // textAlign: 'center',
   //},
-
   button: {
     marginLeft: '42%',
     marginTop: '5px',
