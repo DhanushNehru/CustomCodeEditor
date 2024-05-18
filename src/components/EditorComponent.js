@@ -3,7 +3,9 @@ import Editor from "@monaco-editor/react";
 import "./EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 
-const judge0SubmitUrl = process.env.JUDGE0_SUMBISSION_URL;
+const judge0SubmitUrl = process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
+const rapidApiHost = process.env.REACT_APP_RAPID_API_HOST;
+const rapidApiKey = process.env.REACT_APP_RAPID_API_KEY;
 
 const LANGUAGE_ID_FOR_JAVASCRIPT = 63;
 const LANGUAGE_ID_FOR_PYTHON3 = 71;
@@ -72,7 +74,11 @@ function EditorComponent() {
     try {
       const response = await fetch(judge0SubmitUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+        "Content-Type": "application/json", 
+        "X-RapidAPI-Key": rapidApiKey ,
+        "X-RapidAPI-Host": rapidApiHost,
+        },
         body: JSON.stringify({
           source_code: codeToSubmit,
           language_id: languageDetails.LANGUAGE_ID,
@@ -92,7 +98,15 @@ function EditorComponent() {
       console.log(`Submission created successfully. ID: ${submissionId}`);
 
       setTimeout(() => {
-        fetch(`${judge0SubmitUrl}/${submissionId}`)
+        fetch(`${judge0SubmitUrl}/${submissionId}`, 
+          {
+            method: "GET",
+            headers:{
+            "X-RapidAPI-Key": rapidApiKey ,
+            "X-RapidAPI-Host": rapidApiHost,
+          }
+        }
+        )
           .then((response) => response.json())
           .then((data) => {
             console.log(" DATA ", data);
