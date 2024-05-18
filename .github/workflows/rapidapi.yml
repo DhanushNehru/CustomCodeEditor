@@ -1,0 +1,36 @@
+name: Rapid API
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      REACT_APP_RAPID_API_HOST: ${{ secrets.REACT_APP_RAPID_API_HOST }}
+      REACT_APP_RAPID_API_KEY: ${{ secrets.REACT_APP_RAPID_API_KEY }}
+      REACT_APP_RAPID_API_URL: ${{ secrets.REACT_APP_RAPID_API_URL }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to a server or hosting platform
+        run: |
+          echo "Deploying to server"
+          # Add your deployment commands here, for example:
+          # scp -r ./build user@server:/path/to/deploy
