@@ -1,0 +1,21 @@
+.wrapper {
+  height: 4.25rem;
+}
+.loading {
+  border: 5px solid rgb(203, 203, 203);
+  border-top: 5px solid rgb(35, 61, 255);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
