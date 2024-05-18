@@ -27,7 +27,28 @@ npm install
 yarn install
 ```
 
-## Configuration
+## Setting up Judge0
+
+Let's set up Judge0 and proceed to the following actions:
+
+- Navigate to Judge0, then select the Basic Plan.
+- In reality, RapidAPI hosts Judge0. Proceed and sign up for the basic plan.
+- You can copy the RAPIDAPI_HOST and RAPIDAPI_KEY, which are required to perform API calls to our code execution system, once you have subscribed.
+
+## Local Configuration
+
+- Create a .env file in the root directory of your project if it doesn't already exist.
+- Set the following environment variables in the .env file:
+
+```
+REACT_APP_RAPID_API_HOST=YOUR_HOST_URL
+REACT_APP_RAPID_API_KEY=YOUR_SECRET_KEY
+REACT_APP_RAPID_API_URL=YOUR_SUBMISSIONS_URL
+```
+
+Replace YOUR_HOST_URL, YOUR_SECRET_KEY, and YOUR_SUBMISSIONS_URL with the appropriate values for your Rapid API and Judge0 API endpoints.
+
+## Server Setup Configuration
 Create a .env file in the root directory of your project if it doesn't already exist.
 Set the JUDGE0_SUBMISSION_URL environment variable in the .env file. This variable should point to the URL of the Judge0 API endpoint you want to use for code execution. For example:
 plaintext
@@ -50,10 +71,12 @@ yarn start
 Open your web browser and navigate to http://localhost:3000 to access the application.
 
 ## Usage
-Write your code in the Monaco Editor.
-Execute the code snippet by clicking the "Run" button.
-View the output in the console or output panel.
-Contributing
+
+- Write your code in the Monaco Editor.
+- Execute the code snippet by clicking the "Run" button.
+- View the output in the console or output panel.
+
+##  Contributing
 Contributions are welcome! Feel free to submit pull requests or open issues.
 
 ## Gitpod
