@@ -175,7 +175,7 @@ function EditorComponent() {
         language={languageDetails.DEFAULT_LANGUAGE} // Set default language to JavaScript
       />
       <button onClick={submitCode} style={styles.button}>
-        <i class="fa fa-play"></i> Run {languageDetails.LANGUAGE_NAME} Code
+        <i className="fa fa-play"></i> Run {languageDetails.LANGUAGE_NAME} Code
       </button>
       <div className="output">
         <pre>
@@ -229,18 +229,18 @@ function JavascriptLogo({ width = 40, height = 40 }) {
       <g transform="">
         <g
           fill="none"
-          fill-rule="nonzero"
+          fillRule="nonzero"
           stroke="none"
-          stroke-width="1"
-          stroke-linecap="butt"
-          stroke-linejoin="miter"
-          stroke-miterlimit="10"
-          stroke-dasharray=""
-          stroke-dashoffset="0"
-          font-family="none"
-          font-weight="none"
-          font-size="none"
-          text-anchor="none"
+          strokeWidth="1"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="10"
+          strokeDasharray=""
+          strokeDashoffset="0"
+          fontFamily="none"
+          fontWeight="none"
+          fontSize="none"
+          textAnchor="none"
           style={{ mixBlendMode: "normal" }}
         >
           <g transform="scale(5.33333,5.33333)">
@@ -269,18 +269,18 @@ function PythonLogo({ width = 40, height = 40 }) {
       <g transform="translate(30.72,30.72) scale(0.76,0.76)">
         <g
           fill="none"
-          fill-rule="nonzero"
+          fillRule="nonzero"
           stroke="none"
-          stroke-width="1"
-          stroke-linecap="butt"
-          stroke-linejoin="miter"
-          stroke-miterlimit="10"
-          stroke-dasharray=""
-          stroke-dashoffset="0"
-          font-family="none"
-          font-weight="none"
-          font-size="none"
-          text-anchor="none"
+          strokeWidth="1"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+          strokeMiterlimit="10"
+          strokeDasharray=""
+          strokeDashoffset="0"
+          fontFamily="none"
+          fontWeight="none"
+          fontSize="none"
+          textAnchor="none"
           style={{ mixBlendMode: "normal" }}
         >
           <g transform="scale(5.33333,5.33333)">
