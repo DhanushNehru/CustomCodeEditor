@@ -128,6 +128,8 @@ function EditorComponent() {
   function handleLanguageChange(e) {
     console.log("click, ", e.target.value);
     setCurrentLanguage(e.target.value);
+    setOutput("");
+    setCode(null);
   }
 
   return (
