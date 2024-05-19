@@ -154,12 +154,15 @@ function EditorComponent() {
             style={{ padding: "0.5em 1em" }}
             onChange={handleLanguageChange}
           >
-            <option style={{padding: "0.2em 0.5em"}} value={LANGUAGES[0].DEFAULT_LANGUAGE}>
-              {LANGUAGES[0].NAME}
-            </option>
-            <option style={{padding: "0.2em 0.5em"}} value={LANGUAGES[1].DEFAULT_LANGUAGE}>
-              {LANGUAGES[1].NAME}
-            </option>
+            {LANGUAGES.map((language, index) => (
+              <option
+                key={index}
+                style={{padding: "0.2em 0.5em"}}
+                value={language.DEFAULT_LANGUAGE}
+              >
+                {language.NAME}
+              </option>
+            ))}
           </select>
         </div>
       </div>
