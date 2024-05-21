@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Stars from './Stars';
+import Stars from '../components/js/Stars';
 
 function LandingPage() {
   return (
@@ -12,7 +12,7 @@ function LandingPage() {
   );
 }
 
-const styles = { 
+const styles = {
   container: {
     textAlign: 'center',
     marginTop: '100px',

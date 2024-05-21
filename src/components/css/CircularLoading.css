@@ -1,6 +1,7 @@
 .wrapper {
   height: 4.25rem;
 }
+
 .loading {
   border: 5px solid rgb(203, 203, 203);
   border-top: 5px solid rgb(35, 61, 255);
@@ -15,6 +16,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

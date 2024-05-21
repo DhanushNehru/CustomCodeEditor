@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Editor from "@monaco-editor/react";
-import "./EditorComponent.css"; // Optional for styling
+import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 
 const judge0SubmitUrl = process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
@@ -74,8 +74,8 @@ function EditorComponent() {
     try {
       const response = await fetch(judge0SubmitUrl, {
         method: "POST",
-        headers: { 
-        "Content-Type": "application/json", 
+        headers: {
+        "Content-Type": "application/json",
         "X-RapidAPI-Key": rapidApiKey ,
         "X-RapidAPI-Host": rapidApiHost,
         },
@@ -98,7 +98,7 @@ function EditorComponent() {
       console.log(`Submission created successfully. ID: ${submissionId}`);
 
       setTimeout(() => {
-        fetch(`${judge0SubmitUrl}/${submissionId}`, 
+        fetch(`${judge0SubmitUrl}/${submissionId}`,
           {
             method: "GET",
             headers:{

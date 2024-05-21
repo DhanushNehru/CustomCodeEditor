@@ -1,19 +1,10 @@
 .output pre {
-
   background-color: #e35757; /* Change background color */
-
   padding: 10px; /* Add padding */
-
   border-radius: 5px; /* Add rounded corners */
-
   transition: background-color 0.3s ease; /* Smooth transition */
-
 }
 
-
-
 .output pre:hover {
-
   background-color: #9d4444; /* Change background color on hover */
-
 }

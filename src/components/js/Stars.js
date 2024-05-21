@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetStars } from '../hooks/useGetStars';
+import { useGetStars } from '../../hooks/useGetStars';
 import CircularLoading from './CircularLoading';
 import { FaStar } from 'react-icons/fa';
 import { FaGithub } from 'react-icons/fa';
