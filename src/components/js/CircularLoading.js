@@ -1,4 +1,4 @@
-import './CircularLoading.css';
+import '../css/CircularLoading.css';
 
 const CircularLoading = () => {
   return (
