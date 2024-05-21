@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
-import EditorComponent from './components/EditorComponent'; 
-
+import EditorComponent from './components/EditorComponent';
 import './App.css'
 
 function App() {
