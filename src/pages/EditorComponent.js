@@ -63,8 +63,12 @@ function EditorComponent() {
   // Function to handle editor mounting
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
-  }
 
+    //event listner which submits code upon pressing ctrl+enter 
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+      submitCode();
+    });
+  }
   // Function to handle code submission
   async function submitCode() {
     const codeToSubmit = editorRef.current.getValue();
