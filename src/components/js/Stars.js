@@ -1,8 +1,7 @@
 import React from 'react';
-import { useGetStars } from '../../hooks/useGetStars';
 import CircularLoading from './CircularLoading';
-import { FaStar } from 'react-icons/fa';
-import { FaGithub } from 'react-icons/fa';
+import { useGetStars } from '../../hooks/useGetStars';
+import { FaStar, FaGithub } from 'react-icons/fa';
 
 const Stars = () => {
   const { fetchState, repositoryStarts, getStars } = useGetStars();
