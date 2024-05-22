@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { FaPlay } from "react-icons/fa";
 import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -64,7 +65,7 @@ function EditorComponent() {
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
 
-    //event listner which submits code upon pressing ctrl+enter 
+    //event listner which submits code upon pressing ctrl+enter
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
       submitCode();
     });
@@ -184,7 +185,7 @@ function EditorComponent() {
         language={languageDetails.DEFAULT_LANGUAGE} // Set default language to JavaScript
       />
       <button onClick={submitCode} style={styles.button}>
-        <i className="fa fa-play"></i> Run {languageDetails.LANGUAGE_NAME} Code
+        <FaPlay size="16" /> Run {languageDetails.LANGUAGE_NAME} Code
       </button>
       <div className="output">
         <pre>
