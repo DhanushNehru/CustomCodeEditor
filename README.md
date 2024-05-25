@@ -76,6 +76,9 @@ Open your web browser and navigate to http://localhost:3000 to access the applic
 - Execute the code snippet by clicking the "Run" button.
 - View the output in the console or output panel.
 
+## Important Information
+Currently the project url is based out of the free version of judge0 this means at most one can have 50 requests per day.
+
 ##  Contributing
 Contributions are welcome! Feel free to submit pull requests or open issues.
 

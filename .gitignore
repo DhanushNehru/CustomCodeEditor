@@ -24,6 +24,6 @@ lerna-debug.log*
 .env.development.local
 .env.test.local
 .env.production.local
-
+t.env
 /.vscode
 /dist
