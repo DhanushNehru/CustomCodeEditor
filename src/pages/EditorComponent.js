@@ -36,7 +36,6 @@ function EditorComponent() {
   // State variables for code, output, and potential error messages
   const [code, setCode] = useState(null); // Consider setting an initial value if needed
   const [output, setOutput] = useState("");
-  const [error, setError] = useState(null);
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE
   );
@@ -121,18 +120,15 @@ function EditorComponent() {
             console.log(" DATA ", data);
             console.log("Output:", data.stdout);
             setOutput(data.stdout);
-            setError(null); // Clear any previous error messages
           })
           .catch((error) => {
             console.error("Error retrieving output:", error.message);
             enqueueSnackbar("Error retrieving output: " + error.message, { variant: 'error' });
-            setError("Error retrieving output: " + error.message); // Display error message
           });
       }, 2000); // Delay added to give Judge0 some time to process the submission
     } catch (error) {
       console.error("Error:", error.message);
       enqueueSnackbar("Error: " + error.message, { variant: 'error' });
-      setError("Error: " + error.message); // Display error message in the UI
     }
   }
 
@@ -145,7 +141,6 @@ function EditorComponent() {
 
   return (
     <div className="editor-container" style={styles.container}>
-      {error && <div className="error-message">{error}</div>}
 
       {/* Language toggle button (top right corner) */}
       <div style={styles.flexBetween}>
