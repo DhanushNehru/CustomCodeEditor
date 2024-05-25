@@ -27,3 +27,4 @@ lerna-debug.log*
 
 /.vscode
 /dist
+.env
