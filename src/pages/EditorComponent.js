@@ -3,6 +3,7 @@ import { FaPlay } from "react-icons/fa";
 import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
+import {useSnackbar} from "notistack";
 
 const judge0SubmitUrl = process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
 const rapidApiHost = process.env.REACT_APP_RAPID_API_HOST;
@@ -44,6 +45,7 @@ function EditorComponent() {
     LANGUAGE_NAME: "",
     DEFAULT_LANGUAGE: "",
   });
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const selectedLanguage =
@@ -74,8 +76,11 @@ function EditorComponent() {
   async function submitCode() {
     const codeToSubmit = editorRef.current.getValue();
 
-    console.log(" Code to submit ", codeToSubmit);
-
+    console.log(" Code to submit ", codeToSubmit); 
+    if(codeToSubmit === "") {
+      enqueueSnackbar('Please enter valid code', { variant: 'error' });
+      return;
+    }
     try {
       const response = await fetch(judge0SubmitUrl, {
         method: "POST",
@@ -93,9 +98,8 @@ function EditorComponent() {
       });
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to create submission. Status code: ${response.status}`
-        );
+        enqueueSnackbar(`Failed to create submission. Status code: ${response.status}`, { variant: 'error' });
+        return
       }
 
       const data = await response.json();
@@ -121,11 +125,13 @@ function EditorComponent() {
           })
           .catch((error) => {
             console.error("Error retrieving output:", error.message);
+            enqueueSnackbar("Error retrieving output: " + error.message, { variant: 'error' });
             setError("Error retrieving output: " + error.message); // Display error message
           });
       }, 2000); // Delay added to give Judge0 some time to process the submission
     } catch (error) {
       console.error("Error:", error.message);
+      enqueueSnackbar("Error: " + error.message, { variant: 'error' });
       setError("Error: " + error.message); // Display error message in the UI
     }
   }
