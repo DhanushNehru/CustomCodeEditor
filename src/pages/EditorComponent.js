@@ -80,9 +80,9 @@ function EditorComponent() {
       const response = await fetch(judge0SubmitUrl, {
         method: "POST",
         headers: {
-        "Content-Type": "application/json",
-        "X-RapidAPI-Key": rapidApiKey ,
-        "X-RapidAPI-Host": rapidApiHost,
+          "Content-Type": "application/json",
+          "X-RapidAPI-Key": rapidApiKey ,
+          "X-RapidAPI-Host": rapidApiHost,
         },
         body: JSON.stringify({
           source_code: codeToSubmit,
@@ -107,10 +107,10 @@ function EditorComponent() {
           {
             method: "GET",
             headers:{
-            "X-RapidAPI-Key": rapidApiKey ,
-            "X-RapidAPI-Host": rapidApiHost,
+              "X-RapidAPI-Key": rapidApiKey ,
+              "X-RapidAPI-Host": rapidApiHost,
+            }
           }
-        }
         )
           .then((response) => response.json())
           .then((data) => {
