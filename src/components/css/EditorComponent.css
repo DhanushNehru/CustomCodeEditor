@@ -8,3 +8,19 @@
 .output pre:hover {
   background-color: #9d4444; /* Change background color on hover */
 }
+
+pre {
+  margin: 0;
+}
+
+.layout {
+  display: flex;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 15vw;
+  gap: 1rem;
+  align-items: center;
+}

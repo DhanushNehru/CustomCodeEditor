@@ -4,7 +4,8 @@ import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 
-const judge0SubmitUrl = process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
+const judge0SubmitUrl =
+  process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
 const rapidApiHost = process.env.REACT_APP_RAPID_API_HOST;
 const rapidApiKey = process.env.REACT_APP_RAPID_API_KEY;
 
@@ -80,9 +81,9 @@ function EditorComponent() {
       const response = await fetch(judge0SubmitUrl, {
         method: "POST",
         headers: {
-        "Content-Type": "application/json",
-        "X-RapidAPI-Key": rapidApiKey ,
-        "X-RapidAPI-Host": rapidApiHost,
+          "Content-Type": "application/json",
+          "X-RapidAPI-Key": rapidApiKey,
+          "X-RapidAPI-Host": rapidApiHost,
         },
         body: JSON.stringify({
           source_code: codeToSubmit,
@@ -103,15 +104,13 @@ function EditorComponent() {
       console.log(`Submission created successfully. ID: ${submissionId}`);
 
       setTimeout(() => {
-        fetch(`${judge0SubmitUrl}/${submissionId}`,
-          {
-            method: "GET",
-            headers:{
-            "X-RapidAPI-Key": rapidApiKey ,
+        fetch(`${judge0SubmitUrl}/${submissionId}`, {
+          method: "GET",
+          headers: {
+            "X-RapidAPI-Key": rapidApiKey,
             "X-RapidAPI-Host": rapidApiHost,
-          }
-        }
-        )
+          },
+        })
           .then((response) => response.json())
           .then((data) => {
             console.log(" DATA ", data);
@@ -137,12 +136,27 @@ function EditorComponent() {
     setCode(null);
   }
 
-  return (
-    <div className="editor-container" style={styles.container}>
-      {error && <div className="error-message">{error}</div>}
+  function handleCancel(e) {
+    const errElement = e.target.parentElement;
+    errElement.style.display = "none";
+  }
 
+  return (
+    <div style={styles.container}>
+      {/* className="editor-container"  */}
+      {error && (
+        <div style={styles.error}>
+          {error}
+          <button style={styles.cancel} onClick={handleCancel}>
+            x
+          </button>
+        </div>
+      )}
+      {/* className="error-message" > */}
+
+      {/* error-message */}
       {/* Language toggle button (top right corner) */}
-      <div style={styles.flexBetween}>
+      <div style={{ backgroundColor: "#b7b8a9" }}>
         {/* Current Language Logo */}
         <div style={styles.flexStart}>
           {currentLanguage === LANGUAGES[0].DEFAULT_LANGUAGE ? (
@@ -155,56 +169,66 @@ function EditorComponent() {
             {languageDetails.LANGUAGE_NAME}
           </div>
         </div>
-        {/* DropDown to Change Language */}
-        <div>
+      </div>
+      <div className="layout">
+        <Editor
+          height="70vh"
+          width="85vw"
+          theme="vs-dark"
+          onMount={handleEditorDidMount}
+          // ... other editor configuration options
+          value={code} // Set initial value
+          onChange={(value) => setCode(value)} // Update code state on change
+          language={languageDetails.DEFAULT_LANGUAGE} // Set default language to JavaScript
+        />
+        <div className="sidebar">
           <select
-            style={{ padding: "0.5em 1em" }}
+            style={styles.select}
+            // style={{ padding: "0.5em 1em" }}
             onChange={handleLanguageChange}
           >
             {LANGUAGES.map((language, index) => (
               <option
                 key={index}
-                style={{padding: "0.2em 0.5em"}}
+                style={{ padding: "0.2em 0.5em" }}
                 value={language.DEFAULT_LANGUAGE}
               >
                 {language.NAME}
               </option>
             ))}
           </select>
+          <button onClick={submitCode} style={styles.button}>
+            <FaPlay size="16" /> Run {languageDetails.LANGUAGE_NAME} Code
+          </button>
         </div>
       </div>
 
-      <Editor
-        height="70vh"
-        width="100%"
-        theme="vs-dark"
-        onMount={handleEditorDidMount}
-        // ... other editor configuration options
-        value={code} // Set initial value
-        onChange={(value) => setCode(value)} // Update code state on change
-        language={languageDetails.DEFAULT_LANGUAGE} // Set default language to JavaScript
-      />
-      <button onClick={submitCode} style={styles.button}>
-        <FaPlay size="16" /> Run {languageDetails.LANGUAGE_NAME} Code
-      </button>
-      <div className="output">
-        <pre>
-          <p>{output}</p>
-        </pre>
+      <div
+        style={{
+          backgroundColor: "#eceddd",
+          height: "22.3vh",
+        }}
+      >
+        {output}
+        {/* className="output" */}
+        {/* <pre> */}
+        {/* <p>{output}</p> */}
+        {/* </pre> */}
       </div>
     </div>
   );
 }
 
 const styles = {
-  //container:{
-  // textAlign: 'center',
-  //},
+  // container: {
+  //   textAlign: 'center',
+  // },
   flexStart: {
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "center",
     gap: "0.6em",
+    padding: ".5rem",
   },
   flexBetween: {
     display: "flex",
@@ -213,16 +237,47 @@ const styles = {
     paddingRight: "1em",
   },
   button: {
-    marginLeft: "5px",
+    // marginLeft: "2.5rem",
     marginTop: "5px",
-    padding: "10px 20px",
+    padding: "10px",
     backgroundColor: "#252525",
     color: "#fff",
     border: "none",
     borderRadius: "5px",
-    fontSize: "1.2em",
+    fontSize: ".9em",
     cursor: "pointer",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    height: "3rem",
+    width: "11rem",
+  },
+  select: {
+    width: "11rem",
+    height: "2.5rem",
+    borderRadius: "5px",
+    padding: "0.5em 1em",
+    marginTop: "1rem",
+  },
+  error: {
+    backgroundColor: "#e5ebce",
+    display: "flex",
+    justifyContent: "space-between",
+    position: "fixed",
+    top: "10rem",
+    left: "10rem",
+    width: "60%",
+    height: "20%",
+    borderRadius: ".5rem",
+    fontSize: "20px",
+    padding: "5px 0 0 15px",
+    zIndex: "1000",
+  },
+  cancel: {
+    backgroundColor: "#e5ebce",
+    height: "1.5rem",
+    border: "none",
+    fontSize: "20px",
+    marginRight: "1rem",
+    cursor: "pointer",
   },
 };
 
