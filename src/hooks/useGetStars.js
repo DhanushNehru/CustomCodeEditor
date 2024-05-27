@@ -16,7 +16,6 @@ export const useGetStars = () => {
       const res = await fetch(
         "https://api.github.com/repos/DhanushNehru/CustomCodeEditor"
       );
-      console.log(res.status);
       if (res.status === 200) {
         const result = await res.json();
         setRepositoryStars(result.stargazers_count);

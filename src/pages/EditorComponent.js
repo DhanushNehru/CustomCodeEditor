@@ -5,7 +5,8 @@ import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
 
-const judge0SubmitUrl = process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
+const judge0SubmitUrl =
+  process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
 const rapidApiHost = process.env.REACT_APP_RAPID_API_HOST;
 const rapidApiKey = process.env.REACT_APP_RAPID_API_KEY;
 
@@ -75,8 +76,7 @@ function EditorComponent() {
   async function submitCode() {
     const codeToSubmit = editorRef.current.getValue();
 
-    console.log(" Code to submit ", codeToSubmit); 
-    if(codeToSubmit === "") {
+    if (codeToSubmit === "") {
       enqueueSnackbar("Please enter valid code", { variant: "error" });
       return;
     }
@@ -85,7 +85,7 @@ function EditorComponent() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-RapidAPI-Key": rapidApiKey ,
+          "X-RapidAPI-Key": rapidApiKey,
           "X-RapidAPI-Host": rapidApiHost,
         },
         body: JSON.stringify({
@@ -97,43 +97,40 @@ function EditorComponent() {
       });
 
       if (!response.ok) {
-        enqueueSnackbar(`Failed to create submission. Status code: ${response.status}`, { variant: "error" });
-        return
+        enqueueSnackbar(
+          `Failed to create submission. Status code: ${response.status}`,
+          { variant: "error" }
+        );
+        return;
       }
 
       const data = await response.json();
       const submissionId = data["token"];
-      console.log(`Submission created successfully. ID: ${submissionId}`);
 
       setTimeout(() => {
-        fetch(`${judge0SubmitUrl}/${submissionId}`,
-          {
-            method: "GET",
-            headers:{
-              "X-RapidAPI-Key": rapidApiKey ,
-              "X-RapidAPI-Host": rapidApiHost,
-            }
-          }
-        )
+        fetch(`${judge0SubmitUrl}/${submissionId}`, {
+          method: "GET",
+          headers: {
+            "X-RapidAPI-Key": rapidApiKey,
+            "X-RapidAPI-Host": rapidApiHost,
+          },
+        })
           .then((response) => response.json())
           .then((data) => {
-            console.log(" DATA ", data);
-            console.log("Output:", data.stdout);
             setOutput(data.stdout);
           })
           .catch((error) => {
-            console.error("Error retrieving output:", error.message);
-            enqueueSnackbar("Error retrieving output: " + error.message, { variant: "error" });
+            enqueueSnackbar("Error retrieving output: " + error.message, {
+              variant: "error",
+            });
           });
       }, 2000); // Delay added to give Judge0 some time to process the submission
     } catch (error) {
-      console.error("Error:", error.message);
       enqueueSnackbar("Error: " + error.message, { variant: "error" });
     }
   }
 
   function handleLanguageChange(e) {
-    console.log("click, ", e.target.value);
     setCurrentLanguage(e.target.value);
     setOutput("");
     setCode(null);
@@ -141,7 +138,6 @@ function EditorComponent() {
 
   return (
     <div className="editor-container" style={styles.container}>
-
       {/* Language toggle button (top right corner) */}
       <div style={styles.flexBetween}>
         {/* Current Language Logo */}
@@ -165,7 +161,7 @@ function EditorComponent() {
             {LANGUAGES.map((language, index) => (
               <option
                 key={index}
-                style={{padding: "0.2em 0.5em"}}
+                style={{ padding: "0.2em 0.5em" }}
                 value={language.DEFAULT_LANGUAGE}
               >
                 {language.NAME}
