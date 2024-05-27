@@ -4,16 +4,19 @@ import EditorComponent from "./pages/EditorComponent";
 import "./components/css/App.css"
 import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
+import SnackbarProvider from "./components/js/SnackbarProvider";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/editor" element={<EditorComponent />} />
-        </Routes>
-      </BrowserRouter>
+      <SnackbarProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/editor" element={<EditorComponent />} />
+          </Routes>
+        </BrowserRouter>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }
