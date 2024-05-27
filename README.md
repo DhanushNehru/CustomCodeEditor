@@ -27,13 +27,33 @@ npm install
 yarn install
 ```
 
-## Setting up Judge0
+## Setting Up Judge0 with RapidAPI
 
-Let's set up Judge0 and proceed to the following actions:
+1. **Navigate to Judge0**:
+   - Start by going to the [Judge0 page on RapidAPI](https://rapidapi.com/judge0-official/api/judge0-ce).
+   - Select the **Basic Plan**, which offers a limit of 50 requests per day.
 
-- Navigate to Judge0, then select the Basic Plan.
-- In reality, RapidAPI hosts Judge0. Proceed and sign up for the basic plan.
-- You can copy the RAPIDAPI_HOST and RAPIDAPI_KEY, which are required to perform API calls to our code execution system, once you have subscribed.
+2. **Sign Up for the Basic Plan**:
+   - RapidAPI hosts Judge0, so you need to sign up for the Basic Plan on RapidAPI.
+   - Follow the sign-up process to get started.
+
+3. **Access the RapidAPI Dashboard**:
+   - After signing up, go to the [RapidAPI Dashboard](https://rapidapi.com/judge0-official/api/judge0-ce).
+   - In the navigation bar, select **API Hub**.
+
+4. **Navigate to the API's Section**:
+   - Click on **Endpoints** to view
+   - You will see multiple endpoints such as Submissions, About, and Languages.
+     
+5. **Using the Submissions Endpoint**:
+   - For code submissions, go to the **Submissions** endpoint and then select **Create Submission**.
+   - Here, you will find `X-RapidAPI-Key`, `X-RapidAPI-Host`, and the URL (`url`) needed for API calls. Url is located below the "Code Snippets" section.
+
+6. **Copy Required Keys**:
+   - Copy the `RAPIDAPI_HOST` and `RAPIDAPI_KEY` values. These are necessary to perform API calls to the code execution system.
+   - Ensure you have these keys saved as they will be used in your API requests.
+
+By following these steps, you'll be able to set up Judge0 for code submissions using RapidAPI's infrastructure, enabling you to execute and evaluate code within your application.
 
 ## Local Configuration
 
