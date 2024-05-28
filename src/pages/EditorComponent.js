@@ -4,6 +4,7 @@ import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
+import {Button, CircularProgress, styled} from "@mui/material";
 
 const judge0SubmitUrl =
   process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
@@ -31,6 +32,12 @@ const LANGUAGES = [
   },
 ];
 
+const StyledButton = styled(Button)({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "0.5rem",
+});
 // need to incorporate toggle
 // const LANGUAGE = LANGUAGES[0];
 
@@ -50,6 +57,7 @@ function EditorComponent() {
     LANGUAGE_NAME: "",
     DEFAULT_LANGUAGE: "",
   });
+  const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -85,6 +93,7 @@ function EditorComponent() {
       enqueueSnackbar("Please enter valid code", { variant: "error" });
       return;
     }
+    setLoading(true);
     try {
       const response = await fetch(judge0SubmitUrl, {
         method: "POST",
@@ -106,6 +115,7 @@ function EditorComponent() {
           `Failed to create submission. Status code: ${response.status}`,
           { variant: "error" }
         );
+        setLoading(false);
         return;
       }
 
@@ -133,7 +143,8 @@ function EditorComponent() {
             enqueueSnackbar("Error retrieving output: " + error.message, {
               variant: "error",
             });
-          });
+          })
+          .finally(() => setLoading(false));
       }, 2000); // Delay added to give Judge0 some time to process the submission
     } catch (error) {
       enqueueSnackbar("Error: " + error.message, { variant: "error" });
@@ -191,9 +202,16 @@ function EditorComponent() {
         onChange={(value) => setCode(value)} // Update code state on change
         language={languageDetails.DEFAULT_LANGUAGE} // Set default language to JavaScript
       />
-      <button onClick={submitCode} style={styles.button}>
-        <FaPlay size="16" /> Run {languageDetails.LANGUAGE_NAME} Code
-      </button>
+      <StyledButton onClick={submitCode} style={styles.button} variant="contained" color="primary" disabled={loading}>
+        <span>        
+          {loading ? (
+            <CircularProgress size={16} />
+          ) : (
+            <FaPlay size="16" />
+          )}
+        </span>
+          Run {languageDetails.LANGUAGE_NAME} Code
+      </StyledButton>
       <div className="output">
         <pre>
           <p>{output}</p>
