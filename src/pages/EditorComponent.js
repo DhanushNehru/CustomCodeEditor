@@ -12,7 +12,7 @@ const rapidApiKey = process.env.REACT_APP_RAPID_API_KEY;
 
 const LANGUAGE_ID_FOR_JAVASCRIPT = 63;
 const LANGUAGE_ID_FOR_PYTHON3 = 71;
-
+const LANGUAGE_ID_FOR_CPP = 76;
 const LANGUAGES = [
   {
     ID: LANGUAGE_ID_FOR_JAVASCRIPT,
@@ -23,6 +23,11 @@ const LANGUAGES = [
     ID: LANGUAGE_ID_FOR_PYTHON3,
     NAME: "Python3",
     DEFAULT_LANGUAGE: "python",
+  },
+  {
+    ID: LANGUAGE_ID_FOR_CPP,
+    NAME: "C++",
+    DEFAULT_LANGUAGE: "C++(Clang 7.0.1)"
   },
 ];
 
@@ -51,7 +56,7 @@ function EditorComponent() {
     const selectedLanguage =
       currentLanguage === LANGUAGES[0].DEFAULT_LANGUAGE
         ? LANGUAGES[0]
-        : LANGUAGES[1];
+        : currentLanguage === LANGUAGES[1].DEFAULT_LANGUAGE ? LANGUAGES[1] : LANGUAGES[2];
 
     setLanguageDetails({
       LANGUAGE_ID: selectedLanguage.ID,
