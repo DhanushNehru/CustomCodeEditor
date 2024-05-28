@@ -3,6 +3,7 @@ import { FaPlay } from "react-icons/fa";
 import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
+import { useSnackbar } from "notistack";
 
 const judge0SubmitUrl =
   process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
@@ -11,7 +12,7 @@ const rapidApiKey = process.env.REACT_APP_RAPID_API_KEY;
 
 const LANGUAGE_ID_FOR_JAVASCRIPT = 63;
 const LANGUAGE_ID_FOR_PYTHON3 = 71;
-
+const LANGUAGE_ID_FOR_CPP = 76;
 const LANGUAGES = [
   {
     ID: LANGUAGE_ID_FOR_JAVASCRIPT,
@@ -22,6 +23,11 @@ const LANGUAGES = [
     ID: LANGUAGE_ID_FOR_PYTHON3,
     NAME: "Python3",
     DEFAULT_LANGUAGE: "python",
+  },
+  {
+    ID: LANGUAGE_ID_FOR_CPP,
+    NAME: "C++",
+    DEFAULT_LANGUAGE: "C++(Clang 7.0.1)",
   },
 ];
 
@@ -36,7 +42,6 @@ function EditorComponent() {
   // State variables for code, output, and potential error messages
   const [code, setCode] = useState(null); // Consider setting an initial value if needed
   const [output, setOutput] = useState("");
-  const [error, setError] = useState(null);
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE
   );
@@ -45,12 +50,15 @@ function EditorComponent() {
     LANGUAGE_NAME: "",
     DEFAULT_LANGUAGE: "",
   });
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const selectedLanguage =
       currentLanguage === LANGUAGES[0].DEFAULT_LANGUAGE
         ? LANGUAGES[0]
-        : LANGUAGES[1];
+        : currentLanguage === LANGUAGES[1].DEFAULT_LANGUAGE
+        ? LANGUAGES[1]
+        : LANGUAGES[2];
 
     setLanguageDetails({
       LANGUAGE_ID: selectedLanguage.ID,
@@ -75,12 +83,17 @@ function EditorComponent() {
   async function submitCode() {
     const codeToSubmit = editorRef.current.getValue();
 
-    console.log(" Code to submit ", codeToSubmit);
-
+    if (codeToSubmit === "") {
+      enqueueSnackbar("Please enter valid code", { variant: "error" });
+      return;
+    }
     try {
       const response = await fetch(judge0SubmitUrl, {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
+          "X-RapidAPI-Key": rapidApiKey,
+          "X-RapidAPI-Host": rapidApiHost,
           "Content-Type": "application/json",
           "X-RapidAPI-Key": rapidApiKey,
           "X-RapidAPI-Host": rapidApiHost,
@@ -94,16 +107,21 @@ function EditorComponent() {
       });
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to create submission. Status code: ${response.status}`
+        enqueueSnackbar(
+          `Failed to create submission. Status code: ${response.status}`,
+          { variant: "error" }
         );
+        return;
       }
 
       const data = await response.json();
       const submissionId = data["token"];
-      console.log(`Submission created successfully. ID: ${submissionId}`);
 
       setTimeout(() => {
+        fetch(`${judge0SubmitUrl}/${submissionId}`, {
+          method: "GET",
+          headers: {
+            "X-RapidAPI-Key": rapidApiKey,
         fetch(`${judge0SubmitUrl}/${submissionId}`, {
           method: "GET",
           headers: {
@@ -111,26 +129,29 @@ function EditorComponent() {
             "X-RapidAPI-Host": rapidApiHost,
           },
         })
+          },
+        })
           .then((response) => response.json())
           .then((data) => {
-            console.log(" DATA ", data);
-            console.log("Output:", data.stdout);
+            if (!data.stdout) {
+              enqueueSnackbar("Please check the code", { variant: "error" });
+              setOutput(data.message);
+              return;
+            }
             setOutput(data.stdout);
-            setError(null); // Clear any previous error messages
           })
           .catch((error) => {
-            console.error("Error retrieving output:", error.message);
-            setError("Error retrieving output: " + error.message); // Display error message
+            enqueueSnackbar("Error retrieving output: " + error.message, {
+              variant: "error",
+            });
           });
       }, 2000); // Delay added to give Judge0 some time to process the submission
     } catch (error) {
-      console.error("Error:", error.message);
-      setError("Error: " + error.message); // Display error message in the UI
+      enqueueSnackbar("Error: " + error.message, { variant: "error" });
     }
   }
 
   function handleLanguageChange(e) {
-    console.log("click, ", e.target.value);
     setCurrentLanguage(e.target.value);
     setOutput("");
     setCode(null);
@@ -190,6 +211,7 @@ function EditorComponent() {
             {LANGUAGES.map((language, index) => (
               <option
                 key={index}
+                style={{ padding: "0.2em 0.5em" }}
                 style={{ padding: "0.2em 0.5em" }}
                 value={language.DEFAULT_LANGUAGE}
               >
