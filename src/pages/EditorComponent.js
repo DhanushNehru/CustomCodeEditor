@@ -117,6 +117,11 @@ function EditorComponent() {
         })
           .then((response) => response.json())
           .then((data) => {
+            if(!data.stdout) {
+              enqueueSnackbar("Please check the code", { variant: "error" });
+              setOutput(data.message);
+              return;
+            }
             setOutput(data.stdout);
           })
           .catch((error) => {
