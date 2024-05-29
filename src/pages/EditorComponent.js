@@ -118,7 +118,24 @@ function EditorComponent() {
         setLoading(false);
         return;
       }
+      let request = parseInt(localStorage.getItem("requestCount")) || 0;
+      let lastRequest = localStorage.getItem("lastRequest") || new Date().toISOString();
+      if (new Date() - new Date(lastRequest) > 86400000) {
+        request = 0;
+        localStorage.setItem("requestCount", 0);
+        localStorage.setItem("lastRequest", new Date().toISOString());
+      }
+      if (request >= 50) {
+        throw new Error(
+          "Your daily requests have been finished please come tomorrow"
+        );
+      }
+      else {
+        request++;
+        localStorage.setItem("requestCount", request);
+        document.getElementById("requestCounter").innerText = 50 - request;
 
+      }
       const data = await response.json();
       const submissionId = data["token"];
 
@@ -206,12 +223,13 @@ function EditorComponent() {
         <span>        
           {loading ? (
             <CircularProgress size={16} />
-          ) : (
+          ):(
             <FaPlay size="16" />
           )}
         </span>
           Run {languageDetails.LANGUAGE_NAME} Code
       </StyledButton>
+      <div id="counter">Requests left for today: <span id = "requestCounter">{50 - localStorage.getItem("requestCount")}</span></div>
       <div className="output">
         <pre>
           <p>{output}</p>
