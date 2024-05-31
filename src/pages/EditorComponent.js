@@ -5,32 +5,7 @@ import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
 import {Button, CircularProgress, styled} from "@mui/material";
-
-const judge0SubmitUrl =
-  process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
-const rapidApiHost = process.env.REACT_APP_RAPID_API_HOST;
-const rapidApiKey = process.env.REACT_APP_RAPID_API_KEY;
-
-const LANGUAGE_ID_FOR_JAVASCRIPT = 63;
-const LANGUAGE_ID_FOR_PYTHON3 = 71;
-const LANGUAGE_ID_FOR_CPP = 76;
-const LANGUAGES = [
-  {
-    ID: LANGUAGE_ID_FOR_JAVASCRIPT,
-    NAME: "Javascript",
-    DEFAULT_LANGUAGE: "javascript",
-  },
-  {
-    ID: LANGUAGE_ID_FOR_PYTHON3,
-    NAME: "Python3",
-    DEFAULT_LANGUAGE: "python",
-  },
-  {
-    ID: LANGUAGE_ID_FOR_CPP,
-    NAME: "C++",
-    DEFAULT_LANGUAGE: "C++(Clang 7.0.1)"
-  },
-];
+import {LANGUAGES, judge0SubmitUrl, rapidApiHost, rapidApiKey} from "../constants/constants";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -38,12 +13,6 @@ const StyledButton = styled(Button)({
   justifyContent: "center",
   gap: "0.5rem",
 });
-// need to incorporate toggle
-// const LANGUAGE = LANGUAGES[0];
-
-// const LANGUAGE_ID = LANGUAGE["ID"];
-// const LANGUAGE_NAME = LANGUAGE["NAME"];
-// const DEFAULT_LANGUAGE = LANGUAGE["DEFAULT_LANGUAGE"];
 
 function EditorComponent() {
   // State variables for code, output, and potential error messages
