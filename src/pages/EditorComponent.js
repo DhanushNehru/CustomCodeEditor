@@ -4,8 +4,8 @@ import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
-import {Button, CircularProgress, styled} from "@mui/material";
-import {LANGUAGES, judge0SubmitUrl, rapidApiHost, rapidApiKey} from "../constants/constants";
+import { Button, CircularProgress, styled } from "@mui/material";
+import { LANGUAGES, judge0SubmitUrl, rapidApiHost, rapidApiKey } from "../constants/constants";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -18,23 +18,13 @@ function EditorComponent() {
   // State variables for code, output, and potential error messages
   const [code, setCode] = useState(null); // Consider setting an initial value if needed
   const [output, setOutput] = useState("");
-  const [currentLanguage, setCurrentLanguage] = useState(
-    LANGUAGES[0].DEFAULT_LANGUAGE
-  );
-  const [languageDetails, setLanguageDetails] = useState({
-    LANGUAGE_ID: "",
-    LANGUAGE_NAME: "",
-    DEFAULT_LANGUAGE: "",
-  });
+  const [currentLanguage, setCurrentLanguage] = useState(LANGUAGES[0].DEFAULT_LANGUAGE);
+  const [languageDetails, setLanguageDetails] = useState(LANGUAGES[0]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const selectedLanguage =
-      currentLanguage === LANGUAGES[0].DEFAULT_LANGUAGE
-        ? LANGUAGES[0]
-        : currentLanguage === LANGUAGES[1].DEFAULT_LANGUAGE ? LANGUAGES[1] : LANGUAGES[2];
-
+    const selectedLanguage = LANGUAGES.find(language => language.DEFAULT_LANGUAGE === currentLanguage);
     setLanguageDetails({
       LANGUAGE_ID: selectedLanguage.ID,
       LANGUAGE_NAME: selectedLanguage.NAME,
@@ -54,6 +44,11 @@ function EditorComponent() {
       submitCode();
     });
   }
+  // Function to retrieve logo based on language ID
+  const getLanguageLogoById = (id) => {
+    const language = LANGUAGES.find(lang => lang.ID == id);
+    return language ? language.LOGO : null;
+  };
   // Function to handle code submission
   async function submitCode() {
     const codeToSubmit = editorRef.current.getValue();
@@ -101,7 +96,7 @@ function EditorComponent() {
         })
           .then((response) => response.json())
           .then((data) => {
-            if(!data.stdout) {
+            if (!data.stdout) {
               enqueueSnackbar("Please check the code", { variant: "error" });
               setOutput(data.message);
               return;
@@ -132,11 +127,7 @@ function EditorComponent() {
       <div style={styles.flexBetween}>
         {/* Current Language Logo */}
         <div style={styles.flexStart}>
-          {currentLanguage === LANGUAGES[0].DEFAULT_LANGUAGE ? (
-            <JavascriptLogo />
-          ) : (
-            <PythonLogo />
-          )}
+          {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
 
           <div style={{ fontWeight: "bold" }}>
             {languageDetails.LANGUAGE_NAME}
@@ -172,14 +163,14 @@ function EditorComponent() {
         language={languageDetails.DEFAULT_LANGUAGE} // Set default language to JavaScript
       />
       <StyledButton onClick={submitCode} style={styles.button} variant="contained" color="primary" disabled={loading}>
-        <span>        
+        <span>
           {loading ? (
             <CircularProgress size={16} />
           ) : (
             <FaPlay size="16" />
           )}
         </span>
-          Run {languageDetails.LANGUAGE_NAME} Code
+        Run {languageDetails.LANGUAGE_NAME} Code
       </StyledButton>
       <div className="output">
         <pre>
@@ -220,87 +211,4 @@ const styles = {
   },
 };
 
-function JavascriptLogo({ width = 40, height = 40 }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      x="0px"
-      y="0px"
-      width={width}
-      height={height}
-      viewBox="0,0,256,256"
-    >
-      <g transform="">
-        <g
-          fill="none"
-          fillRule="nonzero"
-          stroke="none"
-          strokeWidth="1"
-          strokeLinecap="butt"
-          strokeLinejoin="miter"
-          strokeMiterlimit="10"
-          strokeDasharray=""
-          strokeDashoffset="0"
-          fontFamily="none"
-          fontWeight="none"
-          fontSize="none"
-          textAnchor="none"
-          style={{ mixBlendMode: "normal" }}
-        >
-          <g transform="scale(5.33333,5.33333)">
-            <path d="M6,42v-36h36v36z" fill="#ffd600"></path>
-            <path
-              d="M29.538,32.947c0.692,1.124 1.444,2.201 3.037,2.201c1.338,0 2.04,-0.665 2.04,-1.585c0,-1.101 -0.726,-1.492 -2.198,-2.133l-0.807,-0.344c-2.329,-0.988 -3.878,-2.226 -3.878,-4.841c0,-2.41 1.845,-4.244 4.728,-4.244c2.053,0 3.528,0.711 4.592,2.573l-2.514,1.607c-0.553,-0.988 -1.151,-1.377 -2.078,-1.377c-0.946,0 -1.545,0.597 -1.545,1.377c0,0.964 0.6,1.354 1.985,1.951l0.807,0.344c2.745,1.169 4.293,2.363 4.293,5.047c0,2.892 -2.284,4.477 -5.35,4.477c-2.999,0 -4.702,-1.505 -5.65,-3.368zM17.952,33.029c0.506,0.906 1.275,1.603 2.381,1.603c1.058,0 1.667,-0.418 1.667,-2.043v-10.589h3.333v11.101c0,3.367 -1.953,4.899 -4.805,4.899c-2.577,0 -4.437,-1.746 -5.195,-3.368z"
-              fill="#000001"
-            ></path>
-          </g>
-        </g>
-      </g>
-    </svg>
-  );
-}
-
-function PythonLogo({ width = 40, height = 40 }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      x="0px"
-      y="0px"
-      width={width}
-      height={height}
-      viewBox="0,0,256,256"
-    >
-      <g transform="translate(30.72,30.72) scale(0.76,0.76)">
-        <g
-          fill="none"
-          fillRule="nonzero"
-          stroke="none"
-          strokeWidth="1"
-          strokeLinecap="butt"
-          strokeLinejoin="miter"
-          strokeMiterlimit="10"
-          strokeDasharray=""
-          strokeDashoffset="0"
-          fontFamily="none"
-          fontWeight="none"
-          fontSize="none"
-          textAnchor="none"
-          style={{ mixBlendMode: "normal" }}
-        >
-          <g transform="scale(5.33333,5.33333)">
-            <path
-              d="M24.047,5c-1.555,0.005 -2.633,0.142 -3.936,0.367c-3.848,0.67 -4.549,2.077 -4.549,4.67v3.963h9v2h-9.342h-4.35c-2.636,0 -4.943,1.242 -5.674,4.219c-0.826,3.417 -0.863,5.557 0,9.125c0.655,2.661 2.098,4.656 4.735,4.656h3.632v-5.104c0,-2.966 2.686,-5.896 5.764,-5.896h7.236c2.523,0 5,-1.862 5,-4.377v-8.586c0,-2.439 -1.759,-4.263 -4.218,-4.672c0.061,-0.006 -1.756,-0.371 -3.298,-0.365zM19.063,9c0.821,0 1.5,0.677 1.5,1.502c0,0.833 -0.679,1.498 -1.5,1.498c-0.837,0 -1.5,-0.664 -1.5,-1.498c0,-0.822 0.663,-1.502 1.5,-1.502z"
-              fill="#0277bd"
-            ></path>
-            <path
-              d="M23.078,43c1.555,-0.005 2.633,-0.142 3.936,-0.367c3.848,-0.67 4.549,-2.077 4.549,-4.67v-3.963h-9v-2h9.343h4.35c2.636,0 4.943,-1.242 5.674,-4.219c0.826,-3.417 0.863,-5.557 0,-9.125c-0.656,-2.661 -2.099,-4.656 -4.736,-4.656h-3.632v5.104c0,2.966 -2.686,5.896 -5.764,5.896h-7.236c-2.523,0 -5,1.862 -5,4.377v8.586c0,2.439 1.759,4.263 4.218,4.672c-0.061,0.006 1.756,0.371 3.298,0.365zM28.063,39c-0.821,0 -1.5,-0.677 -1.5,-1.502c0,-0.833 0.679,-1.498 1.5,-1.498c0.837,0 1.5,0.664 1.5,1.498c0,0.822 -0.664,1.502 -1.5,1.502z"
-              fill="#ffc107"
-            ></path>
-          </g>
-        </g>
-      </g>
-    </svg>
-  );
-}
-
-export default EditorComponent;
+export default EditorComponent
