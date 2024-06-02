@@ -82,7 +82,6 @@ function EditorComponent() {
         setLoading(false);
         return;
       }
-
       const data = await response.json();
       const submissionId = data["token"];
 
@@ -166,12 +165,13 @@ function EditorComponent() {
         <span>
           {loading ? (
             <CircularProgress size={16} />
-          ) : (
+          ):(
             <FaPlay size="16" />
           )}
         </span>
         Run {languageDetails.LANGUAGE_NAME} Code
       </StyledButton>
+      <div id="counter">A user can do 50 executions/day in total (irrespective of the language)</div>
       <div className="output">
         <pre>
           <p>{output}</p>
