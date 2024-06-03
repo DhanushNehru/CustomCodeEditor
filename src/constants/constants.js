@@ -18,24 +18,40 @@ export const LANGUAGES = [
     ID: LANGUAGE_ID_FOR_JAVASCRIPT,
     NAME: "Javascript",
     DEFAULT_LANGUAGE: "javascript",
-    LOGO: <JavascriptLogo/>
+    LOGO: <JavascriptLogo />,
+    HELLO_WORLD: `console.log("Hello World")
+`
   },
   {
     ID: LANGUAGE_ID_FOR_PYTHON3,
     NAME: "Python3",
     DEFAULT_LANGUAGE: "python",
-    LOGO: <PythonLogo/>
+    LOGO: <PythonLogo />,
+    HELLO_WORLD: `print("Hello World")
+`
   },
   {
     ID: LANGUAGE_ID_FOR_CPP,
     NAME: "C++",
     DEFAULT_LANGUAGE: "C++(Clang 7.0.1)",
-    LOGO: <CppLogo/>
+    LOGO: <CppLogo />,
+    HELLO_WORLD: `#include<iostream>
+using namespace std;
+int main(){
+  cout<<"Hello World"<<endl;
+  return 0;
+}`
   },
   {
     ID: LANGUAGE_ID_FOR_JAVA,
     NAME: "Java",
     DEFAULT_LANGUAGE: "java",
-    LOGO: <JavaLogo/>
+    LOGO: <JavaLogo />,
+    HELLO_WORLD: `public class Main
+{
+  public static void main(String[] args) {
+    System.out.println("Hello World");
+  }
+}`
   },
 ]; 

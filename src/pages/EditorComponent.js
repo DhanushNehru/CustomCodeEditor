@@ -30,6 +30,7 @@ function EditorComponent() {
       LANGUAGE_NAME: selectedLanguage.NAME,
       DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
     });
+    setCode(selectedLanguage.HELLO_WORLD)
   }, [currentLanguage]);
 
   // Reference to the Monaco editor instance
