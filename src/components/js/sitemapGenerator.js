@@ -2,8 +2,8 @@ require("babel-register")({
   presets: ["es2015", "react"]
 });
 
-const router = require("./sitemapRoutes").default;
 const Sitemap = require("@snaddyvitch-dispenser/react-router-sitemap").default;
+const router = require("./sitemapRoutes").default;
 
 function generateSitemap() {
   return (
