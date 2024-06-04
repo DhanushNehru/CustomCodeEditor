@@ -4,33 +4,13 @@ import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
-import {Button, CircularProgress, styled} from "@mui/material";
-
-const judge0SubmitUrl =
-  process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
-const rapidApiHost = process.env.REACT_APP_RAPID_API_HOST;
-const rapidApiKey = process.env.REACT_APP_RAPID_API_KEY;
-
-const LANGUAGE_ID_FOR_JAVASCRIPT = 63;
-const LANGUAGE_ID_FOR_PYTHON3 = 71;
-const LANGUAGE_ID_FOR_CPP = 76;
-const LANGUAGES = [
-  {
-    ID: LANGUAGE_ID_FOR_JAVASCRIPT,
-    NAME: "Javascript",
-    DEFAULT_LANGUAGE: "javascript",
-  },
-  {
-    ID: LANGUAGE_ID_FOR_PYTHON3,
-    NAME: "Python3",
-    DEFAULT_LANGUAGE: "python",
-  },
-  {
-    ID: LANGUAGE_ID_FOR_CPP,
-    NAME: "C++",
-    DEFAULT_LANGUAGE: "C++(Clang 7.0.1)",
-  },
-];
+import { Button, CircularProgress, styled } from "@mui/material";
+import {
+  LANGUAGES,
+  judge0SubmitUrl,
+  rapidApiHost,
+  rapidApiKey,
+} from "../constants/constants";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -38,12 +18,6 @@ const StyledButton = styled(Button)({
   justifyContent: "center",
   gap: "0.5rem",
 });
-// need to incorporate toggle
-// const LANGUAGE = LANGUAGES[0];
-
-// const LANGUAGE_ID = LANGUAGE["ID"];
-// const LANGUAGE_NAME = LANGUAGE["NAME"];
-// const DEFAULT_LANGUAGE = LANGUAGE["DEFAULT_LANGUAGE"];
 
 function EditorComponent() {
   // State variables for code, output, and potential error messages
@@ -52,21 +26,14 @@ function EditorComponent() {
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE
   );
-  const [languageDetails, setLanguageDetails] = useState({
-    LANGUAGE_ID: "",
-    LANGUAGE_NAME: "",
-    DEFAULT_LANGUAGE: "",
-  });
+  const [languageDetails, setLanguageDetails] = useState(LANGUAGES[0]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const selectedLanguage =
-      currentLanguage === LANGUAGES[0].DEFAULT_LANGUAGE
-        ? LANGUAGES[0]
-        : currentLanguage === LANGUAGES[1].DEFAULT_LANGUAGE
-        ? LANGUAGES[1]
-        : LANGUAGES[2];
+    const selectedLanguage = LANGUAGES.find(
+      (language) => language.DEFAULT_LANGUAGE === currentLanguage
+    );
 
     setLanguageDetails({
       LANGUAGE_ID: selectedLanguage.ID,
@@ -103,9 +70,6 @@ function EditorComponent() {
           "Content-Type": "application/json",
           "X-RapidAPI-Key": rapidApiKey,
           "X-RapidAPI-Host": rapidApiHost,
-          "Content-Type": "application/json",
-          "X-RapidAPI-Key": rapidApiKey,
-          "X-RapidAPI-Host": rapidApiHost,
         },
         body: JSON.stringify({
           source_code: codeToSubmit,
@@ -132,13 +96,7 @@ function EditorComponent() {
           method: "GET",
           headers: {
             "X-RapidAPI-Key": rapidApiKey,
-        fetch(`${judge0SubmitUrl}/${submissionId}`, {
-          method: "GET",
-          headers: {
-            "X-RapidAPI-Key": rapidApiKey,
             "X-RapidAPI-Host": rapidApiHost,
-          },
-        })
           },
         })
           .then((response) => response.json())
@@ -223,7 +181,6 @@ function EditorComponent() {
               <option
                 key={index}
                 style={{ padding: "0.2em 0.5em" }}
-                style={{ padding: "0.2em 0.5em" }}
                 value={language.DEFAULT_LANGUAGE}
               >
                 {language.NAME}
@@ -246,7 +203,7 @@ function EditorComponent() {
         {/* className="output" */}
         {/* <pre> */}
         {/* <p>{output}</p> */}
-        {/* </pre> */}      
+        {/* </pre> */}
       </div>
     </div>
   );
