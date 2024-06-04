@@ -1,0 +1,28 @@
+name: Linting Check for commits
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  Continuous-Integration:
+    name: Performs linting on the application
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js  
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+        
+    - run: npm ci
+    
+    - name: Run lint check
+      run: npm run lint
