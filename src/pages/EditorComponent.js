@@ -4,7 +4,6 @@ import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
-// import { Button, styled } from "@mui/material";
 
 import {
   LANGUAGES,
@@ -14,31 +13,30 @@ import {
 } from "../constants/constants";
 
 function EditorComponent() {
-  // State variables for code, output, and potential error messages
-  const [code, setCode] = useState(null); // Consider setting an initial value if needed
+  const [code, setCode] = useState(null);
   const [output, setOutput] = useState("");
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE
   );
   const [languageDetails, setLanguageDetails] = useState(LANGUAGES[0]);
   const [loading, setLoading] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();  
+  // Reference to the Monaco editor instance
+  const editorRef = useRef(null);
 
   useEffect(() => {
     const selectedLanguage = LANGUAGES.find(
       (language) => language.DEFAULT_LANGUAGE === currentLanguage
     );
 
+
     setLanguageDetails({
       LANGUAGE_ID: selectedLanguage.ID,
       LANGUAGE_NAME: selectedLanguage.NAME,
       DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
+      NAME: selectedLanguage.NAME,
     });
   }, [currentLanguage]);
-
-  // Reference to the Monaco editor instance
-  const editorRef = useRef(null);
-
   // Function to handle editor mounting
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
@@ -48,10 +46,10 @@ function EditorComponent() {
       submitCode();
     });
   }
+
   // Function to handle code submission
   async function submitCode() {
     const codeToSubmit = editorRef.current.getValue();
-
     if (codeToSubmit === "") {
       enqueueSnackbar("Please enter valid code", { variant: "error" });
       return;
@@ -114,13 +112,14 @@ function EditorComponent() {
     }
   }
 
-  function handleLanguageChange(e) {
-    setCurrentLanguage(e.target.value);
+  function handleLanguageChange(_, value) {
+    setCurrentLanguage(value.DEFAULT_LANGUAGE);
     setOutput("");
     setCode(null);
   }
 
   return (
+
     <div style={styles.container}>
       {/* Language toggle button (top right corner) */}
       <div style={{ backgroundColor: "#b7b8a9" }}>
@@ -190,6 +189,7 @@ const styles = {
   // container: {
   //   textAlign: 'center',
   // },
+
   flexStart: {
     display: "flex",
     justifyContent: "flex-start",
@@ -202,6 +202,7 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     paddingRight: "1em",
+    height: "60px",
   },
   button: {
     // marginLeft: "2.5rem",
@@ -245,6 +246,10 @@ const styles = {
     fontSize: "20px",
     marginRight: "1rem",
     cursor: "pointer",
+  },
+  languageDropdown: {
+    display: "flex",
+    alignItems: "center",
   },
 };
 
