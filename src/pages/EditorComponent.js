@@ -16,8 +16,7 @@ const StyledButton = styled(Button)({
 });
 
 function EditorComponent() {
-  // State variables for code, output, and potential error messages
-  const [code, setCode] = useState(null); // Consider setting an initial value if needed
+  const [code, setCode] = useState(null);
   const [output, setOutput] = useState("");
   const [currentLanguage, setCurrentLanguage] = useState(LANGUAGES[0].DEFAULT_LANGUAGE);
   const [languageDetails, setLanguageDetails] = useState(LANGUAGES[0]);
@@ -164,9 +163,6 @@ function EditorComponent() {
 }
 
 const styles = {
-  //container:{
-  // textAlign: 'center',
-  //},
   flexStart: {
     display: "flex",
     justifyContent: "flex-start",
