@@ -4,7 +4,7 @@ import { SnackbarProvider as Notistack, closeSnackbar } from "notistack";
 import { IconButton } from "@mui/material";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
-const SnackbarProvider = ({children}) => {
+const SnackbarProvider = ({ children }) => {
   
   return (
     <Notistack
@@ -21,7 +21,7 @@ const SnackbarProvider = ({children}) => {
           <IoCloseCircleOutline color='#fff' />
         </IconButton>
       )}
-      style={{width: "auto", minWidth: "100px", fontSize: "1em"}}
+      style={{ width: "auto", minWidth: "100px", fontSize: "1em" }}
     >
       {children}
     </Notistack>

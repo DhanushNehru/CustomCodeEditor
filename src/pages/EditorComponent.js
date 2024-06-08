@@ -4,8 +4,8 @@ import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
-import {Button, CircularProgress, styled} from "@mui/material";
-import {LANGUAGES, judge0SubmitUrl, rapidApiHost, rapidApiKey} from "../constants/constants";
+import { Button, CircularProgress, styled } from "@mui/material";
+import { LANGUAGES, judge0SubmitUrl, rapidApiHost, rapidApiKey } from "../constants/constants";
 
 const StyledButton = styled(Button)({
   display: "flex",

@@ -1,4 +1,4 @@
-export default function CppLogo({width = 40, height = 40}) {
+export default function CppLogo({ width = 40, height = 40 }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
