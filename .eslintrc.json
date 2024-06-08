@@ -18,7 +18,8 @@
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "import/order": ["error", { "groups": [["builtin", "external", "internal"]] }],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "object-curly-spacing": ["error", "always"]
   },
   "parserOptions": {
     "ecmaVersion": 2023,

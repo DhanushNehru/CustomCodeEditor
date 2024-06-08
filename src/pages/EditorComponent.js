@@ -4,8 +4,8 @@ import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
-import {Button, CircularProgress, styled} from "@mui/material";
-import {LANGUAGES, judge0SubmitUrl, rapidApiHost, rapidApiKey} from "../constants/constants";
+import { Button, CircularProgress, styled } from "@mui/material";
+import { LANGUAGES, judge0SubmitUrl, rapidApiHost, rapidApiKey } from "../constants/constants";
 import LanguageSelect from "../components/js/LanguageSelect";
 
 const StyledButton = styled(Button)({
@@ -137,9 +137,10 @@ function EditorComponent() {
         width="100%"
         theme="vs-dark"
         onMount={handleEditorDidMount}
-        value={code}
-        onChange={setCode}
-        language={languageDetails.DEFAULT_LANGUAGE}
+        // ... other editor configuration options
+        value={code} // Set initial value
+        onChange={setCode} // Update code state on change
+        language={languageDetails.DEFAULT_LANGUAGE} // Set default language to JavaScript
       />
       <StyledButton onClick={submitCode} style={styles.button} variant="contained" color="primary" disabled={loading}>
         <span>        
