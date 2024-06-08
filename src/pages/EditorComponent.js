@@ -6,6 +6,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
 import { Button, CircularProgress, styled } from "@mui/material";
 import { LANGUAGES, judge0SubmitUrl, rapidApiHost, rapidApiKey } from "../constants/constants";
+import LanguageSelect from "../components/js/LanguageSelect";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -13,12 +14,6 @@ const StyledButton = styled(Button)({
   justifyContent: "center",
   gap: "0.5rem",
 });
-// need to incorporate toggle
-// const LANGUAGE = LANGUAGES[0];
-
-// const LANGUAGE_ID = LANGUAGE["ID"];
-// const LANGUAGE_NAME = LANGUAGE["NAME"];
-// const DEFAULT_LANGUAGE = LANGUAGE["DEFAULT_LANGUAGE"];
 
 function EditorComponent() {
   // State variables for code, output, and potential error messages
@@ -27,22 +22,20 @@ function EditorComponent() {
   const [currentLanguage, setCurrentLanguage] = useState(LANGUAGES[0].DEFAULT_LANGUAGE);
   const [languageDetails, setLanguageDetails] = useState(LANGUAGES[0]);
   const [loading, setLoading] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();  
+  // Reference to the Monaco editor instance
+  const editorRef = useRef(null);
 
   useEffect(() => {
     const selectedLanguage = LANGUAGES.find((lang) => lang.DEFAULT_LANGUAGE === currentLanguage);
-
     setLanguageDetails({
       LANGUAGE_ID: selectedLanguage.ID,
       LANGUAGE_NAME: selectedLanguage.NAME,
       DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
+      NAME: selectedLanguage.NAME,
     });
     setCode(selectedLanguage.HELLO_WORLD);
   }, [currentLanguage]);
-
-  // Reference to the Monaco editor instance
-  const editorRef = useRef(null);
-
   // Function to handle editor mounting
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
@@ -53,16 +46,14 @@ function EditorComponent() {
     });
   }
   
-  // Function to retrieve logo based on language ID
   const getLanguageLogoById = (id) => {
-    const language = LANGUAGES.find(lang => lang.ID == id);
+    const language = LANGUAGES.find(lang => parseInt(lang.ID) === parseInt(id));
     return language ? language.LOGO : null;
   };
   
   // Function to handle code submission
   async function submitCode() {
     const codeToSubmit = editorRef.current.getValue();
-
     if (codeToSubmit === "") {
       enqueueSnackbar("Please enter valid code", { variant: "error" });
       return;
@@ -105,7 +96,7 @@ function EditorComponent() {
         })
           .then((response) => response.json())
           .then((data) => {
-            if(!data.stdout) {
+            if (!data.stdout) {
               enqueueSnackbar("Please check the code", { variant: "error" });
               setOutput(data.message);
               return;
@@ -124,39 +115,21 @@ function EditorComponent() {
     }
   }
 
-  function handleLanguageChange(e) {
-    setCurrentLanguage(e.target.value);
+  function handleLanguageChange(_, value) {
+    setCurrentLanguage(value.DEFAULT_LANGUAGE);
     setOutput("");
     setCode(null);
   }
 
   return (
     <div className="editor-container" style={styles.container}>
-      {/* Language toggle button (top right corner) */}
       <div style={styles.flexBetween}>
-        {/* Current Language Logo */}
         <div style={styles.flexStart}>
           {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
-          <div style={{ fontWeight: "bold" }}>
-            {languageDetails.LANGUAGE_NAME}
-          </div>
+          <div style={{ fontWeight: "bold" }}>{languageDetails.LANGUAGE_NAME}</div>
         </div>
-        {/* DropDown to Change Language */}
-        <div>
-          <select
-            style={{ padding: "0.5em 1em" }}
-            onChange={handleLanguageChange}
-          >
-            {LANGUAGES.map((language, index) => (
-              <option
-                key={index}
-                style={{ padding: "0.2em 0.5em" }}
-                value={language.DEFAULT_LANGUAGE}
-              >
-                {language.NAME}
-              </option>
-            ))}
-          </select>
+        <div style={styles.languageDropdown}>
+          <LanguageSelect handleLanguageChange={handleLanguageChange} defaultLanguage={languageDetails} />
         </div>
       </div>
 
@@ -167,18 +140,18 @@ function EditorComponent() {
         onMount={handleEditorDidMount}
         // ... other editor configuration options
         value={code} // Set initial value
-        onChange={(value) => setCode(value)} // Update code state on change
+        onChange={setCode} // Update code state on change
         language={languageDetails.DEFAULT_LANGUAGE} // Set default language to JavaScript
       />
       <StyledButton onClick={submitCode} style={styles.button} variant="contained" color="primary" disabled={loading}>
         <span>        
           {loading ? (
             <CircularProgress size={16} />
-          ):(
+          ) : (
             <FaPlay size="16" />
           )}
         </span>
-          Run {languageDetails.LANGUAGE_NAME} Code
+        Run {languageDetails.LANGUAGE_NAME} Code
       </StyledButton>
       <div id="counter">A user can do 50 executions/day in total (irrespective of the language)</div>
       <div className="output">
@@ -205,6 +178,7 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     paddingRight: "1em",
+    height: "60px",
   },
   button: {
     marginLeft: "5px",
@@ -217,6 +191,10 @@ const styles = {
     fontSize: "1.2em",
     cursor: "pointer",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  },
+  languageDropdown: {
+    display: "flex",
+    alignItems: "center",
   },
 };
 
