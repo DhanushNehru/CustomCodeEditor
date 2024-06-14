@@ -4,7 +4,6 @@ import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
-
 import {
   LANGUAGES,
   judge0SubmitUrl,
@@ -168,7 +167,6 @@ function EditorComponent() {
           </button>
         </div>
       </div>
-
       <div
         style={{
           backgroundColor: "#eceddd",
@@ -180,6 +178,7 @@ function EditorComponent() {
         {/* <pre> */}
         {/* <p>{output}</p> */}
         {/* </pre> */}
+
       </div>
     </div>
   );
