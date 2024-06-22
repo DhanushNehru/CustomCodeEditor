@@ -18,7 +18,8 @@ Clone the repository to your local machine:
 ```
 git clone <repository-url>
 ```
-
+- Note:- Please fill in the necessary keys in the `.env` file for successful code submissions
+# Without Docker
 Install dependencies using npm or yarn:
 bash
 ```
@@ -26,6 +27,44 @@ npm install
 # or
 yarn install
 ```
+
+To Start project
+```
+npm run start
+```
+# With Docker
+## Prerequisites
+Before starting with the project, ensure you have Docker installed. If not, follow these steps to install Docker:
+
+### Docker Installation
+
+1. **Windows**: 
+   - Download Docker Desktop from [Docker Hub](https://hub.docker.com/editions/community/docker-ce-desktop-windows).
+   - Follow the installation instructions.
+
+2. **Mac**:
+   - Download Docker Desktop from [Docker Hub](https://hub.docker.com/editions/community/docker-ce-desktop-mac).
+   - Follow the installation instructions.
+
+3. **Linux**:
+   - Docker Engine installation varies by Linux distribution. Refer to [Docker's official documentation](https://docs.docker.com/engine/install/) for installation instructions specific to your Linux distribution.
+
+To start the project using Docker Compose:
+1. Build and run the project:
+   ```bash
+   #Detach mode
+   docker-compose up -d
+   ```
+   ```
+   docker-compose up
+   ```
+2. Access the project:
+   - Once Docker Compose has started the containers, access the project using your web browser at `http://localhost:3000`.
+
+3. Close project
+   ```
+   docker-compose down
+   ```
 
 ## Setting Up Judge0 with RapidAPI
 
