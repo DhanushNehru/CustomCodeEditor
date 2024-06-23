@@ -97,15 +97,21 @@ By following these steps, you'll be able to set up Judge0 for code submissions u
 ## Local Configuration
 
 - Create a .env file in the root directory of your project if it doesn't already exist.
+- You can copy content from `.env.example` to `.env`, you can run below command.
+  ```
+  cp .env.example .env
+  ```
 - Set the following environment variables in the .env file:
 
 ```
 REACT_APP_RAPID_API_HOST=YOUR_HOST_URL
 REACT_APP_RAPID_API_KEY=YOUR_SECRET_KEY
 REACT_APP_RAPID_API_URL=YOUR_SUBMISSIONS_URL
-```
 
-Replace YOUR_HOST_URL, YOUR_SECRET_KEY, and YOUR_SUBMISSIONS_URL with the appropriate values for your Rapid API and Judge0 API endpoints.
+# key for docker container name
+COMPOSE_PROJECT_NAME=custom_code_editor
+```
+Replace YOUR_HOST_URL, YOUR_SECRET_KEY, & YOUR_SUBMISSIONS_URL with the appropriate values for your Rapid API and Judge0 API endpoints.
 
 ## Server Setup Configuration
 Create a .env file in the root directory of your project if it doesn't already exist.
