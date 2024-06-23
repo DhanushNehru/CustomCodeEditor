@@ -18,7 +18,8 @@ Clone the repository to your local machine:
 ```
 git clone <repository-url>
 ```
-
+- Note:- Please fill in the necessary keys in the `.env` file for successful code submissions
+# Without Docker
 Install dependencies using npm or yarn:
 bash
 ```
@@ -26,6 +27,44 @@ npm install
 # or
 yarn install
 ```
+
+To Start project
+```
+npm run start
+```
+# With Docker
+## Prerequisites
+Before starting with the project, ensure you have Docker installed. If not, follow these steps to install Docker:
+
+### Docker Installation
+
+1. **Windows**: 
+   - Download Docker Desktop from [Docker Hub](https://hub.docker.com/editions/community/docker-ce-desktop-windows).
+   - Follow the installation instructions.
+
+2. **Mac**:
+   - Download Docker Desktop from [Docker Hub](https://hub.docker.com/editions/community/docker-ce-desktop-mac).
+   - Follow the installation instructions.
+
+3. **Linux**:
+   - Docker Engine installation varies by Linux distribution. Refer to [Docker's official documentation](https://docs.docker.com/engine/install/) for installation instructions specific to your Linux distribution.
+
+To start the project using Docker Compose:
+1. Build and run the project:
+   ```bash
+   #Detach mode
+   docker-compose up -d
+   ```
+   ```
+   docker-compose up
+   ```
+2. Access the project:
+   - Once Docker Compose has started the containers, access the project using your web browser at `http://localhost:3000`.
+
+3. Close project
+   ```
+   docker-compose down
+   ```
 
 ## Setting Up Judge0 with RapidAPI
 
@@ -58,15 +97,21 @@ By following these steps, you'll be able to set up Judge0 for code submissions u
 ## Local Configuration
 
 - Create a .env file in the root directory of your project if it doesn't already exist.
+- You can copy content from `.env.example` to `.env`, you can run below command.
+  ```
+  cp .env.example .env
+  ```
 - Set the following environment variables in the .env file:
 
 ```
 REACT_APP_RAPID_API_HOST=YOUR_HOST_URL
 REACT_APP_RAPID_API_KEY=YOUR_SECRET_KEY
 REACT_APP_RAPID_API_URL=YOUR_SUBMISSIONS_URL
-```
 
-Replace YOUR_HOST_URL, YOUR_SECRET_KEY, and YOUR_SUBMISSIONS_URL with the appropriate values for your Rapid API and Judge0 API endpoints.
+# key for docker container name
+COMPOSE_PROJECT_NAME=custom_code_editor
+```
+Replace YOUR_HOST_URL, YOUR_SECRET_KEY, & YOUR_SUBMISSIONS_URL with the appropriate values for your Rapid API and Judge0 API endpoints.
 
 ## Server Setup Configuration
 Create a .env file in the root directory of your project if it doesn't already exist.
