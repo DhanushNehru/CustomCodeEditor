@@ -14,7 +14,7 @@ const theme = createTheme({
       fontSize: "2rem",
     },
     fontFamily: [
-      'Poppins',
+      "Poppins",
     ],
   },
 });
