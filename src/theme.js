@@ -13,6 +13,9 @@ const theme = createTheme({
     h1: {
       fontSize: "2rem",
     },
+    fontFamily: [
+      'Poppins',
+    ],
   },
 });
 
