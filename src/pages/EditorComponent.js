@@ -5,7 +5,12 @@ import "../components/css/EditorComponent.css"; // Optional for styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
 import { Button, CircularProgress, styled } from "@mui/material";
-import { LANGUAGES, judge0SubmitUrl, rapidApiHost, rapidApiKey } from "../constants/constants";
+import {
+  LANGUAGES,
+  judge0SubmitUrl,
+  rapidApiHost,
+  rapidApiKey,
+} from "../constants/constants";
 import LanguageSelect from "../components/js/LanguageSelect";
 
 const StyledButton = styled(Button)({
@@ -18,15 +23,19 @@ const StyledButton = styled(Button)({
 function EditorComponent() {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState("");
-  const [currentLanguage, setCurrentLanguage] = useState(LANGUAGES[0].DEFAULT_LANGUAGE);
+  const [currentLanguage, setCurrentLanguage] = useState(
+    LANGUAGES[0].DEFAULT_LANGUAGE
+  );
   const [languageDetails, setLanguageDetails] = useState(LANGUAGES[0]);
   const [loading, setLoading] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();  
+  const { enqueueSnackbar } = useSnackbar();
   // Reference to the Monaco editor instance
   const editorRef = useRef(null);
 
   useEffect(() => {
-    const selectedLanguage = LANGUAGES.find((lang) => lang.DEFAULT_LANGUAGE === currentLanguage);
+    const selectedLanguage = LANGUAGES.find(
+      (lang) => lang.DEFAULT_LANGUAGE === currentLanguage
+    );
     setLanguageDetails({
       LANGUAGE_ID: selectedLanguage.ID,
       LANGUAGE_NAME: selectedLanguage.NAME,
@@ -44,12 +53,14 @@ function EditorComponent() {
       submitCode();
     });
   }
-  
+
   const getLanguageLogoById = (id) => {
-    const language = LANGUAGES.find(lang => parseInt(lang.ID) === parseInt(id));
+    const language = LANGUAGES.find(
+      (lang) => parseInt(lang.ID) === parseInt(id)
+    );
     return language ? language.LOGO : null;
   };
-  
+
   // Function to handle code submission
   async function submitCode() {
     const codeToSubmit = editorRef.current.getValue();
@@ -122,41 +133,78 @@ function EditorComponent() {
 
   return (
     <div className="editor-container" style={styles.container}>
-      <div style={styles.flexBetween}>
+      <div style={{ height: "3.5rem", backgroundColor: "#ccd4bc" }}>
         <div style={styles.flexStart}>
           {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
-          <div style={{ fontWeight: "bold" }}>{languageDetails.LANGUAGE_NAME}</div>
-        </div>
-        <div style={styles.languageDropdown}>
-          <LanguageSelect handleLanguageChange={handleLanguageChange} defaultLanguage={languageDetails} />
+          <div style={{ fontWeight: "bold" }}>
+            {languageDetails.LANGUAGE_NAME}
+          </div>
         </div>
       </div>
-
-      <Editor
-        height="70vh"
-        width="100%"
-        theme="vs-dark"
-        onMount={handleEditorDidMount}
-        // ... other editor configuration options
-        value={code} // Set initial value
-        onChange={setCode} // Update code state on change
-        language={languageDetails.DEFAULT_LANGUAGE} // Set default language to JavaScript
-      />
-      <StyledButton onClick={submitCode} style={styles.button} variant="contained" color="primary" disabled={loading}>
-        <span>        
-          {loading ? (
-            <CircularProgress size={16} />
-          ) : (
-            <FaPlay size="16" />
-          )}
-        </span>
-        Run {languageDetails.LANGUAGE_NAME} Code
-      </StyledButton>
-      <div id="counter">A user can do 50 executions/day in total (irrespective of the language)</div>
-      <div className="output">
-        <pre>
-          <p>{output}</p>
-        </pre>
+      <div className="layout">
+        <Editor
+          height="70vh"
+          width="85vw"
+          theme="vs-dark"
+          onMount={handleEditorDidMount}
+          // ... other editor configuration options
+          value={code} // Set initial value
+          onChange={setCode} // Update code state on change
+          language={languageDetails.DEFAULT_LANGUAGE} // Set default language to JavaScript
+        />
+        <div className="sidebar">
+          <div style={styles.languageDropdown}>
+            <LanguageSelect
+              handleLanguageChange={handleLanguageChange}
+              defaultLanguage={languageDetails}
+            />
+          </div>
+          {/* <select
+            style={styles.select}
+            // style={{ padding: "0.5em 1em" }}
+            onChange={handleLanguageChange}
+          >
+            {LANGUAGES.map((language, index) => (
+              <option
+                key={index}
+                style={{ padding: "0.2em 0.5em" }}
+                value={language.DEFAULT_LANGUAGE}
+              >
+                {language.NAME}
+              </option>
+            ))}
+          </select> */}
+          <StyledButton
+            onClick={submitCode}
+            style={styles.button}
+            variant="contained"
+            color="primary"
+            disabled={loading}
+          >
+            <span>
+              {loading ? <CircularProgress size={16} /> : <FaPlay size="16" />}
+            </span>
+            Run {languageDetails.LANGUAGE_NAME}
+          </StyledButton>
+          {/* <button onClick={submitCode} style={styles.button}>
+          <FaPlay size="16" /> Run {languageDetails.LANGUAGE_NAME} Code
+        </button> */}
+        </div>
+      </div>
+      {/* <div id="counter">
+        A user can do 50 executions/day in total (irrespective of the language)
+      </div> */}
+      <div
+        style={{
+          backgroundColor: "#d8dbcc",
+          height: "22.3vh",
+        }}
+      >
+        {output}
+        {/* className="output" */}
+        {/* <pre> */}
+        {/* <p>{output}</p> */}
+        {/* </pre> */}
       </div>
     </div>
   );
@@ -168,6 +216,7 @@ const styles = {
     justifyContent: "flex-start",
     alignItems: "center",
     gap: "0.6em",
+    paddingTop: "0.5rem",
   },
   flexBetween: {
     display: "flex",
@@ -184,11 +233,12 @@ const styles = {
     color: "#fff",
     border: "none",
     borderRadius: "5px",
-    fontSize: "1.2em",
+    fontSize: "0.8em",
     cursor: "pointer",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   },
   languageDropdown: {
+    marginTop: "2rem",
     display: "flex",
     alignItems: "center",
   },
