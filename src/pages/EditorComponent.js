@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
 import Editor from "@monaco-editor/react";
-import "../components/css/EditorComponent.css"; // Optional for styling
+import "../components/css/EditorComponent.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
 import { Button, CircularProgress, styled } from "@mui/material";
@@ -24,17 +24,16 @@ function EditorComponent() {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState("");
   const [currentLanguage, setCurrentLanguage] = useState(
-    LANGUAGES[0].DEFAULT_LANGUAGE
+    LANGUAGES[0].DEFAULT_LANGUAGE,
   );
   const [languageDetails, setLanguageDetails] = useState(LANGUAGES[0]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  // Reference to the Monaco editor instance
   const editorRef = useRef(null);
 
   useEffect(() => {
     const selectedLanguage = LANGUAGES.find(
-      (lang) => lang.DEFAULT_LANGUAGE === currentLanguage
+      (lang) => lang.DEFAULT_LANGUAGE === currentLanguage,
     );
     setLanguageDetails({
       LANGUAGE_ID: selectedLanguage.ID,
@@ -44,11 +43,9 @@ function EditorComponent() {
     });
     setCode(selectedLanguage.HELLO_WORLD);
   }, [currentLanguage]);
-  // Function to handle editor mounting
+
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
-
-    //event listner which submits code upon pressing ctrl+enter
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
       submitCode();
     });
@@ -56,12 +53,11 @@ function EditorComponent() {
 
   const getLanguageLogoById = (id) => {
     const language = LANGUAGES.find(
-      (lang) => parseInt(lang.ID) === parseInt(id)
+      (lang) => parseInt(lang.ID) === parseInt(id),
     );
     return language ? language.LOGO : null;
   };
 
-  // Function to handle code submission
   async function submitCode() {
     const codeToSubmit = editorRef.current.getValue();
     if (codeToSubmit === "") {
@@ -80,15 +76,15 @@ function EditorComponent() {
         body: JSON.stringify({
           source_code: codeToSubmit,
           language_id: languageDetails.LANGUAGE_ID,
-          stdin: "", // Input for the code (if any)
-          expected_output: "", // Expected output for the code (if any)
+          stdin: "",
+          expected_output: "",
         }),
       });
 
       if (!response.ok) {
         enqueueSnackbar(
           `Failed to create submission. Status code: ${response.status}`,
-          { variant: "error" }
+          { variant: "error" },
         );
         setLoading(false);
         return;
@@ -119,7 +115,7 @@ function EditorComponent() {
             });
           })
           .finally(() => setLoading(false));
-      }, 2000); // Delay added to give Judge0 some time to process the submission
+      }, 2000);
     } catch (error) {
       enqueueSnackbar("Error: " + error.message, { variant: "error" });
     }
@@ -132,7 +128,7 @@ function EditorComponent() {
   }
 
   return (
-    <div className="editor-container" style={styles.container}>
+    <div className="editor-container">
       <div style={{ height: "3.5rem", backgroundColor: "#ccd4bc" }}>
         <div style={styles.flexStart}>
           {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
@@ -143,14 +139,12 @@ function EditorComponent() {
       </div>
       <div className="layout">
         <Editor
-          height="70vh"
-          width="85vw"
+          className="editor"
           theme="vs-dark"
           onMount={handleEditorDidMount}
-          // ... other editor configuration options
-          value={code} // Set initial value
-          onChange={setCode} // Update code state on change
-          language={languageDetails.DEFAULT_LANGUAGE} // Set default language to JavaScript
+          value={code}
+          onChange={setCode}
+          language={languageDetails.DEFAULT_LANGUAGE}
         />
         <div className="sidebar">
           <div style={styles.languageDropdown}>
@@ -159,21 +153,6 @@ function EditorComponent() {
               defaultLanguage={languageDetails}
             />
           </div>
-          {/* <select
-            style={styles.select}
-            // style={{ padding: "0.5em 1em" }}
-            onChange={handleLanguageChange}
-          >
-            {LANGUAGES.map((language, index) => (
-              <option
-                key={index}
-                style={{ padding: "0.2em 0.5em" }}
-                value={language.DEFAULT_LANGUAGE}
-              >
-                {language.NAME}
-              </option>
-            ))}
-          </select> */}
           <StyledButton
             onClick={submitCode}
             style={styles.button}
@@ -186,26 +165,9 @@ function EditorComponent() {
             </span>
             Run {languageDetails.LANGUAGE_NAME}
           </StyledButton>
-          {/* <button onClick={submitCode} style={styles.button}>
-          <FaPlay size="16" /> Run {languageDetails.LANGUAGE_NAME} Code
-        </button> */}
         </div>
       </div>
-      {/* <div id="counter">
-        A user can do 50 executions/day in total (irrespective of the language)
-      </div> */}
-      <div
-        style={{
-          backgroundColor: "#d8dbcc",
-          height: "22.3vh",
-        }}
-      >
-        {output}
-        {/* className="output" */}
-        {/* <pre> */}
-        {/* <p>{output}</p> */}
-        {/* </pre> */}
-      </div>
+      <div className="output">{output}</div>
     </div>
   );
 }
@@ -217,13 +179,6 @@ const styles = {
     alignItems: "center",
     gap: "0.6em",
     paddingTop: "0.5rem",
-  },
-  flexBetween: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingRight: "1em",
-    height: "60px",
   },
   button: {
     marginLeft: "5px",
