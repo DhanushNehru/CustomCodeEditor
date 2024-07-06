@@ -1,22 +1,50 @@
-.output pre {
-  background-color: #e35757; /* Change background color */
-  padding: 10px; /* Add padding */
-  border-radius: 5px; /* Add rounded corners */
-  transition: background-color 0.3s ease; /* Smooth transition */
-}
+/* EditorComponent.css */
 
-.output pre:hover {
-  background-color: #9d4444; /* Change background color on hover */
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
 }
 
 .layout {
   display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: 15vw;
-  gap: 1rem;
   align-items: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.editor {
+  width: 100%;
+  height: 70vh;
+}
+
+.output {
+  background-color: #d8dbcc;
+  height: 22.3vh;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .layout {
+    flex-direction: row;
+  }
+
+  .sidebar {
+    width: 15vw;
+    margin-top: 0;
+  }
+
+  .editor {
+    width: 85vw;
+    height: 70vh;
+  }
 }
