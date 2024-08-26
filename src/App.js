@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
-import LandingPage from "./pages/LandingPage";
 import EditorComponent from "./pages/EditorComponent";
 import "./components/css/App.css"
 import theme from "./theme";
@@ -12,7 +11,7 @@ function App() {
       <SnackbarProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<EditorComponent />} />
             <Route path="/editor" element={<EditorComponent />} />
           </Routes>
         </BrowserRouter>

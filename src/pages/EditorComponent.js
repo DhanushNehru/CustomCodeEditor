@@ -5,6 +5,7 @@ import "../components/css/EditorComponent.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
 import { Button, CircularProgress, styled } from "@mui/material";
+import Stars from "../components/js/Stars";
 import {
   LANGUAGES,
   judge0SubmitUrl,
@@ -130,11 +131,12 @@ function EditorComponent() {
   return (
     <div className="editor-container">
       <div style={{ height: "auto", margin: "0.5rem", padding: "0.5rem", border: "3px solid rgba(0, 0, 0, 0.096)", borderRadius: "1rem" }}>
-        <div style={styles.flexStart}>
+        <div style={styles.flex}>
           {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
           <div style={{ fontWeight: "bold" }}>
             {languageDetails.LANGUAGE_NAME}
           </div>
+          <Stars />
         </div>
       </div>
       <div className="layout">
@@ -173,12 +175,11 @@ function EditorComponent() {
 }
 
 const styles = {
-  flexStart: {
+  flex: {
     display: "flex",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     alignItems: "center",
     gap: "0.6em",
-    paddingTop: "0.5rem",
   },
   button: {
     marginLeft: "5px",
