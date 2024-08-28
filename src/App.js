@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import EditorComponent from "./pages/EditorComponent";
-import "./components/css/App.css"
 import theme from "./theme";
 import SnackbarProvider from "./components/js/SnackbarProvider";
 

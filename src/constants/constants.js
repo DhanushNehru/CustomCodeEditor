@@ -1,7 +1,7 @@
-import CppLogo from "../Images/CppLogo"
-import JavaLogo from "../Images/JavaLogo"
-import JavascriptLogo from "../Images/JavaScriptLogo"
-import PythonLogo from "../Images/PythonLogo"
+import CppLogo from "../components/images/CppLogo";
+import JavaLogo from "../components/images/JavaLogo";
+import JavascriptLogo from "../components/images/JavaScriptLogo";
+import PythonLogo from "../components/images/PythonLogo";
 
 export const judge0SubmitUrl =
   process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL
