@@ -23,7 +23,7 @@ const StyledButton = styled(Button)({
 
 function EditorComponent() {
   const [code, setCode] = useState(null);
-  const [output, setOutput] = useState("");
+  const [output, setOutput] = useState([]);
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE,
   );
@@ -108,7 +108,8 @@ function EditorComponent() {
               setOutput(data.message);
               return;
             }
-            setOutput(data.stdout);
+            const formatedData = data.stdout.split("\n")
+            setOutput(formatedData);
           })
           .catch((error) => {
             enqueueSnackbar("Error retrieving output: " + error.message, {
@@ -169,7 +170,13 @@ function EditorComponent() {
           </StyledButton>
         </div>
       </div>
-      <div className="output">{output}</div>
+      <div className="output">
+        {
+          output && output.map((result, i)=>{
+            return <div key={i}>{result}</div>
+          })
+        }
+      </div>
     </div>
   );
 }
