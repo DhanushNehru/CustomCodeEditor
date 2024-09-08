@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FaStar, FaGithub } from "react-icons/fa";
 import CircularLoading from "./CircularLoading";
 import { useGetStars } from "../../hooks/useGetStars";
@@ -19,18 +20,20 @@ const Stars = () => {
     );
 
   return (
-    <div style={styles.starsCon}>
-      <div style={styles.stars}>
-        <FaGithub fontSize={32} />
-        <div style={styles.starsCount}>
-          <span>Star on GitHub</span>
-          <span style={{ color: "gold" }}>
-            {repositoryStarts} {repositoryStarts > 1 ? "stars" : "star"}{" "}
-            <FaStar style={styles.star} color='gold' />
-          </span>
+    <Link to="https://github.com/DhanushNehru/CustomCodeEditor" target="_blank" style={styles.githubLink}>
+      <div style={styles.starsCon}>
+        <div style={styles.stars}>
+          <FaGithub fontSize={32} />
+          <div style={styles.starsCount}>
+            <span>Star on GitHub</span>
+            <span style={{ color: "gold" }}>
+              {repositoryStarts} {repositoryStarts > 1 ? "stars" : "star"}{" "}
+              <FaStar style={styles.star} color='gold' />
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -71,4 +74,8 @@ const styles = {
     borderRadius: "5px",
     cursor: "pointer",
   },
+  githubLink: {
+    textDecoration: "none",
+    color: "inherit"
+  }
 };
