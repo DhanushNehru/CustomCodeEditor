@@ -131,7 +131,7 @@ function EditorComponent() {
 
   return (
     <div className="editor-container">
-      <div style={{ height: "auto", margin: "0.5rem", padding: "0.5rem", border: "3px solid rgba(0, 0, 0, 0.096)", borderRadius: "1rem" }}>
+      <div style={{ height: "auto", margin: "0.5rem", paddingLeft:"0.5rem", paddingRight: "0.5rem", border: "3px solid rgba(0, 0, 0, 0.096)", borderRadius: "1rem" }}>
         <div style={styles.flex}>
           {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
           <div style={{ fontWeight: "bold" }}>
