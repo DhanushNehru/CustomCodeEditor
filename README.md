@@ -1,4 +1,4 @@
-# Custom Code Builder
+# Custom Code Editor
 
 ![Custom Code Editor (1) (2) (1) (1)-min dn (1)](https://github.com/DhanushNehru/CustomCodeEditor/assets/22955675/c24769a6-ac89-4c8a-aa6a-c5c42c186177)
 
