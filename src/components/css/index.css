@@ -4,3 +4,15 @@ body {
   margin: 0;
   font-family: 'Poppins';
 }
+
+/* Light Mode */
+.light-mode {
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Dark Mode */
+.dark-mode {
+  background-color: #333;
+  color: #f9f9f9;
+}
