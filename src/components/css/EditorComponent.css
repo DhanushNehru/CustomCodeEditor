@@ -14,8 +14,8 @@
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   padding: 0.5rem;
-  border: 3px solid rgba(0, 0, 0, 0.096);
   border-radius: 1rem;
+  transition: background-color 0.3s ease;
 }
 
 .sidebar {
@@ -36,10 +36,11 @@
   overflow-y: auto;
   padding: 1rem;
   margin: 0.5rem;
-  border: 3px solid rgba(0, 0, 0, 0.096);
   border-radius: 1rem;
+  transition: background-color 0.3s ease;
 }
 
+/* Responsive layout */
 @media (min-width: 768px) {
   .layout {
     flex-direction: row;

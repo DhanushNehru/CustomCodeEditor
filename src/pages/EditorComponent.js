@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaPlay } from "react-icons/fa";
+import { FaPlay, FaSun, FaMoon } from "react-icons/fa"; // Import icons
 import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
-import { Button, CircularProgress, styled } from "@mui/material";
+import { Button, CircularProgress, styled, IconButton } from "@mui/material";
+import { toast, ToastContainer } from "react-toastify"; // Import react-toastify
+import "react-toastify/dist/ReactToastify.css"; // Import CSS for toasts
+
 import Stars from "../components/js/Stars";
 import {
   LANGUAGES,
@@ -21,7 +24,7 @@ const StyledButton = styled(Button)({
   gap: "0.5rem",
 });
 
-function EditorComponent() {
+function EditorComponent({ darkMode, toggleTheme }) {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState([]);
   const [currentLanguage, setCurrentLanguage] = useState(
@@ -108,7 +111,7 @@ function EditorComponent() {
               setOutput(data.message);
               return;
             }
-            const formatedData = data.stdout.split("\n")
+            const formatedData = data.stdout.split("\n");
             setOutput(formatedData);
           })
           .catch((error) => {
@@ -129,53 +132,82 @@ function EditorComponent() {
     setCode(null);
   }
 
+  // Add toast inside toggleTheme
+  const handleToggleTheme = () => {
+    toggleTheme();
+    toast.darkMode
+      ? toast.info("Switched to light mode")
+      : toast.info("Switched to dark mode");
+  };
+
+  useEffect(() => {
+    toast.info(
+      "Note: The code editor is currently using the free tier version of Judge0, which has a limit of 50 requests per day. Please be mindful of your usage."
+    );
+  }, []);
+
   return (
-    <div className="editor-container">
-      <div style={{ height: "auto", margin: "0.5rem", paddingLeft:"0.5rem", paddingRight: "0.5rem", border: "3px solid rgba(0, 0, 0, 0.096)", borderRadius: "1rem" }}>
-        <div style={styles.flex}>
-          {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
-          <div style={{ fontWeight: "bold" }}>
-            {languageDetails.LANGUAGE_NAME}
+    <div>
+      <ToastContainer /> {/* Add ToastContainer for notifications */}
+      <div className="editor-container">
+        <div
+          style={{
+            height: "auto",
+            margin: "0.5rem",
+            paddingLeft: "0.5rem",
+            paddingRight: "0.5rem",
+            border: "3px solid rgba(0, 0, 0, 0.096)",
+            borderRadius: "1rem",
+          }}
+        >
+          <div style={styles.flex}>
+            {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
+            <div style={{ fontWeight: "bold" }}>
+              {languageDetails.LANGUAGE_NAME}
+            </div>
+            <Stars />
+            <IconButton onClick={handleToggleTheme} color="inherit">
+              {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
+            </IconButton>
           </div>
-          <Stars />
         </div>
-      </div>
-      <div className="layout">
-        <Editor
-          className="editor"
-          theme="vs-dark"
-          onMount={handleEditorDidMount}
-          value={code}
-          onChange={setCode}
-          language={languageDetails.DEFAULT_LANGUAGE}
-        />
-        <div className="sidebar">
-          <div style={styles.languageDropdown}>
-            <LanguageSelect
-              handleLanguageChange={handleLanguageChange}
-              defaultLanguage={languageDetails}
-            />
+        <div className="layout">
+          <Editor
+            className="editor"
+            theme={darkMode ? "vs-dark" : "light"}
+            onMount={handleEditorDidMount}
+            value={code}
+            onChange={setCode}
+            language={languageDetails.DEFAULT_LANGUAGE}
+          />
+          <div className="sidebar">
+            <div style={styles.languageDropdown}>
+              <LanguageSelect
+                handleLanguageChange={handleLanguageChange}
+                defaultLanguage={languageDetails}
+                darkMode={darkMode}
+              />
+            </div>
+            <StyledButton
+              onClick={submitCode}
+              style={styles.button}
+              variant="contained"
+              color="primary"
+              disabled={loading}
+            >
+              <span>
+                {loading ? <CircularProgress size={16} /> : <FaPlay size="16" />}
+              </span>
+              Run {languageDetails.LANGUAGE_NAME}
+            </StyledButton>
           </div>
-          <StyledButton
-            onClick={submitCode}
-            style={styles.button}
-            variant="contained"
-            color="primary"
-            disabled={loading}
-          >
-            <span>
-              {loading ? <CircularProgress size={16} /> : <FaPlay size="16" />}
-            </span>
-            Run {languageDetails.LANGUAGE_NAME}
-          </StyledButton>
         </div>
-      </div>
-      <div className="output">
-        {
-          output && output.map((result, i)=>{
-            return <div key={i}>{result}</div>
-          })
-        }
+        <div className="output">
+          {output &&
+            output.map((result, i) => {
+              return <div key={i}>{result}</div>;
+            })}
+        </div>
       </div>
     </div>
   );
