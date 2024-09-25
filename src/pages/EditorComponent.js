@@ -1,10 +1,11 @@
+// EditorComponent.js
 import React, { useState, useRef, useEffect } from "react";
-import { FaPlay } from "react-icons/fa";
+import { FaPlay, FaSun, FaMoon } from "react-icons/fa"; // Import icons
 import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
-import { Button, CircularProgress, styled } from "@mui/material";
+import { Button, CircularProgress, styled, IconButton } from "@mui/material";
 import Stars from "../components/js/Stars";
 import {
   LANGUAGES,
@@ -21,7 +22,7 @@ const StyledButton = styled(Button)({
   gap: "0.5rem",
 });
 
-function EditorComponent() {
+function EditorComponent({ darkMode, toggleTheme }) {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState([]);
   const [currentLanguage, setCurrentLanguage] = useState(
@@ -108,7 +109,7 @@ function EditorComponent() {
               setOutput(data.message);
               return;
             }
-            const formatedData = data.stdout.split("\n")
+            const formatedData = data.stdout.split("\n");
             setOutput(formatedData);
           })
           .catch((error) => {
@@ -131,19 +132,31 @@ function EditorComponent() {
 
   return (
     <div className="editor-container">
-      <div style={{ height: "auto", margin: "0.5rem", paddingLeft:"0.5rem", paddingRight: "0.5rem", border: "3px solid rgba(0, 0, 0, 0.096)", borderRadius: "1rem" }}>
+      <div
+        style={{
+          height: "auto",
+          margin: "0.5rem",
+          paddingLeft: "0.5rem",
+          paddingRight: "0.5rem",
+          border: "3px solid rgba(0, 0, 0, 0.096)",
+          borderRadius: "1rem",
+        }}
+      >
         <div style={styles.flex}>
           {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
           <div style={{ fontWeight: "bold" }}>
             {languageDetails.LANGUAGE_NAME}
           </div>
           <Stars />
+          <IconButton onClick={toggleTheme} color="inherit">
+            {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
+          </IconButton>
         </div>
       </div>
       <div className="layout">
         <Editor
           className="editor"
-          theme="vs-dark"
+          theme={darkMode ? "vs-dark" : "light"}
           onMount={handleEditorDidMount}
           value={code}
           onChange={setCode}
@@ -154,6 +167,7 @@ function EditorComponent() {
             <LanguageSelect
               handleLanguageChange={handleLanguageChange}
               defaultLanguage={languageDetails}
+              darkMode={darkMode}
             />
           </div>
           <StyledButton
@@ -171,11 +185,10 @@ function EditorComponent() {
         </div>
       </div>
       <div className="output">
-        {
-          output && output.map((result, i)=>{
-            return <div key={i}>{result}</div>
-          })
-        }
+        {output &&
+          output.map((result, i) => {
+            return <div key={i}>{result}</div>;
+          })}
       </div>
     </div>
   );
