@@ -7,7 +7,7 @@
     "@emotion/styled": "^11.11.5",
     "@fortawesome/fontawesome-free": "^6.5.2",
     "@monaco-editor/react": "^4.6.0",
-    "@mui/material": "^5.15.18",
+    "@mui/material": "^6.1.1",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@snaddyvitch-dispenser/react-router-sitemap": "^1.2.6",
     "notistack": "^3.0.1",

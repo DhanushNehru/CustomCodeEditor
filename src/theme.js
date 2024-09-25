@@ -1,6 +1,9 @@
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
+  colorSchemes: {
+    dark: true,
+  },
   palette: {
     primary: {
       main: "#1976d2",
@@ -13,9 +16,7 @@ const theme = createTheme({
     h1: {
       fontSize: "2rem",
     },
-    fontFamily: [
-      "Poppins",
-    ],
+    fontFamily: ["Poppins"],
   },
 });
 

@@ -1,12 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+
 import EditorComponent from "./pages/EditorComponent";
 import theme from "./theme";
 import SnackbarProvider from "./components/js/SnackbarProvider";
-
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <SnackbarProvider>
         <BrowserRouter>
           <Routes>
@@ -19,4 +21,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

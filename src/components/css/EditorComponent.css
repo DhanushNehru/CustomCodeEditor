@@ -7,17 +7,6 @@
   height: 100vh;
 }
 
-.layout {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  padding: 0.5rem;
-  border: 3px solid rgba(0, 0, 0, 0.096);
-  border-radius: 1rem;
-}
-
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -31,20 +20,7 @@
   height: 70vh;
 }
 
-.output {
-  background-color: #d8dbcc;
-  height: 22.3vh;
-  overflow-y: auto;
-  padding: 1rem;
-  margin: 0.5rem;
-  border: 3px solid rgba(0, 0, 0, 0.096);
-  border-radius: 1rem;
-}
-
 @media (min-width: 768px) {
-  .layout {
-    flex-direction: row;
-  }
 
   .sidebar {
     width: 15vw;
