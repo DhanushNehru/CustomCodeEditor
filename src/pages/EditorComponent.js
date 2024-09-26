@@ -4,6 +4,7 @@ import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import { useSnackbar } from "notistack";
+import Box from "@mui/material/Box";
 import { Button, CircularProgress, styled } from "@mui/material";
 import Stars from "../components/js/Stars";
 import {
@@ -13,6 +14,7 @@ import {
   rapidApiKey,
 } from "../constants/constants";
 import LanguageSelect from "../components/js/LanguageSelect";
+import ToggleTheme from "../components/js/ToggleTheme";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -25,12 +27,50 @@ function EditorComponent() {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState([]);
   const [currentLanguage, setCurrentLanguage] = useState(
-    LANGUAGES[0].DEFAULT_LANGUAGE,
+    LANGUAGES[0].DEFAULT_LANGUAGE
   );
   const [languageDetails, setLanguageDetails] = useState(LANGUAGES[0]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const editorRef = useRef(null);
+
+  const StyledLayout = styled("div")(({ theme }) => ({
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    marginLeft: "0.5rem",
+    marginRight: "0.5rem",
+    padding: "0.5rem",
+    border: `3px solid ${theme.palette.divider}`,
+    borderRadius: "1rem",
+    "@media (min-width: 768px)": {
+      flexDirection: "row",
+    },
+  }));
+
+  const OutputLayout = styled("div")(({ theme }) => ({
+    backgroundColor: theme.palette.background.paper,
+    height: "22.3vh",
+    overflowY: "auto",
+    padding: "1rem",
+    margin: "0.5rem",
+    border: `3px solid ${theme.palette.divider}`,
+    borderRadius: "1rem",
+  }));
+
+  const styles = {
+    flex: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      gap: "0.6em",
+    },
+    languageDropdown: {
+      marginTop: "2rem",
+      display: "flex",
+      alignItems: "center",
+    },
+  };
 
   useEffect(() => {
     const selectedLanguage = LANGUAGES.find(
@@ -131,16 +171,30 @@ function EditorComponent() {
 
   return (
     <div className="editor-container">
-      <div style={{ height: "auto", margin: "0.5rem", paddingLeft:"0.5rem", paddingRight: "0.5rem", border: "3px solid rgba(0, 0, 0, 0.096)", borderRadius: "1rem" }}>
+      <Box
+        sx={[
+          (theme) => ({
+            height: "auto",
+            margin: "0.5rem",
+            paddingLeft: "0.5rem",
+            paddingRight: "0.5rem",
+            border: `3px solid ${theme.palette.divider}`,
+            borderRadius: "1rem",
+          }),
+        ]}
+      >
         <div style={styles.flex}>
           {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
           <div style={{ fontWeight: "bold" }}>
             {languageDetails.LANGUAGE_NAME}
           </div>
-          <Stars />
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <ToggleTheme />
+            <Stars />
+          </div>
         </div>
-      </div>
-      <div className="layout">
+      </Box>
+      <StyledLayout>
         <Editor
           className="editor"
           theme="vs-dark"
@@ -157,8 +211,21 @@ function EditorComponent() {
             />
           </div>
           <StyledButton
+            sx={[
+              (theme) => ({
+                marginLeft: "5px",
+                marginTop: "5px",
+                padding: "10px 20px",
+                bgcolor: theme.palette.text.primary,
+                color: theme.palette.background.default,
+                border: "none",
+                borderRadius: "5px",
+                fontSize: "0.8em",
+                cursor: "pointer",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }),
+            ]}
             onClick={submitCode}
-            style={styles.button}
             variant="contained"
             color="primary"
             disabled={loading}
@@ -169,42 +236,15 @@ function EditorComponent() {
             Run {languageDetails.LANGUAGE_NAME}
           </StyledButton>
         </div>
-      </div>
-      <div className="output">
-        {
-          output && output.map((result, i)=>{
-            return <div key={i}>{result}</div>
-          })
-        }
-      </div>
+      </StyledLayout>
+      <OutputLayout>
+        {output &&
+          output.map((result, i) => {
+            return <div key={i}>{result}</div>;
+          })}
+      </OutputLayout>
     </div>
   );
 }
-
-const styles = {
-  flex: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: "0.6em",
-  },
-  button: {
-    marginLeft: "5px",
-    marginTop: "5px",
-    padding: "10px 20px",
-    backgroundColor: "#252525",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    fontSize: "0.8em",
-    cursor: "pointer",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  },
-  languageDropdown: {
-    marginTop: "2rem",
-    display: "flex",
-    alignItems: "center",
-  },
-};
 
 export default EditorComponent;
