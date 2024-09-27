@@ -51,7 +51,6 @@ function EditorComponent() {
       flexDirection: "row",
     },
   }));
-  console.log(currentEditorTheme);
 
   const OutputLayout = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,

@@ -60,7 +60,6 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 function ToggleTheme() {
   const { mode, setMode } = useColorScheme();
-  console.log(mode);
 
   const changeMode = () => {
     mode == "dark" ? setMode("light") : setMode("dark");
