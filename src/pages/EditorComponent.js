@@ -12,9 +12,12 @@ import {
   judge0SubmitUrl,
   rapidApiHost,
   rapidApiKey,
+  EDITOR_THEMES,
 } from "../constants/constants";
 import LanguageSelect from "../components/js/LanguageSelect";
 import ToggleTheme from "../components/js/ToggleTheme";
+import EditorThemeSelect from "../components/js/EditorThemeSelect";
+import { defineEditorTheme } from "../components/js/defineEditorTheme";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -55,6 +58,7 @@ function EditorComponent() {
     LANGUAGES[0].DEFAULT_LANGUAGE
   );
   const [languageDetails, setLanguageDetails] = useState(LANGUAGES[0]);
+  const [currentEditorTheme, setCurrentEditorTheme] = useState(EDITOR_THEMES[1]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const editorRef = useRef(null);
@@ -76,7 +80,7 @@ function EditorComponent() {
 
   useEffect(() => {
     const selectedLanguage = LANGUAGES.find(
-      (lang) => lang.DEFAULT_LANGUAGE === currentLanguage,
+      (lang) => lang.DEFAULT_LANGUAGE === currentLanguage
     );
     setLanguageDetails({
       LANGUAGE_ID: selectedLanguage.ID,
@@ -94,9 +98,19 @@ function EditorComponent() {
     });
   }
 
+  const handleEditorThemeChange = async (_, theme) => {
+    if (["light", "vs-dark"].includes(theme.ID)) {
+      setCurrentEditorTheme(theme);
+    } else {
+      setCurrentEditorTheme(theme);
+
+      defineEditorTheme(theme).then((_) => setCurrentEditorTheme(theme));
+    }
+  };
+
   const getLanguageLogoById = (id) => {
     const language = LANGUAGES.find(
-      (lang) => parseInt(lang.ID) === parseInt(id),
+      (lang) => parseInt(lang.ID) === parseInt(id)
     );
     return language ? language.LOGO : null;
   };
@@ -127,7 +141,7 @@ function EditorComponent() {
       if (!response.ok) {
         enqueueSnackbar(
           `Failed to create submission. Status code: ${response.status}`,
-          { variant: "error" },
+          { variant: "error" }
         );
         setLoading(false);
         return;
@@ -150,7 +164,7 @@ function EditorComponent() {
               setOutput(data.message);
               return;
             }
-            const formatedData = data.stdout.split("\n")
+            const formatedData = data.stdout.split("\n");
             setOutput(formatedData);
           })
           .catch((error) => {
@@ -199,7 +213,7 @@ function EditorComponent() {
       <StyledLayout>
         <Editor
           className="editor"
-          theme="vs-dark"
+          theme={currentEditorTheme.NAME}
           onMount={handleEditorDidMount}
           value={code}
           onChange={setCode}
@@ -237,6 +251,12 @@ function EditorComponent() {
             </span>
             Run {languageDetails.LANGUAGE_NAME}
           </StyledButton>
+          <div style={{ marginTop: "50px" }}>
+            <EditorThemeSelect
+              handleEditorThemeChange={handleEditorThemeChange}
+              defaultEditorTheme={currentEditorTheme}
+            />
+          </div>
         </div>
       </StyledLayout>
       <OutputLayout>
