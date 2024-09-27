@@ -23,6 +23,31 @@ const StyledButton = styled(Button)({
   gap: "0.5rem",
 });
 
+
+const StyledLayout = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
+  marginLeft: "0.5rem",
+  marginRight: "0.5rem",
+  padding: "0.5rem",
+  border: `3px solid ${theme.palette.divider}`,
+  borderRadius: "1rem",
+  "@media (min-width: 768px)": {
+    flexDirection: "row",
+  },
+}));
+
+const OutputLayout = styled("div")(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  height: "22.3vh",
+  overflowY: "auto",
+  padding: "1rem",
+  margin: "0.5rem",
+  border: `3px solid ${theme.palette.divider}`,
+  borderRadius: "1rem",
+}));
+
 function EditorComponent() {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState([]);
@@ -34,29 +59,6 @@ function EditorComponent() {
   const { enqueueSnackbar } = useSnackbar();
   const editorRef = useRef(null);
 
-  const StyledLayout = styled("div")(({ theme }) => ({
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    marginLeft: "0.5rem",
-    marginRight: "0.5rem",
-    padding: "0.5rem",
-    border: `3px solid ${theme.palette.divider}`,
-    borderRadius: "1rem",
-    "@media (min-width: 768px)": {
-      flexDirection: "row",
-    },
-  }));
-
-  const OutputLayout = styled("div")(({ theme }) => ({
-    backgroundColor: theme.palette.background.paper,
-    height: "22.3vh",
-    overflowY: "auto",
-    padding: "1rem",
-    margin: "0.5rem",
-    border: `3px solid ${theme.palette.divider}`,
-    borderRadius: "1rem",
-  }));
 
   const styles = {
     flex: {
