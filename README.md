@@ -1,6 +1,7 @@
 # Custom Code Editor
-
-![Custom Code Editor (1) (2) (1) (1)-min dn (1)](https://github.com/DhanushNehru/CustomCodeEditor/assets/22955675/c24769a6-ac89-4c8a-aa6a-c5c42c186177)
+<p align=middle>
+<img src="./banner.svg" height="200" alt="Custom Code Editor"/>
+</p>
 
 
 This project is a React-based code builder that utilizes the Monaco Editor. It allows users to write and execute code snippets within a web browser. It uses Judge0 as a code execution system

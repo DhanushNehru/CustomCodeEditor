@@ -34,7 +34,7 @@ const StyledLayout = styled("div")(({ theme }) => ({
   marginLeft: "0.5rem",
   marginRight: "0.5rem",
   padding: "0.5rem",
-  border: `3px solid ${theme.palette.divider}`,
+  border: `2px solid ${theme.palette.divider}`,
   borderRadius: "1rem",
   "@media (min-width: 768px)": {
     flexDirection: "row",
@@ -47,7 +47,7 @@ const OutputLayout = styled("div")(({ theme }) => ({
   overflowY: "auto",
   padding: "1rem",
   margin: "0.5rem",
-  border: `3px solid ${theme.palette.divider}`,
+  border: `2px solid ${theme.palette.divider}`,
   borderRadius: "1rem",
 }));
 
@@ -194,7 +194,7 @@ function EditorComponent() {
             margin: "0.5rem",
             paddingLeft: "0.5rem",
             paddingRight: "0.5rem",
-            border: `3px solid ${theme.palette.divider}`,
+            border: `2px solid ${theme.palette.divider}`,
             borderRadius: "1rem",
           }),
         ]}
