@@ -2,15 +2,20 @@ import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   colorSchemes: {
-    dark: true,
+    dark: {
+      palette: {
+        divider: ["#868e96"]
+      }
+    }
   },
   palette: {
     primary: {
-      main: "#1976d2",
+      main: "#2F1888",
     },
     secondary: {
-      main: "#dc004e",
+      main: "#2837BA",
     },
+    divider: ["#868e96"]
   },
   typography: {
     h1: {
