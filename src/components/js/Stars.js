@@ -49,9 +49,7 @@ const styles = {
     height: "4.2rem",
   },
   stars: {
-    border: "1px solid gray",
     padding: ".25rem 1rem",
-    borderRadius: "6px",
     display: "flex",
     alignItems: "center",
     gap: ".5rem",
