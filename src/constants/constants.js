@@ -26,7 +26,7 @@ export const LANGUAGES = [
     ID: LANGUAGE_ID_FOR_PYTHON3,
     NAME: "Python3",
     DEFAULT_LANGUAGE: "python",
-    LOGO: <PythonLogo />,
+    LOGO: <PythonLogo/>,
     HELLO_WORLD: `print("Hello World")
 `,
   },
