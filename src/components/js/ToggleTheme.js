@@ -1,5 +1,5 @@
 import React from "react";
-import { useColorScheme , styled } from "@mui/material/styles";
+import { useColorScheme, styled } from "@mui/material/styles";
 
 import Switch from "@mui/material/Switch";
 

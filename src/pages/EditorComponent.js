@@ -72,7 +72,7 @@ function EditorComponent() {
       gap: "0.6em",
     },
     languageDropdown: {
-      marginTop: "2rem",
+      marginTop: "1rem",
       display: "flex",
       alignItems: "center",
     },
@@ -200,16 +200,16 @@ function EditorComponent() {
         ]}
       >
         <div style={styles.flex}>
-          {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
-          <div style={{ fontWeight: "bold" }}>
-            {languageDetails.LANGUAGE_NAME}
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img src="./images/custom-code-editor-rounded.svg" alt="Custom Code Editor icon" width={32} style={{ marginLeft: "0.5rem" }} />
+            <span style={{ backgroundClip: "text", background: "linear-gradient(#2837BA 0%, #2F1888 100%)", WebkitBackgroundClip: "text", color: "transparent", marginLeft: "0.5rem", fontWeight: "bold", fontSize: "1.5em" }}>Custom Code Editor</span>
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
             <ToggleTheme />
             <Stars />
           </div>
         </div>
-      </Box>
+      </Box >
       <StyledLayout>
         <Editor
           className="editor"
@@ -220,6 +220,16 @@ function EditorComponent() {
           language={languageDetails.DEFAULT_LANGUAGE}
         />
         <div className="sidebar">
+          {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
+          <div style={{ fontWeight: "bold" }}>
+            {languageDetails.LANGUAGE_NAME}
+          </div>
+          <div style={styles.languageDropdown}>
+            <EditorThemeSelect
+              handleEditorThemeChange={handleEditorThemeChange}
+              defaultEditorTheme={currentEditorTheme}
+            />
+          </div>
           <div style={styles.languageDropdown}>
             <LanguageSelect
               handleLanguageChange={handleLanguageChange}
@@ -230,7 +240,7 @@ function EditorComponent() {
             sx={[
               (theme) => ({
                 marginLeft: "5px",
-                marginTop: "5px",
+                marginTop: "1rem",
                 padding: "10px 20px",
                 bgcolor: theme.palette.text.primary,
                 color: theme.palette.background.default,
@@ -247,16 +257,10 @@ function EditorComponent() {
             disabled={loading}
           >
             <span>
-              {loading ? <CircularProgress size={16} /> : <FaPlay size="16" />}
+              {loading ? <CircularProgress size={13} /> : <FaPlay size="13" />}
             </span>
             Run {languageDetails.LANGUAGE_NAME}
           </StyledButton>
-          <div style={{ marginTop: "50px" }}>
-            <EditorThemeSelect
-              handleEditorThemeChange={handleEditorThemeChange}
-              defaultEditorTheme={currentEditorTheme}
-            />
-          </div>
         </div>
       </StyledLayout>
       <OutputLayout>
@@ -265,7 +269,7 @@ function EditorComponent() {
             return <div key={i}>{result}</div>;
           })}
       </OutputLayout>
-    </div>
+    </div >
   );
 }
 
