@@ -26,7 +26,6 @@ const StyledButton = styled(Button)({
   gap: "0.5rem",
 });
 
-
 const StyledLayout = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -58,11 +57,12 @@ function EditorComponent() {
     LANGUAGES[0].DEFAULT_LANGUAGE
   );
   const [languageDetails, setLanguageDetails] = useState(LANGUAGES[0]);
-  const [currentEditorTheme, setCurrentEditorTheme] = useState(EDITOR_THEMES[1]);
+  const [currentEditorTheme, setCurrentEditorTheme] = useState(
+    EDITOR_THEMES[1]
+  );
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const editorRef = useRef(null);
-
 
   const styles = {
     flex: {
@@ -182,7 +182,7 @@ function EditorComponent() {
   function handleLanguageChange(_, value) {
     setCurrentLanguage(value.DEFAULT_LANGUAGE);
     setOutput("");
-    setCode(null);
+    code ? setCode(code) : setCode(value.HELLO_WORLD);
   }
 
   return (
@@ -201,15 +201,32 @@ function EditorComponent() {
       >
         <div style={styles.flex}>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <img src="./images/custom-code-editor-rounded.svg" alt="Custom Code Editor icon" width={32} style={{ marginLeft: "0.5rem" }} />
-            <span style={{ backgroundClip: "text", background: "linear-gradient(#2837BA 0%, #2F1888 100%)", WebkitBackgroundClip: "text", color: "transparent", marginLeft: "0.5rem", fontWeight: "bold", fontSize: "1.5em" }}>Custom Code Editor</span>
+            <img
+              src="./images/custom-code-editor-rounded.svg"
+              alt="Custom Code Editor icon"
+              width={32}
+              style={{ marginLeft: "0.5rem" }}
+            />
+            <span
+              style={{
+                backgroundClip: "text",
+                background: "linear-gradient(#2837BA 0%, #2F1888 100%)",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                marginLeft: "0.5rem",
+                fontWeight: "bold",
+                fontSize: "1.5em",
+              }}
+            >
+              Custom Code Editor
+            </span>
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
             <ToggleTheme />
             <Stars />
           </div>
         </div>
-      </Box >
+      </Box>
       <StyledLayout>
         <Editor
           className="editor"
@@ -269,7 +286,7 @@ function EditorComponent() {
             return <div key={i}>{result}</div>;
           })}
       </OutputLayout>
-    </div >
+    </div>
   );
 }
 
