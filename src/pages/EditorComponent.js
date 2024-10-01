@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FaPlay } from "react-icons/fa";
 import Editor from "@monaco-editor/react";
 import "../components/css/EditorComponent.css";
@@ -63,6 +63,7 @@ function EditorComponent() {
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const editorRef = useRef(null);
+  const monacoRef = useRef(null);
 
   const styles = {
     flex: {
@@ -83,20 +84,13 @@ function EditorComponent() {
       (lang) => lang.DEFAULT_LANGUAGE === currentLanguage
     );
     setLanguageDetails({
-      LANGUAGE_ID: selectedLanguage.ID,
+      ID: selectedLanguage.ID,
       LANGUAGE_NAME: selectedLanguage.NAME,
       DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
       NAME: selectedLanguage.NAME,
     });
     setCode(selectedLanguage.HELLO_WORLD);
   }, [currentLanguage]);
-
-  function handleEditorDidMount(editor, monaco) {
-    editorRef.current = editor;
-    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-      submitCode();
-    });
-  }
 
   const handleEditorThemeChange = async (_, theme) => {
     if (["light", "vs-dark"].includes(theme.ID)) {
@@ -115,7 +109,7 @@ function EditorComponent() {
     return language ? language.LOGO : null;
   };
 
-  async function submitCode() {
+  const submitCode = useCallback(async () => {
     const codeToSubmit = editorRef.current.getValue();
     if (codeToSubmit === "") {
       enqueueSnackbar("Please enter valid code", { variant: "error" });
@@ -132,7 +126,7 @@ function EditorComponent() {
         },
         body: JSON.stringify({
           source_code: codeToSubmit,
-          language_id: languageDetails.LANGUAGE_ID,
+          language_id: languageDetails.ID,
           stdin: "",
           expected_output: "",
         }),
@@ -177,7 +171,27 @@ function EditorComponent() {
     } catch (error) {
       enqueueSnackbar("Error: " + error.message, { variant: "error" });
     }
-  }
+  }, [enqueueSnackbar, languageDetails]);
+
+  const handleEditorDidMount = useCallback(
+    (editor, monaco) => {
+      editorRef.current = editor;
+      monacoRef.current = monaco;
+      editor.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
+        submitCode
+      );
+    },
+    [submitCode]
+  );
+
+  useEffect(() => {
+    if (editorRef.current && monacoRef.current) {
+      const editor = editorRef.current;
+      const monaco = monacoRef.current;
+      handleEditorDidMount(editor, monaco);
+    }
+  }, [languageDetails, handleEditorDidMount]);
 
   function handleLanguageChange(_, value) {
     setCurrentLanguage(value.DEFAULT_LANGUAGE);
@@ -237,7 +251,7 @@ function EditorComponent() {
           language={languageDetails.DEFAULT_LANGUAGE}
         />
         <div className="sidebar">
-          {getLanguageLogoById(languageDetails.LANGUAGE_ID)}
+          {getLanguageLogoById(languageDetails.ID)}
           <div style={{ fontWeight: "bold" }}>
             {languageDetails.LANGUAGE_NAME}
           </div>
