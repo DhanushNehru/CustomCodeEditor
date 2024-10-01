@@ -196,7 +196,9 @@ function EditorComponent() {
   function handleLanguageChange(_, value) {
     setCurrentLanguage(value.DEFAULT_LANGUAGE);
     setOutput("");
-    setCode(null);
+    setCode(
+      code ? code : value.HELLO_WORLD
+    );
   }
 
   return (
