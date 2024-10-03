@@ -3,7 +3,6 @@
 <img src="./banner.svg" height="200" alt="Custom Code Editor"/>
 </p>
 
-
 This project is a React-based code builder that utilizes the Monaco Editor. It allows users to write and execute code snippets within a web browser. It uses Judge0 as a code execution system
 
 ## Getting Started
@@ -147,6 +146,11 @@ Currently the project url is based out of the free version of judge0 this means 
 
 ##  Contributing
 Contributions are welcome! Feel free to submit pull requests or open issues.
+
+### Contributors
+<a href="https://github.com/DhanushNehru/CustomCodeEditor/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=DhanushNehru/CustomCodeEditor" />
+</a>
 
 ## Gitpod
 
