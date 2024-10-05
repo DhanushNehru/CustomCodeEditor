@@ -2,7 +2,7 @@ import CppLogo from "../components/images/CppLogo";
 import JavaLogo from "../components/images/JavaLogo";
 import JavascriptLogo from "../components/images/JavaScriptLogo";
 import PythonLogo from "../components/images/PythonLogo";
-
+import CLogo from "../components/images/CLogo";
 export const judge0SubmitUrl =
   process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
 export const rapidApiHost = process.env.REACT_APP_RAPID_API_HOST;
@@ -12,6 +12,7 @@ export const LANGUAGE_ID_FOR_JAVASCRIPT = 63;
 export const LANGUAGE_ID_FOR_PYTHON3 = 71;
 export const LANGUAGE_ID_FOR_CPP = 76;
 export const LANGUAGE_ID_FOR_JAVA = 62;
+export const LANGUAGE_ID_FOR_C=64
 
 export const LANGUAGES = [
   {
@@ -52,6 +53,17 @@ int main(){
   public static void main(String[] args) {
     System.out.println("Hello World");
   }
+}`,
+  },
+  {
+    ID: LANGUAGE_ID_FOR_C, // Add this object for C
+    NAME: "C",
+    DEFAULT_LANGUAGE: "c",
+    LOGO: <CLogo />, // Make sure to import CLogo component if you have one
+    HELLO_WORLD: `#include <stdio.h>
+int main() {
+    printf("Hello World");
+    return 0;
 }`,
   },
 ];
