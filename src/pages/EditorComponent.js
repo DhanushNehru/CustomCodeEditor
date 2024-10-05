@@ -117,7 +117,8 @@ function EditorComponent() {
     }
     setLoading(true);
     try {
-      const response = await fetch(judge0SubmitUrl, {
+      const encodedCode = btoa(codeToSubmit);
+      const response = await fetch(`${judge0SubmitUrl}?base64_encoded=true&wait=false&fields=*`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -125,7 +126,7 @@ function EditorComponent() {
           "X-RapidAPI-Host": rapidApiHost,
         },
         body: JSON.stringify({
-          source_code: codeToSubmit,
+          source_code: encodedCode,
           language_id: languageDetails.ID,
           stdin: "",
           expected_output: "",
@@ -144,7 +145,7 @@ function EditorComponent() {
       const submissionId = data["token"];
 
       setTimeout(() => {
-        fetch(`${judge0SubmitUrl}/${submissionId}`, {
+        fetch(`${judge0SubmitUrl}/${submissionId}?base64_encoded=true&fields=*`, {
           method: "GET",
           headers: {
             "X-RapidAPI-Key": rapidApiKey,
@@ -158,8 +159,9 @@ function EditorComponent() {
               setOutput(data.message);
               return;
             }
-            const formatedData = data.stdout.split("\n");
-            setOutput(formatedData);
+            const decodedOutput = atob(data.stdout);
+            const formattedData = decodedOutput.split("\n");
+            setOutput(formattedData);
           })
           .catch((error) => {
             enqueueSnackbar("Error retrieving output: " + error.message, {

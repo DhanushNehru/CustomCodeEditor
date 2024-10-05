@@ -3,8 +3,7 @@ import JavaLogo from "../components/images/JavaLogo";
 import JavascriptLogo from "../components/images/JavaScriptLogo";
 import PythonLogo from "../components/images/PythonLogo";
 
-export const judge0SubmitUrl =
-  process.env.JUDGE0_SUMBISSION_URL || process.env.REACT_APP_RAPID_API_URL;
+export const judge0SubmitUrl = process.env.REACT_APP_RAPID_API_URL;
 export const rapidApiHost = process.env.REACT_APP_RAPID_API_HOST;
 export const rapidApiKey = process.env.REACT_APP_RAPID_API_KEY;
 
