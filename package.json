@@ -11,6 +11,7 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@snaddyvitch-dispenser/react-router-sitemap": "^1.2.6",
     "CustomCodeEditor": "file:",
+    "firebase": "^10.14.0",
     "monaco-themes": "^0.4.4",
     "notistack": "^3.0.1",
     "react": "^18.3.1",

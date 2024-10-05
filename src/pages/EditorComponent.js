@@ -1,23 +1,26 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { FaPlay } from "react-icons/fa";
-import Editor from "@monaco-editor/react";
-import "../components/css/EditorComponent.css";
+/* eslint-disable indent */
 import "@fortawesome/fontawesome-free/css/all.css";
-import { useSnackbar } from "notistack";
+import Editor from "@monaco-editor/react";
+import { Avatar, Button, CircularProgress, styled } from "@mui/material";
 import Box from "@mui/material/Box";
-import { Button, CircularProgress, styled } from "@mui/material";
+import { useSnackbar } from "notistack";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { FaPlay } from "react-icons/fa";
+import "../components/css/EditorComponent.css";
+import EditorThemeSelect from "../components/js/EditorThemeSelect";
+import LanguageSelect from "../components/js/LanguageSelect";
 import Stars from "../components/js/Stars";
+import ToggleTheme from "../components/js/ToggleTheme";
+import { defineEditorTheme } from "../components/js/defineEditorTheme";
 import {
+  EDITOR_THEMES,
   LANGUAGES,
   judge0SubmitUrl,
   rapidApiHost,
   rapidApiKey,
-  EDITOR_THEMES,
 } from "../constants/constants";
-import LanguageSelect from "../components/js/LanguageSelect";
-import ToggleTheme from "../components/js/ToggleTheme";
-import EditorThemeSelect from "../components/js/EditorThemeSelect";
-import { defineEditorTheme } from "../components/js/defineEditorTheme";
+import GoogleSignIn from "../components/GoogleSignIn";
+import { useAuth } from "../context/AuthContext";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -64,6 +67,7 @@ function EditorComponent() {
   const { enqueueSnackbar } = useSnackbar();
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
+  const { currentUser, logOut } = useAuth();
 
   const styles = {
     flex: {
@@ -203,48 +207,16 @@ function EditorComponent() {
     );
   }
 
-  return (
-    <div className="editor-container">
-      <Box
-        sx={[
-          (theme) => ({
-            height: "auto",
-            margin: "0.5rem",
-            paddingLeft: "0.5rem",
-            paddingRight: "0.5rem",
-            border: `2px solid ${theme.palette.divider}`,
-            borderRadius: "1rem",
-          }),
-        ]}
-      >
-        <div style={styles.flex}>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <img
-              src="./images/custom-code-editor-rounded.svg"
-              alt="Custom Code Editor icon"
-              width={32}
-              style={{ marginLeft: "0.5rem" }}
-            />
-            <span
-              style={{
-                backgroundClip: "text",
-                background: "linear-gradient(#2837BA 0%, #2F1888 100%)",
-                WebkitBackgroundClip: "text",
-                color: "transparent",
-                marginLeft: "0.5rem",
-                fontWeight: "bold",
-                fontSize: "1.5em",
-              }}
-            >
-              Custom Code Editor
-            </span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <ToggleTheme />
-            <Stars />
-          </div>
-        </div>
-      </Box>
+  const handleSignOut = async () => {
+		try {
+			await logOut();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+  const renderAuthenticatedContent = () => (
+    <>
       <StyledLayout>
         <Editor
           className="editor"
@@ -299,11 +271,89 @@ function EditorComponent() {
         </div>
       </StyledLayout>
       <OutputLayout>
-        {output &&
+        {Array.isArray(output) &&
           output.map((result, i) => {
             return <div key={i}>{result}</div>;
           })}
       </OutputLayout>
+    </>
+  );
+
+  const renderUnauthenticatedContent = () => (
+    <div style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "50vh",
+      flexDirection: "column"
+    }}>
+      <h2>Please sign in to use the Code Editor</h2>
+      <GoogleSignIn />
+    </div>
+  );
+
+  return (
+    <div className="editor-container">
+      <Box
+        sx={[
+          (theme) => ({
+            height: "auto",
+            margin: "0.5rem",
+            paddingLeft: "0.5rem",
+            paddingRight: "0.5rem",
+            border: `2px solid ${theme.palette.divider}`,
+            borderRadius: "1rem",
+          }),
+        ]}
+      >
+        <div style={styles.flex}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img
+              src="./images/custom-code-editor-rounded.svg"
+              alt="Custom Code Editor icon"
+              width={32}
+              style={{ marginLeft: "0.5rem" }}
+            />
+            <span
+              style={{
+                backgroundClip: "text",
+                background: "linear-gradient(#2837BA 0%, #2F1888 100%)",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                marginLeft: "0.5rem",
+                fontWeight: "bold",
+                fontSize: "1.5em",
+              }}
+            >
+              Custom Code Editor
+            </span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div className="flex items-center space-x-2">
+              {currentUser ? (
+                <>
+                  <span className="welcome-text">Welcome, {currentUser.displayName}</span>
+                  <Avatar
+                    src={currentUser.photoURL}
+                    alt={currentUser.displayName}
+                    sx={{ width: 32, height: 32, marginLeft: "0.5rem", marginRight: "0.5rem" }}
+                  />
+                  <div className="signout-container">
+                    <button onClick={handleSignOut} className="signout-button">
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <GoogleSignIn />
+              )}
+            </div>
+            <ToggleTheme />
+            <Stars />
+          </div>
+        </div>
+      </Box>
+      {currentUser ? renderAuthenticatedContent() : renderUnauthenticatedContent()}
     </div>
   );
 }
