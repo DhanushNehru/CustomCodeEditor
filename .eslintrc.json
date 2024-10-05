@@ -13,7 +13,7 @@
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "indent": ["error", 2],
-    "linebreak-style": ["error", "unix"],
+    "linebreak-style": ["error", "unix"], 
     "quotes": ["error", "double"],
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "import/order": ["error", { "groups": [["builtin", "external", "internal"]] }],
