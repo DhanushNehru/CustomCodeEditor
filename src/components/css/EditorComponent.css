@@ -1,4 +1,3 @@
-/* EditorComponent.css */
 
 .editor-container {
   display: flex;
@@ -30,5 +29,70 @@
   .editor {
     width: 85vw;
     height: 70vh;
+  }
+}
+
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.space-x-2 > *:not(:last-child) {
+  margin-right: 8px;
+}
+
+.welcome-text {
+  color: #000;
+  font-weight: bold;
+}
+
+.signout-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #D1D1D1; /* border-gray-300 */
+  border-radius: 4px;
+  padding: 4px 8px;
+  background-color: #fff;
+  transition: background-color 0.25s;
+}
+
+.signout-container:hover {
+  background-color: #fff;
+  
+  transition: 0.5s all ease;
+}
+
+.signout-button {
+  font-weight: bold;
+  color: #4A4A4A; /* text-gray-700 */
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.signout-button span:hover {
+  color: #000; /* Black text */
+  
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .welcome-text {
+    color: #fff; /* text-white */
+  }
+
+  .signout-container {
+    background-color: #000; /* dark:bg-black */
+    color: #fff ;
+    border-color: #666; /* dark:border-gray-500 */
+  }
+
+  .signout-button span {
+    color: #fff; 
   }
 }
