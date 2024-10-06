@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../components/css/GoogleSignIn.css";
+import { Button } from "@mui/material";
 import { useAuth } from "../context/AuthContext.js";
 
 const GoogleSignIn = () => {
@@ -22,16 +22,29 @@ const GoogleSignIn = () => {
   };
 
   return loading ? null : (
-    <button onClick={handleSignIn} className="sign-in-button">
+    <Button
+      variant="outlined"
+      onClick={handleSignIn}
+      sx={[
+        (theme) => ({
+          marginLeft: "5px",
+          bgcolor: theme.palette.text.primary,
+          color: theme.palette.background.default,
+          border: "1px solid #E2E8F0",
+          fontSize: "0.8em",
+          cursor: "pointer",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        }),
+      ]}
+    >
       <img
-        className="google-logo"
+        style={{ height: "25px", width: "25px", paddingRight: "6px" }}
         src="https://www.svgrepo.com/show/475656/google-color.svg"
         loading="lazy"
         alt="google logo"
       />
-      <span>Login with Google</span>
-    </button>
-
+      <span> Login with Google</span>
+    </Button>
   );
 };
 
