@@ -53,6 +53,12 @@ const OutputLayout = styled("div")(({ theme }) => ({
   borderRadius: "1rem",
 }));
 
+const WelcomeText = styled("span")(({ theme }) => ({
+  color: theme.palette.text.primary,
+  fontWeight:"bold"
+
+}));
+
 function EditorComponent() {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState([]);
@@ -330,7 +336,7 @@ function EditorComponent() {
             <div className="flex items-center space-x-2">
               {currentUser ? (
                 <>
-                  <span className="welcome-text">Welcome, {currentUser.displayName}</span>
+                  <WelcomeText >Welcome, {currentUser.displayName}</WelcomeText>
                   <Avatar
                     src={currentUser.photoURL}
                     alt={currentUser.displayName}
