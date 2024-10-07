@@ -56,7 +56,6 @@ const OutputLayout = styled("div")(({ theme }) => ({
 const WelcomeText = styled("span")(({ theme }) => ({
   color: theme.palette.text.primary,
   fontWeight:"bold"
-
 }));
 
 function EditorComponent() {
