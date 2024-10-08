@@ -94,6 +94,23 @@ To start the project using Docker Compose:
 
 By following these steps, you'll be able to set up Judge0 for code submissions using RapidAPI's infrastructure, enabling you to execute and evaluate code within your application.
 
+## Firebase Configuration
+
+1. Create a Firebase account at [firebase.google.com](https://firebase.google.com/) and go to the console.
+2. Go to Authentication.
+3. In Sign-in method, choose the Google provider.
+4. Go to settings and you'll see authorized domains.
+5. Add your production URL in authorized domains for our project: `https://custom-code-editor.vercel.app/`
+6. Create a `.env` file in your root directory and add these values:
+```
+REACT_APP_FIREBASE_API_KEY=""
+REACT_APP_FIREBASE_AUTH_DOMAIN=""
+REACT_APP_FIREBASE_PROJECT_ID=""
+REACT_APP_FIREBASE_STORAGE_BUCKET=""
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=""
+REACT_APP_FIREBASE_APP_ID=""
+```
+
 ## Local Configuration
 
 - Create a .env file in the root directory of your project if it doesn't already exist.
