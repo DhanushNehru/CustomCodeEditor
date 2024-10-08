@@ -53,6 +53,11 @@ const OutputLayout = styled("div")(({ theme }) => ({
   borderRadius: "1rem",
 }));
 
+const WelcomeText = styled("span")(({ theme }) => ({
+  color: theme.palette.text.primary,
+  fontWeight: "bold",
+}));
+
 function EditorComponent() {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState([]);
@@ -202,18 +207,16 @@ function EditorComponent() {
   function handleLanguageChange(_, value) {
     setCurrentLanguage(value.DEFAULT_LANGUAGE);
     setOutput("");
-    setCode(
-      code ? code : value.HELLO_WORLD
-    );
+    setCode(code ? code : value.HELLO_WORLD);
   }
 
   const handleSignOut = async () => {
-		try {
-			await logOut();
-		} catch (error) {
-			console.log(error);
-		}
-	};
+    try {
+      await logOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const renderAuthenticatedContent = () => (
     <>
@@ -280,13 +283,15 @@ function EditorComponent() {
   );
 
   const renderUnauthenticatedContent = () => (
-    <div style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "50vh",
-      flexDirection: "column"
-    }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "50vh",
+        flexDirection: "column",
+      }}
+    >
       <h2>Please sign in to use the Code Editor</h2>
       <GoogleSignIn />
     </div>
@@ -332,11 +337,16 @@ function EditorComponent() {
             <div className="flex items-center space-x-2">
               {currentUser ? (
                 <>
-                  <span className="welcome-text">Welcome, {currentUser.displayName}</span>
+                  <WelcomeText>Welcome, {currentUser.displayName}</WelcomeText>
                   <Avatar
                     src={currentUser.photoURL}
                     alt={currentUser.displayName}
-                    sx={{ width: 32, height: 32, marginLeft: "0.5rem", marginRight: "0.5rem" }}
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      marginLeft: "0.5rem",
+                      marginRight: "0.5rem",
+                    }}
                   />
                   <div className="signout-container">
                     <button onClick={handleSignOut} className="signout-button">
@@ -353,7 +363,9 @@ function EditorComponent() {
           </div>
         </div>
       </Box>
-      {currentUser ? renderAuthenticatedContent() : renderUnauthenticatedContent()}
+      {currentUser
+        ? renderAuthenticatedContent()
+        : renderUnauthenticatedContent()}
     </div>
   );
 }
