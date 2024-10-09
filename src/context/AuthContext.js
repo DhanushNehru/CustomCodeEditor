@@ -24,6 +24,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log(user);
       setCurrentUser(user);
     });
 
@@ -31,5 +32,5 @@ export function AuthProvider({ children }) {
   }, [currentUser]);
 
 
-  return <AuthContext.Provider value={{ currentUser, googleSignIn, logOut }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ currentUser, setCurrentUser, googleSignIn, logOut }}>{children}</AuthContext.Provider>;
 }
