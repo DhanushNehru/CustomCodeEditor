@@ -5,13 +5,12 @@ import { getAuth, GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD1hSaR5PzPXYs90AhuFshIE85ZGBsWT3I",
-  authDomain: "codelive-503da.firebaseapp.com",
-  projectId: "codelive-503da",
-  storageBucket: "codelive-503da.appspot.com",
-  messagingSenderId: "52006541158",
-  appId: "1:52006541158:web:5cdc1584e3bcd5d1c19aa7",
-  measurementId: "G-HB4DLV7RBZ"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
 
