@@ -3,13 +3,13 @@ import "../components/css/Landingpage.css";
 import axios from "axios";
 import { useContext } from "react";
 import { SocketContext } from "../context/socket";
-import Header from '../components/Header'
+import Header from "../components/Header"
 import GoogleSignIn from "../components/GoogleSignIn";
 import { useAuth } from "../context/AuthContext";
 
 const CreatePopUp = ({ setTogglePopUp, setRooms, rooms }) => {
     const { socket } = useContext(SocketContext);
-    const [roomName, setRoomName] = useState('');
+    const [roomName, setRoomName] = useState("");
 
 
 
@@ -29,7 +29,7 @@ const CreatePopUp = ({ setTogglePopUp, setRooms, rooms }) => {
     return (
         <div style={{ "position": "absolute", "bottom": "30vh", "left": "25vw", "width": "50vw", "height": "25vh", "backgroundColor": "#d2b48c", "paddingLeft": "1rem", "border": "2px solid white", "borderRadius": "1rem" }} className="popup">
             <div className="popup-content" style={{ "display": "flex", "flexDirection": "column" }}>
-                <h2 style={{ "margin": '1rem 0' }}>Create Room</h2>
+                <h2 style={{ "margin": "1rem 0" }}>Create Room</h2>
                 <input style={{ "padding": "0.4rem 1rem", "outline": "none", "width": "75%", "margin": "0.2rem 0rem" }} value={roomName} type="text" placeholder="Room Name" onChange={(e) => setRoomName(e.target.value)} />
                 <div>
                     <button style={{ "width": "fit-content", "padding": "0.5rem 1rem", "marginRight": "1rem" }} onClick={handleFormSubmit}>Create</button>
