@@ -32,6 +32,22 @@ To Start project
 ```
 npm run start
 ```
+## Server is being hosted at render with domain name 
+https://webservice-nbbv.onrender.com
+## To set up the server 
+Inside root directory of the project run these commands
+```
+   cd server
+   npm install
+   node index.js
+```
+
+## Setting up the database 
+```
+Use your own mongodb connection uri and update in the index.js 
+```
+<p>Server would be running on port 5000</p>
+
 # With Docker
 ## Prerequisites
 Before starting with the project, ensure you have Docker installed. If not, follow these steps to install Docker:
@@ -109,6 +125,7 @@ REACT_APP_FIREBASE_PROJECT_ID=""
 REACT_APP_FIREBASE_STORAGE_BUCKET=""
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=""
 REACT_APP_FIREBASE_APP_ID=""
+REACT_APP_BACKEND=""
 ```
 
 ## Local Configuration
