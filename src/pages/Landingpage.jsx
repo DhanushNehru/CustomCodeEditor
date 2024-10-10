@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { SocketContext } from "../context/socket";
 import Header from "../components/Header"
 import GoogleSignIn from "../components/GoogleSignIn";
+import GithubSignIn from "../components/GithubSignIn";
 import { useAuth } from "../context/AuthContext";
 
 const CreatePopUp = ({ setTogglePopUp, setRooms, rooms }) => {
@@ -81,6 +82,8 @@ function Landingpage() {
         >
             <h2>Please sign in to use the Code Editor</h2>
             <GoogleSignIn />
+            <br/>
+            <GithubSignIn/>
         </div>
     );
 
