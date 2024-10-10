@@ -66,6 +66,7 @@ const OutputLayout = styled("div")(({ theme }) => ({
 function EditorComponent() {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState([]);
+  
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE
   );
