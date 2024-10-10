@@ -6,6 +6,8 @@ import EditorComponent from "./pages/EditorComponent";
 import theme from "./theme";
 import SnackbarProvider from "./components/js/SnackbarProvider";
 import { AuthProvider } from "./context/AuthContext";
+import Landingpage from "./pages/Landingpage";
+
 function App() {
   return (
     <AuthProvider>
@@ -14,8 +16,8 @@ function App() {
         <SnackbarProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<EditorComponent/>} />
-              <Route path="/editor" element={<EditorComponent />} />
+              <Route path="/" element={<Landingpage/>} />
+              <Route path="/editor/:id" element={<EditorComponent />} />
             </Routes>
           </BrowserRouter>
         </SnackbarProvider>

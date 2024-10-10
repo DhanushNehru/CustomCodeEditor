@@ -1,0 +1,74 @@
+/* General Styles */
+.app-container {
+    background-color: black;
+    color: white;
+    height: 100vh;
+    width: 100%;
+    padding:1rem;
+    font-family: "Arial", sans-serif;
+    overflow-y: hidden;
+}
+
+
+/* Create Room Section */
+.create-room-container {
+    display: flex;
+    width: 40%;
+    align-items: center;
+}
+
+.create-btn {
+    background-color: #d2b48c;
+    /* Coffee-like color */
+    color: black;
+    border: 2px solid #d2b48c;
+    border-radius: 5px;
+    margin: 0px 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.1rem 0.3rem;
+}
+
+.create-btn:hover {
+    background-color: #c6a377;
+}
+
+/* Available Rooms Section */
+.available-rooms-container {    
+    width: 60%;
+    height:75vh;
+    overflow-y: scroll;
+}
+
+.room-block {
+    background-color: #f5deb3;
+    position: relative;
+    height: fit-content;
+    width:90%;
+    color: black;
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Join Room Section */
+
+.join-btn {
+    background-color: #d2b48c;
+    color: black;
+    border: 2px solid #d2b48c;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    position: absolute;
+    right:0;
+    bottom: 0;
+}
+
+.join-btn:hover {
+    background-color: #c6a377;
+}
