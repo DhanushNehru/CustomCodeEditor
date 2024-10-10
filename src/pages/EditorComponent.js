@@ -6,6 +6,8 @@ import Box from "@mui/material/Box";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FaPlay } from "react-icons/fa";
+import GithubSignIn from "../components/GithubSignIn";
+import GoogleSignIn from "../components/GoogleSignIn";
 import "../components/css/EditorComponent.css";
 import EditorThemeSelect from "../components/js/EditorThemeSelect";
 import LanguageSelect from "../components/js/LanguageSelect";
@@ -19,7 +21,6 @@ import {
   rapidApiHost,
   rapidApiKey,
 } from "../constants/constants";
-import GoogleSignIn from "../components/GoogleSignIn";
 import { useAuth } from "../context/AuthContext";
 
 const StyledButton = styled(Button)({
@@ -61,6 +62,7 @@ const WelcomeText = styled("span")(({ theme }) => ({
 function EditorComponent() {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState([]);
+  
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE
   );
@@ -294,6 +296,8 @@ function EditorComponent() {
     >
       <h2>Please sign in to use the Code Editor</h2>
       <GoogleSignIn />
+      <br/>
+      <GithubSignIn/>
     </div>
   );
 
@@ -355,7 +359,10 @@ function EditorComponent() {
                   </div>
                 </>
               ) : (
+                <>
                 <GoogleSignIn />
+                <GithubSignIn/>
+                </>
               )}
             </div>
             <ToggleTheme />
