@@ -3,6 +3,15 @@
 <img src="./banner.svg" height="200" alt="Custom Code Editor"/>
 </p>
 
+<div align="center">
+  
+[![Join Our Discord](https://img.shields.io/badge/Discord-Join%20Server-blue?logo=discord&style=for-the-badge)](https://discord.com/invite/Yn9g6KuWyA)
+[![Subscribe on YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?logo=youtube&style=for-the-badge)](https://www.youtube.com/@dhanushnehru?sub_confirmation=1)
+[![Subscribe to Newsletter](https://img.shields.io/badge/Newsletter-Subscribe-orange?style=for-the-badge)](https://dhanushn.substack.com/)
+
+</div>
+
+
 This project is a React-based code builder that utilizes the Monaco Editor. It allows users to write and execute code snippets within a web browser. It uses Judge0 as a code execution system
 
 ## Getting Started
@@ -178,5 +187,3 @@ You can use Gitpod in the cloud [![Gitpod Ready-to-Code](https://img.shields.io/
 ----
 
 Feel free to customize this README.md according to your project's specific requirements and features. Let me know if you need further assistance!
-
-### Connect 👉 [**Twitter**](https://twitter.com/Dhanush_Nehru) **/** [**Instagram**](https://www.instagram.com/dhanush_nehru/) **/** [**Github**](https://github.com/DhanushNehru/) **/** [**Youtube**](https://www.youtube.com/@dhanushnehru?sub_confirmation=1) **/** [**Newsletter**](https://dhanushn.substack.com/) **/** [**Discord**](https://discord.com/invite/Yn9g6KuWyA)
