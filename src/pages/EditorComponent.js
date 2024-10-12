@@ -22,6 +22,7 @@ import {
   rapidApiKey,
 } from "../constants/constants";
 import { useAuth } from "../context/AuthContext";
+import Footer from "../components/Footer";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -276,10 +277,11 @@ function EditorComponent() {
         </div>
       </StyledLayout>
       <OutputLayout>
-        {Array.isArray(output) &&
+        {/* {Array.isArray(output) &&
           output.map((result, i) => {
             return <div key={i}>{result}</div>;
-          })}
+          })} */}
+          <Footer/>
       </OutputLayout>
     </>
   );
