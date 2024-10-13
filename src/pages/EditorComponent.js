@@ -62,7 +62,7 @@ const WelcomeText = styled("span")(({ theme }) => ({
 
 function EditorComponent() {
   const [code, setCode] = useState(null);
-  const [setOutput] = useState([]);
+  const [output, setOutput] = useState([]);
   
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE
@@ -277,10 +277,10 @@ function EditorComponent() {
         </div>
       </StyledLayout>
       <OutputLayout>
-        {/* {Array.isArray(output) &&
+        {Array.isArray(output) &&
           output.map((result, i) => {
             return <div key={i}>{result}</div>;
-          })} */}
+          })}
           <Footer/>
       </OutputLayout>
     </>
