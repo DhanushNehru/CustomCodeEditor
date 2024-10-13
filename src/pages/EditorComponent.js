@@ -19,6 +19,7 @@ import ToggleTheme from "../components/js/ToggleTheme";
 import EditorThemeSelect from "../components/js/EditorThemeSelect";
 import { defineEditorTheme } from "../components/js/defineEditorTheme";
 
+
 const StyledButton = styled(Button)({
   display: "flex",
   alignItems: "center",
@@ -64,6 +65,19 @@ function EditorComponent() {
   const { enqueueSnackbar } = useSnackbar();
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
+
+  const triggerFind = () => {
+    if (editorRef.current) {
+      editorRef.current.trigger("keyboard", "actions.find");
+    }
+  };
+
+  const triggerReplace = () => {
+    if (editorRef.current) {
+      editorRef.current.getAction("editor.action.startFindReplaceAction").run();
+    }
+  };
+
 
   const styles = {
     flex: {
@@ -133,45 +147,38 @@ function EditorComponent() {
       });
 
       if (!response.ok) {
-        enqueueSnackbar(
-          `Failed to create submission. Status code: ${response.status}`,
-          { variant: "error" }
-        );
+        enqueueSnackbar("Failed to create submission. Status code: ${response.status}",{ variant: "error" });
         setLoading(false);
         return;
       }
       const data = await response.json();
-      const submissionId = data["token"];
+      const submissionId = data["token"]
 
-      setTimeout(() => {
-        fetch(`${judge0SubmitUrl}/${submissionId}`, {
+      setTimeout(async () => {
+        const resultResponse = await fetch(`${judge0SubmitUrl}/${submissionId}`, {
           method: "GET",
           headers: {
             "X-RapidAPI-Key": rapidApiKey,
             "X-RapidAPI-Host": rapidApiHost,
           },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (!data.stdout) {
-              enqueueSnackbar("Please check the code", { variant: "error" });
-              setOutput(data.message);
-              return;
-            }
-            const formatedData = data.stdout.split("\n");
-            setOutput(formatedData);
-          })
-          .catch((error) => {
-            enqueueSnackbar("Error retrieving output: " + error.message, {
-              variant: "error",
-            });
-          })
-          .finally(() => setLoading(false));
+        });
+
+        const resultData = await resultResponse.json();
+        if (!resultData.stdout) {
+          enqueueSnackbar("Please check the code", { variant: "error" });
+          setOutput([resultData.message]); // Check here
+          return;
+        }
+        const formattedOutput = resultData.stdout.split("\n"); // Split by newlines
+        setOutput(formattedOutput); // Set the output state
       }, 2000);
     } catch (error) {
       enqueueSnackbar("Error: " + error.message, { variant: "error" });
+    } finally {
+      setLoading(false);
     }
   }, [enqueueSnackbar, languageDetails]);
+
 
   const handleEditorDidMount = useCallback(
     (editor, monaco) => {
@@ -294,13 +301,29 @@ function EditorComponent() {
             </span>
             Run {languageDetails.LANGUAGE_NAME}
           </StyledButton>
+          {/* Find and Replace Buttons */}
+          <StyledButton
+            onClick={triggerFind}
+            variant="outlined"
+            color="secondary"
+            style={{ marginTop: "1rem" }}
+          >
+          Find
+          </StyledButton>
+          <StyledButton
+            onClick={triggerReplace}
+            variant="outlined"
+            color="secondary"
+            style={{ marginTop: "1rem" }}
+          >
+          Replace
+          </StyledButton>
         </div>
       </StyledLayout>
       <OutputLayout>
-        {output &&
-          output.map((result, i) => {
-            return <div key={i}>{result}</div>;
-          })}
+        {output && output.map((result, i) => {
+          return <div key={i}>{result}</div>;
+        })}
       </OutputLayout>
     </div>
   );
