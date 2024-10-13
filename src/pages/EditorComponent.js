@@ -155,7 +155,7 @@ function EditorComponent() {
       const submissionId = data["token"]
 
       setTimeout(async () => {
-         const resultResponse = await fetch(`${judge0SubmitUrl}/${submissionId}?base64_encoded=true&fields=*`, {
+        const resultResponse = await fetch(`${judge0SubmitUrl}/${submissionId}?base64_encoded=true&fields=*`, {
           method: "GET",
           headers: {
             "X-RapidAPI-Key": rapidApiKey,
