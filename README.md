@@ -139,7 +139,7 @@ To enable GitHub authentication for the Custom Code Editor, follow these steps:
    - Click **Register Application**.
 
 3. **Retrieve GitHub Client ID and Client Secret:**
-   - Once the app is registered, you'll see the **Client ID** and **Client Secret** in the GitHub OAuth App settings. Copy these values.
+   - Once the app is registered, you will see the **Client ID** and **Client Secret** in the GitHub OAuth App settings. Copy these values.
 
 4. **Add GitHub OAuth Credentials to Firebase:**
    - Return to the Firebase Console and go back to the **GitHub** provider configuration.
