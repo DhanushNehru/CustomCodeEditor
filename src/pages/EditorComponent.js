@@ -62,7 +62,7 @@ const WelcomeText = styled("span")(({ theme }) => ({
 
 function EditorComponent() {
   const [code, setCode] = useState(null);
-  const [output, setOutput] = useState([]);
+  const [setOutput] = useState([]);
   
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE
