@@ -119,7 +119,7 @@ REACT_APP_FIREBASE_STORAGE_BUCKET=""
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=""
 REACT_APP_FIREBASE_APP_ID=""
 ```
-## GitHub Authentication Setup
+## GitHub Authentication Configuration
 
 To enable GitHub authentication for the Custom Code Editor, follow these steps:
 
@@ -127,15 +127,18 @@ To enable GitHub authentication for the Custom Code Editor, follow these steps:
    - Go to your Firebase project in the [Firebase Console](https://firebase.google.com/).
    - Navigate to **Authentication** > **Sign-in method**.
    - Enable **GitHub** as a sign-in provider.
-   - In the GitHub configuration, click **Add app**, which will take you to the GitHub Developer settings to register a new OAuth application.
+   - Note the **Authorization Callback URL** provided by Firebase, as you will need this for your GitHub OAuth App.
 
 2. **Register a New OAuth Application on GitHub:**
    - Go to your GitHub [Developer Settings](https://github.com/settings/developers).
    - Click on **OAuth Apps** and select **New OAuth App**.
    - Fill in the application details:
      - **Application Name**: Custom Code Editor
-     - **Homepage URL**: ( `http://localhost:3000` for local development)
-     - **Authorization Callback URL**: ( `http://localhost:3000` for local development)
+     - **Homepage URL**: 
+       - For **local development**, use `http://localhost:3000`
+       - For **production deployment**, use your public URL (e.g., `https://custom-code-editor.vercel.app/`)
+     - **Authorization Callback URL**: 
+       - Use the **Authorization Callback URL** provided by Firebase.
    - Click **Register Application**.
 
 3. **Retrieve GitHub Client ID and Client Secret:**

@@ -25,7 +25,7 @@ const Stars = () => {
         <div style={styles.stars}>
           <FaGithub fontSize={32} />
           <div style={styles.starsCount}>
-            <span>Star on GitHub</span>
+            <span>Stars on GitHub</span>
             <span style={{ color: "gold" }}>
               {repositoryStarts} {repositoryStarts > 1 ? "stars" : "star"}{" "}
               <FaStar style={styles.star} color='gold' />
