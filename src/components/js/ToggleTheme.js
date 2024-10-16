@@ -62,7 +62,7 @@ function ToggleTheme() {
   const { mode, setMode } = useColorScheme();
 
   const changeMode = () => {
-    mode == "dark" ? setMode("light") : setMode("dark");
+    mode === "dark" ? setMode("light") : setMode("dark");
   };
   return (
     <>
