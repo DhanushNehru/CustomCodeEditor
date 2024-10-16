@@ -27,6 +27,7 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import Footer from "../components/Footer";
 
 
 const StyledButton = styled(Button)({
@@ -396,6 +397,7 @@ function EditorComponent() {
           output.map((result, i) => {
             return <div key={i}>{result}</div>;
           })}
+          <Footer/>
       </OutputLayout>
     </div>
     </>
