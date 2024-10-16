@@ -119,6 +119,45 @@ REACT_APP_FIREBASE_STORAGE_BUCKET=""
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=""
 REACT_APP_FIREBASE_APP_ID=""
 ```
+### GitHub Authentication Configuration
+
+To enable GitHub authentication for the Custom Code Editor, follow these steps:
+
+1. **Enable GitHub Authentication in Firebase Console:**
+   - Go to your Firebase project in the [Firebase Console](https://firebase.google.com/).
+   - Navigate to **Authentication** > **Sign-in method**.
+   - Enable **GitHub** as a sign-in provider.
+   - Note the **Authorization Callback URL** provided by Firebase, as you will need this for your GitHub OAuth App.
+
+2. **Register a New OAuth Application on GitHub:**
+   - Go to your GitHub [Developer Settings](https://github.com/settings/developers).
+   - Click on **OAuth Apps** and select **New OAuth App**.
+   - Fill in the application details:
+     - **Application Name**: Custom Code Editor
+     - **Homepage URL**: 
+       - For **local development**, use `http://localhost:3000`
+       - For **production deployment**, use your public URL (e.g., `https://custom-code-editor.vercel.app/`)
+     - **Authorization Callback URL**: 
+       - Use the **Authorization Callback URL** provided by Firebase.
+   - Click **Register Application**.
+
+3. **Retrieve GitHub Client ID and Client Secret:**
+   - Once the app is registered, you will see the **Client ID** and **Client Secret** in the GitHub OAuth App settings. Copy these values.
+
+4. **Add GitHub OAuth Credentials to Firebase:**
+   - Return to the Firebase Console and go back to the **GitHub** provider configuration.
+   - Enter the **Client ID** and **Client Secret** from GitHub.
+   - Save these settings.
+
+5. **Update Environment Variables:**
+   - Open your `.env` file in your project root and add the following:
+
+     ```plaintext
+     REACT_APP_GITHUB_CLIENT_ID=YOUR_GITHUB_CLIENT_ID
+     REACT_APP_GITHUB_CLIENT_SECRET=YOUR_GITHUB_CLIENT_SECRET
+     ```
+
+   - Replace `YOUR_GITHUB_CLIENT_ID` and `YOUR_GITHUB_CLIENT_SECRET` with the values you copied from GitHub.
 
 ## Local Configuration
 
