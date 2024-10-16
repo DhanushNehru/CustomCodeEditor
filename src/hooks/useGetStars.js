@@ -21,7 +21,7 @@ export const useGetStars = () => {
         setRepositoryStars(result.stargazers_count);
         setFetchState(initialFetchState);
       } else
-        throw Error("Error happend in getting repository stars, retry again!.");
+        throw Error("Error happened in getting repository stars, retry again!.");
     } catch (error) {
       setFetchState({
         ...initialFetchState,
