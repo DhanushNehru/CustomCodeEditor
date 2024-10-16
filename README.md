@@ -119,7 +119,7 @@ REACT_APP_FIREBASE_STORAGE_BUCKET=""
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=""
 REACT_APP_FIREBASE_APP_ID=""
 ```
-### GitHub Authentication Configuration
+## GitHub Authentication Configuration
 
 To enable GitHub authentication for the Custom Code Editor, follow these steps:
 
