@@ -15,7 +15,7 @@ const port = 5000;
 
 const app = express();
 const server = http.createServer(app);
-
+require('dotenv').config()
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -30,7 +30,7 @@ app.use('/api/room', roomRouter);
 app.use('/api/code',codeRouter);
 
 
-mongoose.connect("mongodb+srv://testing_node:test1234@cluster0.jriry7x.mongodb.net/customDb?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect(process.env.MONGO_URI)
     .then((success) => console.log("Connected to MongoDB"))
     .catch(err => console.log("Error connecting"));
 
