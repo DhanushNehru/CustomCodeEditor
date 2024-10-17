@@ -34,25 +34,28 @@ const StyledButton = styled(Button)({
 const StyledLayout = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
-  height: "100%",
-  marginLeft: "0.5rem",
-  marginRight: "0.5rem",
-  padding: "0.5rem",
+  height: "80%",
+  margin: "0.5rem",
   border: `2px solid ${theme.palette.divider}`,
   borderRadius: "1rem",
-  "@media (min-width: 768px)": {
+  "@media (min-width: 1024px)": {
     flexDirection: "row",
+    padding:"1.5rem",
+    alignItems: "center",
   },
 }));
 
 const OutputLayout = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
-  height: "22.3vh",
-  overflowY: "auto",
-  padding: "1rem",
-  margin: "0.5rem",
+  height: "50vh",
+  // overflowY: "auto",
+  margin: "2rem 0",
   border: `2px solid ${theme.palette.divider}`,
   borderRadius: "1rem",
+  "@media (min-width: 1024px)": {
+    height: "30vh",
+    padding: "1rem",
+  },
 }));
 
 const WelcomeText = styled("span")(({ theme }) => ({
@@ -80,14 +83,22 @@ function EditorComponent() {
   const styles = {
     flex: {
       display: "flex",
-      justifyContent: "space-between",
+      flexDirection:"column",
       alignItems: "center",
-      gap: "0.6em",
     },
     languageDropdown: {
       marginTop: "1rem",
       display: "flex",
       alignItems: "center",
+    },
+    "@media (min-width: 576px)": {
+      flex: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: "0.6em",
+      },
     },
   };
 
@@ -231,8 +242,9 @@ function EditorComponent() {
           value={code}
           onChange={setCode}
           language={languageDetails.DEFAULT_LANGUAGE}
+          options={{ minimap: { enabled: false } }} // Minimap off for better responsiveness
         />
-        <div className="sidebar">
+        <div className="sidebar" style={{ display: "flex", flexDirection: "column" }}>
           {getLanguageLogoById(languageDetails.ID)}
           <div style={{ fontWeight: "bold" }}>
             {languageDetails.LANGUAGE_NAME}
@@ -250,20 +262,21 @@ function EditorComponent() {
             />
           </div>
           <StyledButton
-            sx={[
-              (theme) => ({
-                marginLeft: "5px",
-                marginTop: "1rem",
-                padding: "10px 20px",
-                bgcolor: theme.palette.text.primary,
-                color: theme.palette.background.default,
-                border: "none",
-                borderRadius: "5px",
-                fontSize: "0.8em",
-                cursor: "pointer",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              }),
-            ]}
+            sx={(theme) => ({
+              marginTop: "1rem",
+              padding: "10px 20px",
+              bgcolor: theme.palette.text.primary,
+              color: theme.palette.background.default,
+              border: "none",
+              borderRadius: "15px",
+              fontSize: "0.8em",
+              cursor: "pointer",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              width: "50%", 
+              "@media (min-width: 1024px)": {
+                width: "100%", // Full width button
+              },
+            })}
             onClick={submitCode}
             variant="contained"
             color="primary"
@@ -278,10 +291,10 @@ function EditorComponent() {
       </StyledLayout>
       <OutputLayout>
         {Array.isArray(output) &&
-          output.map((result, i) => {
-            return <div key={i}>{result}</div>;
-          })}
-          <Footer/>
+          output.map((result, i) => (
+            <div key={i}>{result}</div>
+          ))}
+        <Footer />
       </OutputLayout>
     </>
   );
@@ -339,7 +352,7 @@ function EditorComponent() {
               Custom Code Editor
             </span>
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div className="flex-container">
             <div className="flex items-center space-x-2">
               {currentUser ? (
                 <>
