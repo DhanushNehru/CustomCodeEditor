@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useColorScheme, styled } from "@mui/material/styles";
-
 import Switch from "@mui/material/Switch";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -58,12 +57,26 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     }),
   },
 }));
+
 function ToggleTheme() {
   const { mode, setMode } = useColorScheme();
 
+  useEffect(() => {
+    const savedMode = localStorage.getItem("themeMode");
+    if (!savedMode) {
+      setMode("dark"); // Set default to dark mode
+      localStorage.setItem("themeMode", "dark");
+    } else {
+      setMode(savedMode);
+    }
+  }, [setMode]);
+
   const changeMode = () => {
-    mode == "dark" ? setMode("light") : setMode("dark");
+    const newMode = mode === "dark" ? "light" : "dark";
+    setMode(newMode);
+    localStorage.setItem("themeMode", newMode); // Save mode to local storage
   };
+
   return (
     <>
       <MaterialUISwitch onChange={changeMode} checked={mode === "dark"} />
