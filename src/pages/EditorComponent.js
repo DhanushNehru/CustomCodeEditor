@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import "@fortawesome/fontawesome-free/css/all.css";
-import Editor from "@monaco-editor/react";
+import { Editor } from "@monaco-editor/react";
 import { Avatar, Button, CircularProgress, styled } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useSnackbar } from "notistack";
