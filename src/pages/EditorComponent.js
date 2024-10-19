@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import "@fortawesome/fontawesome-free/css/all.css";
 import Editor from "@monaco-editor/react";
 import { Avatar, Button, CircularProgress, styled } from "@mui/material";
@@ -40,7 +39,7 @@ const StyledLayout = styled("div")(({ theme }) => ({
   borderRadius: "1rem",
   "@media (min-width: 1024px)": {
     flexDirection: "row",
-    padding:"1.5rem",
+    padding: "1.5rem",
     alignItems: "center",
   },
 }));
@@ -48,7 +47,6 @@ const StyledLayout = styled("div")(({ theme }) => ({
 const OutputLayout = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   height: "50vh",
-  // overflowY: "auto",
   margin: "2rem 0",
   border: `2px solid ${theme.palette.divider}`,
   borderRadius: "1rem",
@@ -66,7 +64,6 @@ const WelcomeText = styled("span")(({ theme }) => ({
 function EditorComponent() {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState([]);
-  
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE
   );
@@ -83,7 +80,7 @@ function EditorComponent() {
   const styles = {
     flex: {
       display: "flex",
-      flexDirection:"column",
+      flexDirection: "column",
       alignItems: "center",
     },
     languageDropdown: {
@@ -120,7 +117,6 @@ function EditorComponent() {
       setCurrentEditorTheme(theme);
     } else {
       setCurrentEditorTheme(theme);
-
       defineEditorTheme(theme).then((_) => setCurrentEditorTheme(theme));
     }
   };
@@ -133,6 +129,11 @@ function EditorComponent() {
   };
 
   const submitCode = useCallback(async () => {
+    console.log("Submitting code..."); // Debug log
+    if (!editorRef.current) {
+      console.log("Editor reference not available");
+      return;
+    }
     const codeToSubmit = editorRef.current.getValue();
     if (codeToSubmit === "") {
       enqueueSnackbar("Please enter valid code", { variant: "error" });
@@ -198,17 +199,31 @@ function EditorComponent() {
     }
   }, [enqueueSnackbar, languageDetails]);
 
-  const handleEditorDidMount = useCallback(
-    (editor, monaco) => {
-      editorRef.current = editor;
-      monacoRef.current = monaco;
-      editor.addCommand(
-        monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
-        submitCode
-      );
-    },
-    [submitCode]
-  );
+  const handleEditorDidMount = useCallback((editor, monaco) => {
+    console.log("Editor mounted"); // Debug log
+    editorRef.current = editor;
+    monacoRef.current = monaco;
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+      console.log("Ctrl+Enter pressed in editor");
+      submitCode();
+    });
+  }, [submitCode]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        console.log("Ctrl+Enter pressed globally");
+        event.preventDefault();
+        submitCode();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [submitCode]);
 
   useEffect(() => {
     if (editorRef.current && monacoRef.current) {
@@ -216,7 +231,7 @@ function EditorComponent() {
       const monaco = monacoRef.current;
       handleEditorDidMount(editor, monaco);
     }
-  }, [languageDetails, handleEditorDidMount]);
+  }, [handleEditorDidMount]);
 
   function handleLanguageChange(_, value) {
     setCurrentLanguage(value.DEFAULT_LANGUAGE);
@@ -242,7 +257,7 @@ function EditorComponent() {
           value={code}
           onChange={setCode}
           language={languageDetails.DEFAULT_LANGUAGE}
-          options={{ minimap: { enabled: false } }} // Minimap off for better responsiveness
+          options={{ minimap: { enabled: false } }}
         />
         <div className="sidebar" style={{ display: "flex", flexDirection: "column" }}>
           {getLanguageLogoById(languageDetails.ID)}
@@ -272,9 +287,9 @@ function EditorComponent() {
               fontSize: "0.8em",
               cursor: "pointer",
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              width: "50%", 
+              width: "50%",
               "@media (min-width: 1024px)": {
-                width: "100%", // Full width button
+                width: "100%",
               },
             })}
             onClick={submitCode}
@@ -375,8 +390,8 @@ function EditorComponent() {
                 </>
               ) : (
                 <>
-                <GoogleSignIn />
-                <GithubSignIn/>
+                  <GoogleSignIn />
+                  <GithubSignIn/>
                 </>
               )}
             </div>
