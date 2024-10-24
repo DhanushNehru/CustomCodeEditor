@@ -341,7 +341,6 @@ function EditorComponent() {
   );
 
   return (
-    <>
       <div className="editor-container">
         <Box
           sx={[
@@ -422,7 +421,6 @@ function EditorComponent() {
           <Footer />
         </div>
       </div>
-    </>
   );
 }
 
