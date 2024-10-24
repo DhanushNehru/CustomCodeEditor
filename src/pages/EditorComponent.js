@@ -341,86 +341,86 @@ function EditorComponent() {
   );
 
   return (
-      <div className="editor-container">
-        <Box
-          sx={[
-            (theme) => ({
-              height: "auto",
-              margin: "0.5rem",
-              paddingLeft: "0.5rem",
-              paddingRight: "0.5rem",
-              border: `2px solid ${theme.palette.divider}`,
-              borderRadius: "1rem",
-            }),
-          ]}
-        >
-          <div style={styles.flex}>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <img
-                src="./images/custom-code-editor-rounded.svg"
-                alt="Custom Code Editor icon"
-                width={32}
-                style={{ marginLeft: "0.5rem" }}
-              />
-              <span
-                style={{
-                  backgroundClip: "text",
-                  background: "linear-gradient(#2837BA 0%, #2F1888 100%)",
-                  WebkitBackgroundClip: "text",
-                  color: "transparent",
-                  marginLeft: "0.5rem",
-                  fontWeight: "bold",
-                  fontSize: "1.5em",
-                }}
-              >
+    <div className="editor-container">
+      <Box
+        sx={[
+          (theme) => ({
+            height: "auto",
+            margin: "0.5rem",
+            paddingLeft: "0.5rem",
+            paddingRight: "0.5rem",
+            border: `2px solid ${theme.palette.divider}`,
+            borderRadius: "1rem",
+          }),
+        ]}
+      >
+        <div style={styles.flex}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img
+              src="./images/custom-code-editor-rounded.svg"
+              alt="Custom Code Editor icon"
+              width={32}
+              style={{ marginLeft: "0.5rem" }}
+            />
+            <span
+              style={{
+                backgroundClip: "text",
+                background: "linear-gradient(#2837BA 0%, #2F1888 100%)",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                marginLeft: "0.5rem",
+                fontWeight: "bold",
+                fontSize: "1.5em",
+              }}
+            >
                 Custom Code Editor
-              </span>
-            </div>
-            <div className="flex-container">
-              <div className="flex items-center space-x-2">
-                {currentUser ? (
-                  <>
-                    <WelcomeText>
-                      Welcome, {currentUser.displayName}
-                    </WelcomeText>
-                    <Avatar
-                      src={currentUser.photoURL}
-                      alt={currentUser.displayName}
-                      sx={{
-                        width: 32,
-                        height: 32,
-                        marginLeft: "0.5rem",
-                        marginRight: "0.5rem",
-                      }}
-                    />
-                    <div className="signout-container">
-                      <button
-                        onClick={handleSignOut}
-                        className="signout-button"
-                      >
-                        <span>Logout</span>
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <GoogleSignIn />
-                    <GithubSignIn />
-                  </>
-                )}
-              </div>
-              <ToggleTheme />
-              <Stars />
-            </div>
+            </span>
           </div>
-        </Box>
-        {currentUser
-          ? renderAuthenticatedContent()
-          : renderUnauthenticatedContent()}
-        <div className="footer">
-          <Footer />
+          <div className="flex-container">
+            <div className="flex items-center space-x-2">
+              {currentUser ? (
+                <>
+                  <WelcomeText>
+                      Welcome, {currentUser.displayName}
+                  </WelcomeText>
+                  <Avatar
+                    src={currentUser.photoURL}
+                    alt={currentUser.displayName}
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      marginLeft: "0.5rem",
+                      marginRight: "0.5rem",
+                    }}
+                  />
+                  <div className="signout-container">
+                    <button
+                      onClick={handleSignOut}
+                      className="signout-button"
+                    >
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <GoogleSignIn />
+                  <GithubSignIn />
+                </>
+              )}
+            </div>
+            <ToggleTheme />
+            <Stars />
+          </div>
         </div>
+      </Box>
+      {currentUser
+        ? renderAuthenticatedContent()
+        : renderUnauthenticatedContent()}
+      <div className="footer">
+        <Footer />
       </div>
+    </div>
   );
 }
 
