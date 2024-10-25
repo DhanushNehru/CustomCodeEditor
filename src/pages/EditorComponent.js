@@ -47,7 +47,7 @@ const StyledLayout = styled("div")(({ theme }) => ({
 const OutputLayout = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   height: "50vh",
-  margin: "2rem 0",
+  margin: "1rem 0",
   border: `2px solid ${theme.palette.divider}`,
   borderRadius: "1rem",
   "@media (min-width: 1024px)": {
@@ -142,20 +142,23 @@ function EditorComponent() {
     setLoading(true);
     try {
       const encodedCode = btoa(codeToSubmit);
-      const response = await fetch(`${judge0SubmitUrl}?base64_encoded=true&wait=false&fields=*`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-RapidAPI-Key": rapidApiKey,
-          "X-RapidAPI-Host": rapidApiHost,
-        },
-        body: JSON.stringify({
-          source_code: encodedCode,
-          language_id: languageDetails.ID,
-          stdin: "",
-          expected_output: "",
-        }),
-      });
+      const response = await fetch(
+        `${judge0SubmitUrl}?base64_encoded=true&wait=false&fields=*`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-RapidAPI-Key": rapidApiKey,
+            "X-RapidAPI-Host": rapidApiHost,
+          },
+          body: JSON.stringify({
+            source_code: encodedCode,
+            language_id: languageDetails.ID,
+            stdin: "",
+            expected_output: "",
+          }),
+        }
+      );
 
       if (!response.ok) {
         enqueueSnackbar(
@@ -169,13 +172,16 @@ function EditorComponent() {
       const submissionId = data["token"];
 
       setTimeout(() => {
-        fetch(`${judge0SubmitUrl}/${submissionId}?base64_encoded=true&fields=*`, {
-          method: "GET",
-          headers: {
-            "X-RapidAPI-Key": rapidApiKey,
-            "X-RapidAPI-Host": rapidApiHost,
-          },
-        })
+        fetch(
+          `${judge0SubmitUrl}/${submissionId}?base64_encoded=true&fields=*`,
+          {
+            method: "GET",
+            headers: {
+              "X-RapidAPI-Key": rapidApiKey,
+              "X-RapidAPI-Host": rapidApiHost,
+            },
+          }
+        )
           .then((response) => response.json())
           .then((data) => {
             if (!data.stdout) {
@@ -199,15 +205,18 @@ function EditorComponent() {
     }
   }, [enqueueSnackbar, languageDetails]);
 
-  const handleEditorDidMount = useCallback((editor, monaco) => {
-    console.log("Editor mounted"); // Debug log
-    editorRef.current = editor;
-    monacoRef.current = monaco;
-    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-      console.log("Ctrl+Enter pressed in editor");
-      submitCode();
-    });
-  }, [submitCode]);
+  const handleEditorDidMount = useCallback(
+    (editor, monaco) => {
+      console.log("Editor mounted"); // Debug log
+      editorRef.current = editor;
+      monacoRef.current = monaco;
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+        console.log("Ctrl+Enter pressed in editor");
+        submitCode();
+      });
+    },
+    [submitCode]
+  );
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -259,7 +268,10 @@ function EditorComponent() {
           language={languageDetails.DEFAULT_LANGUAGE}
           options={{ minimap: { enabled: false } }}
         />
-        <div className="sidebar" style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          className="sidebar"
+          style={{ display: "flex", flexDirection: "column" }}
+        >
           {getLanguageLogoById(languageDetails.ID)}
           <div style={{ fontWeight: "bold" }}>
             {languageDetails.LANGUAGE_NAME}
@@ -306,10 +318,7 @@ function EditorComponent() {
       </StyledLayout>
       <OutputLayout>
         {Array.isArray(output) &&
-          output.map((result, i) => (
-            <div key={i}>{result}</div>
-          ))}
-        <Footer />
+          output.map((result, i) => <div key={i}>{result}</div>)}
       </OutputLayout>
     </>
   );
@@ -326,8 +335,8 @@ function EditorComponent() {
     >
       <h2>Please sign in to use the Code Editor</h2>
       <GoogleSignIn />
-      <br/>
-      <GithubSignIn/>
+      <br />
+      <GithubSignIn />
     </div>
   );
 
@@ -364,14 +373,16 @@ function EditorComponent() {
                 fontSize: "1.5em",
               }}
             >
-              Custom Code Editor
+                Custom Code Editor
             </span>
           </div>
           <div className="flex-container">
             <div className="flex items-center space-x-2">
               {currentUser ? (
                 <>
-                  <WelcomeText>Welcome, {currentUser.displayName}</WelcomeText>
+                  <WelcomeText>
+                      Welcome, {currentUser.displayName}
+                  </WelcomeText>
                   <Avatar
                     src={currentUser.photoURL}
                     alt={currentUser.displayName}
@@ -383,7 +394,10 @@ function EditorComponent() {
                     }}
                   />
                   <div className="signout-container">
-                    <button onClick={handleSignOut} className="signout-button">
+                    <button
+                      onClick={handleSignOut}
+                      className="signout-button"
+                    >
                       <span>Logout</span>
                     </button>
                   </div>
@@ -391,7 +405,7 @@ function EditorComponent() {
               ) : (
                 <>
                   <GoogleSignIn />
-                  <GithubSignIn/>
+                  <GithubSignIn />
                 </>
               )}
             </div>
@@ -403,6 +417,9 @@ function EditorComponent() {
       {currentUser
         ? renderAuthenticatedContent()
         : renderUnauthenticatedContent()}
+      <div className="footer">
+        <Footer />
+      </div>
     </div>
   );
 }
