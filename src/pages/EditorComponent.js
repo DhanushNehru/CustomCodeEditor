@@ -80,8 +80,9 @@ function EditorComponent() {
   const styles = {
     flex: {
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "row",
       alignItems: "center",
+      justifyContent: "space-between",
     },
     languageDropdown: {
       marginTop: "1rem",
@@ -373,16 +374,16 @@ function EditorComponent() {
                 fontSize: "1.5em",
               }}
             >
-                Custom Code Editor
+              Custom Code Editor
             </span>
           </div>
-          <div className="flex-container">
-            <div className="flex items-center space-x-2">
-              {currentUser ? (
+          <Stars />
+          <ToggleTheme />
+          {currentUser && (
+            <div className="flex-container">
+              <div className="flex items-center space-x-2">
                 <>
-                  <WelcomeText>
-                      Welcome, {currentUser.displayName}
-                  </WelcomeText>
+                  <WelcomeText>Welcome, {currentUser.displayName}</WelcomeText>
                   <Avatar
                     src={currentUser.photoURL}
                     alt={currentUser.displayName}
@@ -394,24 +395,14 @@ function EditorComponent() {
                     }}
                   />
                   <div className="signout-container">
-                    <button
-                      onClick={handleSignOut}
-                      className="signout-button"
-                    >
+                    <button onClick={handleSignOut} className="signout-button">
                       <span>Logout</span>
                     </button>
                   </div>
                 </>
-              ) : (
-                <>
-                  <GoogleSignIn />
-                  <GithubSignIn />
-                </>
-              )}
+              </div>
             </div>
-            <ToggleTheme />
-            <Stars />
-          </div>
+          )}
         </div>
       </Box>
       {currentUser
