@@ -2,6 +2,13 @@ import CppLogo from "../components/images/CppLogo";
 import JavaLogo from "../components/images/JavaLogo";
 import JavascriptLogo from "../components/images/JavaScriptLogo";
 import PythonLogo from "../components/images/PythonLogo";
+import RubyLogo from "../components/images/RubyLogo";
+import RustLogo from "../components/images/RustLogo";
+import PhpLogo from "../components/images/PhpLogo";
+import GoLogo from "../components/images/GoLogo";
+import CLogo from "../components/images/CLogo";
+
+
 
 export const judge0SubmitUrl = process.env.REACT_APP_RAPID_API_URL;
 export const rapidApiHost = process.env.REACT_APP_RAPID_API_HOST;
@@ -11,6 +18,16 @@ export const LANGUAGE_ID_FOR_JAVASCRIPT = 63;
 export const LANGUAGE_ID_FOR_PYTHON3 = 71;
 export const LANGUAGE_ID_FOR_CPP = 76;
 export const LANGUAGE_ID_FOR_JAVA = 62;
+export const LANGUAGE_ID_FOR_RUBY = 72;
+export const LANGUAGE_ID_FOR_RUST = 73;
+export const LANGUAGE_ID_FOR_PHP = 68;
+export const LANGUAGE_ID_FOR_GO = 60;
+export const LANGUAGE_ID_FOR_C = 48;
+
+
+
+
+
 
 export const LANGUAGES = [
   {
@@ -53,6 +70,68 @@ int main(){
   }
 }`,
   },
+
+  {
+    ID: LANGUAGE_ID_FOR_RUBY,
+    NAME: "Ruby",
+    DEFAULT_LANGUAGE: "Ruby",
+    LOGO: <RubyLogo />,
+    HELLO_WORLD: `puts ("Hello World")
+    `,
+  },
+
+  {
+    ID: LANGUAGE_ID_FOR_RUST,
+    NAME: "Rust",
+    DEFAULT_LANGUAGE: "Rust",
+    LOGO: <RustLogo />,
+    HELLO_WORLD: `fn main(){
+        println!("Hello World");
+    }
+    `,
+  },
+
+  {
+    ID: LANGUAGE_ID_FOR_PHP,
+    NAME: "Php",
+    DEFAULT_LANGUAGE: "Php",
+    LOGO: <PhpLogo />,
+    HELLO_WORLD: `<?php
+               echo "Hello, World!";
+            ?>
+;
+    `,
+  },
+
+  {
+    ID: LANGUAGE_ID_FOR_GO,
+    NAME: "Go",
+    DEFAULT_LANGUAGE: "Go",
+    LOGO: <GoLogo />,
+    HELLO_WORLD: `package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+} `,
+  },
+
+  
+  {
+    ID: LANGUAGE_ID_FOR_C,
+    NAME: "C",
+    DEFAULT_LANGUAGE: "C",
+    LOGO: <CLogo />,
+    HELLO_WORLD: `#include <stdio.h>
+                  int main() {
+                      printf("Hello World");
+                      return 0;
+                  }`,
+  },
+
+
+
 ];
 
 export const EDITOR_THEMES = [
