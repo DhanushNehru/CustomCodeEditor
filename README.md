@@ -25,7 +25,7 @@ npm or yarn package manager
 Clone the repository to your local machine:
 
 ```
-git clone <repository-url>
+git clone https://github.com/DhanushNehru/CustomCodeEditor
 ```
 - Note:- Please fill in the necessary keys in the `.env` file for successful code submissions
 # Without Docker
@@ -225,4 +225,4 @@ You can use Gitpod in the cloud [![Gitpod Ready-to-Code](https://img.shields.io/
 
 ----
 
-Feel free to customize this README.md according to your project's specific requirements and features. Let me know if you need further assistance!
+Contributions are welcome. Drop a PR or reach out if you need any help!
