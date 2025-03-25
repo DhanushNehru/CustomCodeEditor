@@ -19,6 +19,7 @@
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "react-share": "^5.2.2",
     "styled-components": "^6.1.11"
   },
   "scripts": {
