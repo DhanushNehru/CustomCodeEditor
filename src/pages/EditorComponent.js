@@ -242,6 +242,7 @@ function EditorComponent() {
     );
     if (!selectedLanguage) {
       console.error("Unsupported file type");
+      enqueueSnackbar("Unsupported file type", { variant: "error" });
       isImportingRef.current = false;
       setIsImporting(false);
       return;
@@ -269,9 +270,11 @@ function EditorComponent() {
   };
 
   // download file
+  const [isDownloading, setDownloading] = React.useState(false);
   const exportFile = () => {
-    if (!code) return; 
+    if (!code) return;
 
+    setDownloading(true);
     const fileContent = code;
 
     const extensionMap = {
@@ -294,6 +297,7 @@ function EditorComponent() {
 
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+    setDownloading(false);
   };
 
   const handleEditorDidMount = useCallback(
@@ -463,8 +467,17 @@ function EditorComponent() {
                 },
               })}
             >
-              <FaFileDownload fontSize="small" />
-              Export
+              {isDownloading ? (
+                <>
+                  <CircularProgress size={16} color="inherit" />
+                  Exporting...
+                </>
+              ) : (
+                <>
+                  <FaFileDownload fontSize="small" />
+                  Export
+                </>
+              )}
             </StyledButton>
           </div>
 
