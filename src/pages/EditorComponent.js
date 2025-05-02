@@ -4,7 +4,8 @@ import { Avatar, Button, CircularProgress, styled } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FaPlay } from "react-icons/fa";
+import { FaPlay, FaFileUpload, FaFileDownload } from "react-icons/fa";
+// import { FaFileUpload } from "react-icons/fa";
 import GithubSignIn from "../components/GithubSignIn";
 import GoogleSignIn from "../components/GoogleSignIn";
 import "../components/css/EditorComponent.css";
@@ -22,6 +23,7 @@ import {
 } from "../constants/constants";
 import { useAuth } from "../context/AuthContext";
 import Footer from "../components/Footer";
+// import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -101,6 +103,8 @@ function EditorComponent() {
   };
 
   useEffect(() => {
+    if (isImportingRef.current) return;
+
     const selectedLanguage = LANGUAGES.find(
       (lang) => lang.DEFAULT_LANGUAGE === currentLanguage
     );
@@ -206,6 +210,96 @@ function EditorComponent() {
     }
   }, [enqueueSnackbar, languageDetails]);
 
+  // import file
+  const [isImporting, setIsImporting] = React.useState(false);
+  const isImportingRef = useRef(false);
+  const fileInputRef = React.useRef(null);
+
+  const handleFileImport = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setCode("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+
+    isImportingRef.current = true;
+    setIsImporting(true);
+
+    const extension = file.name.split(".").pop().toLowerCase();
+
+    const languageMap = {
+      js: "Javascript",
+      py: "Python3",
+      cpp: "C++",
+      java: "Java",
+    };
+
+    const languageName = languageMap[extension];
+    const selectedLanguage = LANGUAGES.find(
+      (lang) => lang.NAME === languageName
+    );
+    if (!selectedLanguage) {
+      console.error("Unsupported file type");
+      enqueueSnackbar("Unsupported file type", { variant: "error" });
+      isImportingRef.current = false;
+      setIsImporting(false);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setCurrentLanguage(selectedLanguage.DEFAULT_LANGUAGE);
+      setLanguageDetails({
+        ID: selectedLanguage.ID,
+        NAME: selectedLanguage.NAME,
+        DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
+        LANGUAGE_NAME: selectedLanguage.NAME,
+      });
+      setCode(event.target.result);
+      // console.log("file code ", event.target.result);
+      setOutput("");
+      setIsImporting(false);
+    };
+    reader.onerror = () => {
+      console.error("Error reading file");
+      isImportingRef.current = false;
+      setIsImporting(false);
+    };
+    reader.readAsText(file);
+  };
+
+  // download file
+  const [isDownloading, setDownloading] = React.useState(false);
+  const exportFile = () => {
+    if (!code) return;
+
+    setDownloading(true);
+    const fileContent = code;
+
+    const extensionMap = {
+      javascript: "js",
+      python: "py",
+      cpp: "cpp",
+      java: "java",
+    };
+
+    const extension = extensionMap[languageDetails.DEFAULT_LANGUAGE] || "txt";
+
+    const blob = new Blob([fileContent], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = `code.${extension}`;
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setDownloading(false);
+  };
+
   const handleEditorDidMount = useCallback(
     (editor, monaco) => {
       console.log("Editor mounted"); // Debug log
@@ -244,6 +338,7 @@ function EditorComponent() {
   }, [handleEditorDidMount]);
 
   function handleLanguageChange(_, value) {
+    if (isImporting) return;
     setCurrentLanguage(value.DEFAULT_LANGUAGE);
     setOutput("");
     setCode(code ? code : value.HELLO_WORLD);
@@ -273,6 +368,119 @@ function EditorComponent() {
           className="sidebar"
           style={{ display: "flex", flexDirection: "column" }}
         >
+          {/* import and export btn */}
+          <div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
+            <StyledButton
+              onClick={() => fileInputRef.current.click()}
+              disabled={isImporting}
+              sx={(theme) => ({
+                padding: "8px 10px",
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                border: `1px solid ${theme.palette.primary.dark}`,
+                borderRadius: "8px",
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                cursor: "pointer",
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.08)",
+                transition: "all 0.2s ease",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.dark,
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.12)",
+                  transform: "translateY(-1px)",
+                },
+                "&:active": {
+                  transform: "translateY(0)",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                },
+                "&:disabled": {
+                  backgroundColor: theme.palette.action.disabled,
+                  color: theme.palette.action.disabledBackground,
+                  cursor: "not-allowed",
+                  transform: "none",
+                },
+                "@media (max-width: 768px)": {
+                  padding: "8px 12px",
+                  fontSize: "0.8125rem",
+                },
+              })}
+            >
+              {isImporting ? (
+                <>
+                  <CircularProgress size={16} color="inherit" />
+                  Importing...
+                </>
+              ) : (
+                <>
+                  <FaFileUpload fontSize="small" />
+                  Import
+                </>
+              )}
+            </StyledButton>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              accept=".java,.js,.py,.cpp"
+              onChange={handleFileImport}
+            />
+
+            <StyledButton
+              onClick={exportFile}
+              sx={(theme) => ({
+                padding: "8px 10px",
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                border: `1px solid ${theme.palette.primary.dark}`,
+                borderRadius: "8px",
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                cursor: "pointer",
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.08)",
+                transition: "all 0.2s ease",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.dark,
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.12)",
+                  transform: "translateY(-1px)",
+                },
+                "&:active": {
+                  transform: "translateY(0)",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                },
+                "&:disabled": {
+                  backgroundColor: theme.palette.action.disabled,
+                  color: theme.palette.action.disabledBackground,
+                  cursor: "not-allowed",
+                  transform: "none",
+                },
+                "@media (max-width: 768px)": {
+                  padding: "8px 12px",
+                  fontSize: "0.8125rem",
+                },
+              })}
+            >
+              {isDownloading ? (
+                <>
+                  <CircularProgress size={16} color="inherit" />
+                  Exporting...
+                </>
+              ) : (
+                <>
+                  <FaFileDownload fontSize="small" />
+                  Export
+                </>
+              )}
+            </StyledButton>
+          </div>
+
           {getLanguageLogoById(languageDetails.ID)}
           <div style={{ fontWeight: "bold" }}>
             {languageDetails.LANGUAGE_NAME}
