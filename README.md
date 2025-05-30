@@ -228,3 +228,6 @@ You can use Gitpod in the cloud [![Gitpod Ready-to-Code](https://img.shields.io/
 Contributions are welcome. Drop a PR or reach out if you need any help!
 
 <!-- GitAds-Verify: ZJJCDBIFN4BV794G1ER2YWOY2HYB35Z1 -->
+
+## GitAds Sponsored
+[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=dhanushnehru/customcodeeditor@github)](https://gitads.dev/v1/ad-track?source=dhanushnehru/customcodeeditor@github)
