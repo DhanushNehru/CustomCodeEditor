@@ -9,7 +9,7 @@
 [![Subscribe on YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?logo=youtube&style=for-the-badge)](https://www.youtube.com/@dhanushnehru?sub_confirmation=1)
 [![Subscribe to Newsletter](https://img.shields.io/badge/Newsletter-Subscribe-orange?style=for-the-badge)](https://dhanushn.substack.com/)
 </br>
-<a href="https://www.producthunt.com/products/custom-code-editor?utm_source=badge-follow&utm_medium=badge&utm_source=badge-custom&#0045;code&#0045;editor" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1087882&theme=light" alt="Custom&#0032;Code&#0032;Editor - Web&#0032;tool&#0032;to&#0032;write&#0044;&#0032;test&#0032;&#0038;&#0032;run&#0032;code&#0032;in&#0032;many&#0032;languages | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+<a href="https://www.producthunt.com/products/custom-code-editor?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-custom&#0045;code&#0045;editor" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=993788&theme=light&t=1753034255804" alt="Custom&#0032;Code&#0032;Editor - Web&#0032;tool&#0032;to&#0032;write&#0044;&#0032;test&#0032;&#0038;&#0032;run&#0032;code&#0032;in&#0032;many&#0032;languages | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
 </div>
 
