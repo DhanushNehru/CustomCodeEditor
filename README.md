@@ -219,12 +219,6 @@ Contributions are welcome! Feel free to submit pull requests or open issues.
   <img src="https://contrib.rocks/image?repo=DhanushNehru/CustomCodeEditor" />
 </a>
 
-## Gitpod
-
-In the cloud-free development environment where you can directly start coding.
-
-You can use Gitpod in the cloud [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/DhanushNehru/CustomCodeEditor/)
-
 ----
 
 Contributions are welcome. Drop a PR or reach out if you need any help!
