@@ -10,14 +10,20 @@ permissions:
 jobs:
   welcome:
     runs-on: ubuntu-latest
+    if: ${{ github.event.issue.pull_request == null }}
     steps:
       - name: Post welcome comment
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
+            const issue_number = context.payload.issue.number;
+            const message = `Thank you for raising this issue! Our team will review it soon.
+            
+            For more queries or discussions or approval of requests, please join the Discord server for further discussion: https://discord.com/invite/Yn9g6KuWyA`;
+            
+            await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Thank you for raising this issue! Our team will review it soon.\n\nFor more queries or discussions or approval of requests, please join the Discord server for further discussion: [Discord Link](https://discord.com/invite/Yn9g6KuWyA)'
-            })
+              issue_number,
+              body: message
+            });
