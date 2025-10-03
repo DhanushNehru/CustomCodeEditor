@@ -5,13 +5,12 @@ import { getAuth, GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAIW1dZERJyjv-DlVRCkqOIvsjgppNXMfk",
-  authDomain: "customcodeeditor-c34c7.firebaseapp.com",
-  projectId: "customcodeeditor-c34c7",
-  storageBucket: "customcodeeditor-c34c7.firebasestorage.app",
-  messagingSenderId: "437441540919",
-  appId: "1:437441540919:web:0702b86f8a1c734019a0b2",
-  measurementId: "G-X8G0P24413"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
 
