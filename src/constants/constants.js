@@ -2,6 +2,7 @@ import CppLogo from "../components/images/CppLogo";
 import JavaLogo from "../components/images/JavaLogo";
 import JavascriptLogo from "../components/images/JavaScriptLogo";
 import PythonLogo from "../components/images/PythonLogo";
+import CLogo from "../components/images/CLogo";
 
 export const judge0SubmitUrl = process.env.REACT_APP_RAPID_API_URL;
 export const rapidApiHost = process.env.REACT_APP_RAPID_API_HOST;
@@ -51,6 +52,17 @@ int main(){
   public static void main(String[] args) {
     System.out.println("Hello World");
   }
+}`,
+  },
+  {
+    ID: LANGUAGE_ID_FOR_C, // Add this object for C
+    NAME: "C",
+    DEFAULT_LANGUAGE: "c",
+    LOGO: <CLogo />,
+    HELLO_WORLD: `#include <stdio.h>
+int main() {
+    printf("Hello World");
+    return 0;
 }`,
   },
 ];
