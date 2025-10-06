@@ -50,6 +50,7 @@ const OutputLayout = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   height: "50vh",
   margin: "1rem 0",
+  overflow: "auto",
   border: `2px solid ${theme.palette.divider}`,
   borderRadius: "1rem",
   "@media (min-width: 1024px)": {
