@@ -1,6 +1,6 @@
 import "@fortawesome/fontawesome-free/css/all.css";
 import { Editor } from "@monaco-editor/react";
-import { Avatar, Button, CircularProgress, styled } from "@mui/material";
+import { Avatar, Button, CircularProgress, styled, FormControlLabel, Switch, Typography, Slider } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -78,6 +78,11 @@ function EditorComponent() {
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
   const { currentUser, logOut } = useAuth();
+
+  // Editor settings state
+  const [showLineNumbers, setShowLineNumbers] = useState(true);
+  const [wordWrap, setWordWrap] = useState(false);
+  const [fontSize, setFontSize] = useState(14);
 
   const styles = {
     flex: {
@@ -352,6 +357,19 @@ function EditorComponent() {
     }
   };
 
+  // Editor settings handlers
+  const handleLineNumbersToggle = (event) => {
+    setShowLineNumbers(event.target.checked);
+  };
+
+  const handleWordWrapToggle = (event) => {
+    setWordWrap(event.target.checked);
+  };
+
+  const handleFontSizeChange = (event, newValue) => {
+    setFontSize(newValue);
+  };
+
   const renderAuthenticatedContent = () => (
     <>
       <StyledLayout>
@@ -362,7 +380,12 @@ function EditorComponent() {
           value={code}
           onChange={setCode}
           language={languageDetails.DEFAULT_LANGUAGE}
-          options={{ minimap: { enabled: false } }}
+          options={{ 
+            minimap: { enabled: false },
+            lineNumbers: showLineNumbers ? "on" : "off",
+            wordWrap: wordWrap ? "on" : "off",
+            fontSize: fontSize
+          }}
         />
         <div
           className="sidebar"
@@ -496,6 +519,58 @@ function EditorComponent() {
               handleLanguageChange={handleLanguageChange}
               defaultLanguage={languageDetails}
             />
+          </div>
+
+          {/* Editor Settings Section */}
+          <div className="editor-settings">
+            <Typography variant="subtitle2" className="editor-settings-title">
+              Editor Settings
+            </Typography>
+            
+            <FormControlLabel
+              control={
+                <Switch 
+                  checked={showLineNumbers} 
+                  onChange={handleLineNumbersToggle}
+                  size="small"
+                />
+              }
+              label="Line Numbers"
+              className="editor-settings-control"
+            />
+            
+            <FormControlLabel
+              control={
+                <Switch 
+                  checked={wordWrap} 
+                  onChange={handleWordWrapToggle}
+                  size="small"
+                />
+              }
+              label="Word Wrap"
+              className="editor-settings-control"
+            />
+            
+            <Typography variant="body2" sx={{ margin: "0.5rem 0 0.25rem 0" }}>
+              Font Size: {fontSize}px
+            </Typography>
+            <div className="editor-settings-slider">
+              <Slider
+                value={fontSize}
+                onChange={handleFontSizeChange}
+                min={12}
+                max={20}
+                step={1}
+                marks={[
+                  { value: 12, label: '12' },
+                  { value: 14, label: '14' },
+                  { value: 16, label: '16' },
+                  { value: 18, label: '18' },
+                  { value: 20, label: '20' }
+                ]}
+                size="small"
+              />
+            </div>
           </div>
           <StyledButton
             sx={(theme) => ({
