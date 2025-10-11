@@ -178,7 +178,7 @@ function EditorComponent() {
       const submissionId = data["token"];
 
       const decodeFormat = (data) => {
-        return atob(data).split("\n");
+        return data?atob(data).split("\n"):[];
       }
 
       setTimeout(() => {
@@ -195,14 +195,15 @@ function EditorComponent() {
           .then((response) => response.json())
           .then((data) => {
             if (!data.stdout) {
-              if(data.stderr) {
-                enqueueSnackbar("Please check the code", { variant: "error" });
+              enqueueSnackbar("Please check the code", { variant: "error" });
+              if (data.stderr) {
                 setOutput(decodeFormat(data.stderr));
                 return;
               } 
-              else {
-                enqueueSnackbar("Please check the code", { variant: "error" });
+              else if (data.compile_output) {
                 setOutput(decodeFormat(data.compile_output));
+              }
+              else {
                 return;
               }
             }
