@@ -52,21 +52,17 @@ const OutputLayout = styled("div")(({ theme }) => ({
   margin: "1rem 0",
   border: `2px solid ${theme.palette.divider}`,
   borderRadius: "1rem",
-  overflow: "auto",
   "@media (min-width: 1024px)": {
     height: "30vh",
     padding: "1rem",
   },
+  overflow: "auto",
 }));
 
 const WelcomeText = styled("span")(({ theme }) => ({
   color: theme.palette.text.primary,
   fontWeight: "bold",
 }));
-
-const decodeFormat = (data) => {
-  return data?atob(data).split("\n"):[];
-}
 
 function EditorComponent() {
   const [code, setCode] = useState(null);
@@ -180,6 +176,10 @@ function EditorComponent() {
       }
       const data = await response.json();
       const submissionId = data["token"];
+
+      const decodeFormat = (data) => {
+        return data?atob(data).split("\n"):[];
+      }
 
       setTimeout(() => {
         fetch(
