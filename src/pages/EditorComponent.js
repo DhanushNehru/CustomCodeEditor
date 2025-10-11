@@ -56,6 +56,7 @@ const OutputLayout = styled("div")(({ theme }) => ({
     height: "30vh",
     padding: "1rem",
   },
+  overflow: "auto",
 }));
 
 const WelcomeText = styled("span")(({ theme }) => ({
@@ -176,6 +177,10 @@ function EditorComponent() {
       const data = await response.json();
       const submissionId = data["token"];
 
+      const decodeFormat = (data) => {
+        return atob(data).split("\n");
+      }
+
       setTimeout(() => {
         fetch(
           `${judge0SubmitUrl}/${submissionId}?base64_encoded=true&fields=*`,
@@ -190,13 +195,18 @@ function EditorComponent() {
           .then((response) => response.json())
           .then((data) => {
             if (!data.stdout) {
-              enqueueSnackbar("Please check the code", { variant: "error" });
-              setOutput(data.message);
-              return;
+              if(data.stderr) {
+                enqueueSnackbar("Please check the code", { variant: "error" });
+                setOutput(decodeFormat(data.stderr));
+                return;
+              } 
+              else {
+                enqueueSnackbar("Please check the code", { variant: "error" });
+                setOutput(decodeFormat(data.compile_output));
+                return;
+              }
             }
-            const decodedOutput = atob(data.stdout);
-            const formattedData = decodedOutput.split("\n");
-            setOutput(formattedData);
+            setOutput(decodeFormat(data.stdout));
           })
           .catch((error) => {
             enqueueSnackbar("Error retrieving output: " + error.message, {
