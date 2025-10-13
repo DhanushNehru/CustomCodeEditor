@@ -377,18 +377,18 @@ function EditorComponent() {
       return;
     }
 
-    const outputText = Array.isArray(output) ? output.join('\n') : output.toString();
+    const outputText = Array.isArray(output) ? output.join("\n") : output.toString();
     try {
       await navigator.clipboard.writeText(outputText);
       enqueueSnackbar("Output copied to clipboard!", { variant: "success" });
     } catch (err) {
       // Fallback for browsers that don't support clipboard API
-      const textArea = document.createElement('textarea');
+      const textArea = document.createElement("textarea");
       textArea.value = outputText;
       document.body.appendChild(textArea);
       textArea.select();
       try {
-        document.execCommand('copy');
+        document.execCommand("copy");
         enqueueSnackbar("Output copied to clipboard!", { variant: "success" });
       } catch (fallbackErr) {
         enqueueSnackbar("Failed to copy output", { variant: "error" });
@@ -594,11 +594,11 @@ function EditorComponent() {
                 max={20}
                 step={1}
                 marks={[
-                  { value: 12, label: '12' },
-                  { value: 14, label: '14' },
-                  { value: 16, label: '16' },
-                  { value: 18, label: '18' },
-                  { value: 20, label: '20' }
+                  { value: 12, label: "12" },
+                  { value: 14, label: "14" },
+                  { value: 16, label: "16" },
+                  { value: 18, label: "18" },
+                  { value: 20, label: "20" }
                 ]}
                 size="small"
               />
