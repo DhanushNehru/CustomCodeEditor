@@ -198,8 +198,7 @@ function EditorComponent() {
               enqueueSnackbar("Please check the code", { variant: "error" });
               if (data.stderr) {
                 setOutput(decodeFormat(data.stderr));
-              } 
-              else if (data.compile_output) {
+              } else if (data.compile_output) {
                 setOutput(decodeFormat(data.compile_output));
               }
               return;
