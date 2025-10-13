@@ -65,7 +65,7 @@ const WelcomeText = styled("span")(({ theme }) => ({
 }));
 
 const decodeFormat = (data) => {
-  return data?atob(data).split("\n"):[];
+  return data ? atob(data).split("\n") : [];
 }
 
 function EditorComponent() {
