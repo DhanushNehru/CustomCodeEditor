@@ -1,11 +1,21 @@
-import "@fortawesome/fontawesome-free/css/all.css";
-import { Editor } from "@monaco-editor/react";
-import { Avatar, Button, CircularProgress, styled, FormControlLabel, Switch, Typography, Slider } from "@mui/material";
-import Box from "@mui/material/Box";
-import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useSnackbar } from "notistack";
+import {
+  Avatar,
+  Button,
+  CircularProgress,
+  FormControlLabel,
+  Slider,
+  styled,
+  Switch,
+  Typography,
+} from "@mui/material";
+import Box from "@mui/material/Box";
+import { Editor } from "@monaco-editor/react";
 import { FaPlay, FaFileUpload, FaFileDownload, FaCopy, FaTrash } from "react-icons/fa";
-// import { FaFileUpload } from "react-icons/fa";
+import "@fortawesome/fontawesome-free/css/all.css";
+
+// Local imports after external imports
 import GithubSignIn from "../components/GithubSignIn";
 import GoogleSignIn from "../components/GoogleSignIn";
 import "../components/css/EditorComponent.css";
@@ -23,7 +33,6 @@ import {
 } from "../constants/constants";
 import { useAuth } from "../context/AuthContext";
 import Footer from "../components/Footer";
-// import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -412,11 +421,11 @@ function EditorComponent() {
           value={code}
           onChange={setCode}
           language={languageDetails.DEFAULT_LANGUAGE}
-          options={{ 
+          options={{
             minimap: { enabled: false },
             lineNumbers: showLineNumbers ? "on" : "off",
             wordWrap: wordWrap ? "on" : "off",
-            fontSize: fontSize
+            fontSize: fontSize,
           }}
         />
         <div
@@ -558,11 +567,11 @@ function EditorComponent() {
             <Typography variant="subtitle2" className="editor-settings-title">
               Editor Settings
             </Typography>
-            
+
             <FormControlLabel
               control={
-                <Switch 
-                  checked={showLineNumbers} 
+                <Switch
+                  checked={showLineNumbers}
                   onChange={handleLineNumbersToggle}
                   size="small"
                 />
@@ -570,11 +579,11 @@ function EditorComponent() {
               label="Line Numbers"
               className="editor-settings-control"
             />
-            
+
             <FormControlLabel
               control={
-                <Switch 
-                  checked={wordWrap} 
+                <Switch
+                  checked={wordWrap}
                   onChange={handleWordWrapToggle}
                   size="small"
                 />
@@ -582,8 +591,11 @@ function EditorComponent() {
               label="Word Wrap"
               className="editor-settings-control"
             />
-            
-            <Typography variant="body2" sx={{ margin: "0.5rem 0 0.25rem 0" }}>
+
+            <Typography
+              variant="body2"
+              sx={{ margin: "0.5rem 0 0.25rem 0" }}
+            >
               Font Size: {fontSize}px
             </Typography>
             <div className="editor-settings-slider">
@@ -598,7 +610,7 @@ function EditorComponent() {
                   { value: 14, label: "14" },
                   { value: 16, label: "16" },
                   { value: 18, label: "18" },
-                  { value: 20, label: "20" }
+                  { value: 20, label: "20" },
                 ]}
                 size="small"
               />
@@ -634,22 +646,25 @@ function EditorComponent() {
       </StyledLayout>
       <OutputLayout>
         <div className="output-header">
-          <Typography variant="h6" sx={{ fontSize: "1rem", fontWeight: "bold" }}>
+          <Typography
+            variant="h6"
+            sx={{ fontSize: "1rem", fontWeight: "bold" }}
+          >
             Output
           </Typography>
           <div className="output-controls">
-            <Button 
-              size="small" 
-              onClick={copyOutput} 
+            <Button
+              size="small"
+              onClick={copyOutput}
               startIcon={<FaCopy />}
               variant="outlined"
               sx={{ minWidth: "auto", padding: "4px 8px" }}
             >
               Copy
             </Button>
-            <Button 
-              size="small" 
-              onClick={clearOutput} 
+            <Button
+              size="small"
+              onClick={clearOutput}
               startIcon={<FaTrash />}
               variant="outlined"
               sx={{ minWidth: "auto", padding: "4px 8px", marginLeft: "0.5rem" }}
@@ -661,10 +676,14 @@ function EditorComponent() {
         <div className="output-content">
           {Array.isArray(output) && output.length > 0 ? (
             output.map((result, i) => (
-              <div key={i} className="output-line">{result}</div>
+              <div key={i} className="output-line">
+                {result}
+              </div>
             ))
           ) : (
-            <div className="output-empty">No output yet. Run your code to see results!</div>
+            <div className="output-empty">
+              No output yet. Run your code to see results!
+            </div>
           )}
         </div>
       </OutputLayout>
