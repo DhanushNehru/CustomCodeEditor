@@ -64,6 +64,10 @@ const WelcomeText = styled("span")(({ theme }) => ({
   fontWeight: "bold",
 }));
 
+const decodeFormat = (data) => {
+  return data ? atob(data).split("\n") : [];
+}
+
 function EditorComponent() {
   const [code, setCode] = useState(null);
   const [output, setOutput] = useState([]);
@@ -192,12 +196,14 @@ function EditorComponent() {
           .then((data) => {
             if (!data.stdout) {
               enqueueSnackbar("Please check the code", { variant: "error" });
-              setOutput(data.message);
+              if (data.stderr) {
+                setOutput(decodeFormat(data.stderr));
+              } else if (data.compile_output) {
+                setOutput(decodeFormat(data.compile_output));
+              }
               return;
             }
-            const decodedOutput = atob(data.stdout);
-            const formattedData = decodedOutput.split("\n");
-            setOutput(formattedData);
+            setOutput(decodeFormat(data.stdout));
           })
           .catch((error) => {
             enqueueSnackbar("Error retrieving output: " + error.message, {
