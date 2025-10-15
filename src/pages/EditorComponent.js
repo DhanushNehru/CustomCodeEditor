@@ -386,7 +386,7 @@ function EditorComponent() {
       return;
     }
 
-    const outputText = outputToText(output);
+    const outputText = Array.isArray(output) ? output.join("\n") : output.toString();
     try {
       await navigator.clipboard.writeText(outputText);
       enqueueSnackbar("Output copied to clipboard!", { variant: "success" });
