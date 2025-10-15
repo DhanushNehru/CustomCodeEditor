@@ -1,3 +1,4 @@
+// src/pages/EditorComponent.js
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSnackbar } from "notistack";
 import {
@@ -6,11 +7,11 @@ import {
   CircularProgress,
   FormControlLabel,
   Slider,
-  styled,
   Switch,
   Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
 import { Editor } from "@monaco-editor/react";
 import { FaPlay, FaFileUpload, FaFileDownload, FaCopy, FaTrash } from "react-icons/fa";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -73,15 +74,12 @@ const WelcomeText = styled("span")(({ theme }) => ({
 }));
 
 function EditorComponent() {
-  const [code, setCode] = useState(null);
+  // Keep types consistent: code is always string, output always array of lines
+  const [code, setCode] = useState("");
   const [output, setOutput] = useState([]);
-  const [currentLanguage, setCurrentLanguage] = useState(
-    LANGUAGES[0].DEFAULT_LANGUAGE
-  );
+  const [currentLanguage, setCurrentLanguage] = useState(LANGUAGES[0].DEFAULT_LANGUAGE);
   const [languageDetails, setLanguageDetails] = useState(LANGUAGES[0]);
-  const [currentEditorTheme, setCurrentEditorTheme] = useState(
-    EDITOR_THEMES[1]
-  );
+  const [currentEditorTheme, setCurrentEditorTheme] = useState(EDITOR_THEMES[1]);
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const editorRef = useRef(null);
@@ -93,6 +91,13 @@ function EditorComponent() {
   const [wordWrap, setWordWrap] = useState(false);
   const [fontSize, setFontSize] = useState(14);
 
+  // file import/export state
+  const [isImporting, setIsImporting] = useState(false);
+  const isImportingRef = useRef(false);
+  const fileInputRef = useRef(null);
+  const timeoutRef = useRef(null);
+
+  // Styles object (kept small)
   const styles = {
     flex: {
       display: "flex",
@@ -116,51 +121,70 @@ function EditorComponent() {
     },
   };
 
+  // Keep languageDetails in sync whenever currentLanguage changes (but avoid during import)
   useEffect(() => {
     if (isImportingRef.current) return;
 
     const selectedLanguage = LANGUAGES.find(
       (lang) => lang.DEFAULT_LANGUAGE === currentLanguage
     );
+    if (!selectedLanguage) return;
+
     setLanguageDetails({
       ID: selectedLanguage.ID,
       LANGUAGE_NAME: selectedLanguage.NAME,
       DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
       NAME: selectedLanguage.NAME,
+      HELLO_WORLD: selectedLanguage.HELLO_WORLD,
+      LOGO: selectedLanguage.LOGO,
     });
-    setCode(selectedLanguage.HELLO_WORLD);
+    setCode(selectedLanguage.HELLO_WORLD || "");
   }, [currentLanguage]);
 
   const handleEditorThemeChange = async (_, theme) => {
+    // For standard themes we can set directly; for custom themes define them first
     if (["light", "vs-dark"].includes(theme.ID)) {
       setCurrentEditorTheme(theme);
     } else {
       setCurrentEditorTheme(theme);
-      defineEditorTheme(theme).then((_) => setCurrentEditorTheme(theme));
+      try {
+        await defineEditorTheme(theme);
+        setCurrentEditorTheme(theme);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        if (process.env.NODE_ENV !== "production") console.error("Failed defineEditorTheme:", err);
+      }
     }
   };
 
   const getLanguageLogoById = (id) => {
-    const language = LANGUAGES.find(
-      (lang) => parseInt(lang.ID) === parseInt(id)
-    );
+    const language = LANGUAGES.find((lang) => parseInt(lang.ID, 10) === parseInt(id, 10));
     return language ? language.LOGO : null;
   };
 
+  // Submit code to Judge0 via RapidAPI wrapper (non-blocking, single poll)
   const submitCode = useCallback(async () => {
-    console.log("Submitting code..."); // Debug log
     if (!editorRef.current) {
-      console.log("Editor reference not available");
+      enqueueSnackbar("Editor not ready", { variant: "error" });
       return;
     }
-    const codeToSubmit = editorRef.current.getValue();
-    if (codeToSubmit === "") {
+    const codeToSubmit = editorRef.current.getValue() ?? "";
+    if (codeToSubmit.trim() === "") {
       enqueueSnackbar("Please enter valid code", { variant: "error" });
       return;
     }
+
     setLoading(true);
+    setOutput([]);
+    // Clear any previous timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
     try {
       const encodedCode = btoa(codeToSubmit);
+
       const response = await fetch(
         `${judge0SubmitUrl}?base64_encoded=true&wait=false&fields=*`,
         {
@@ -180,59 +204,95 @@ function EditorComponent() {
       );
 
       if (!response.ok) {
-        enqueueSnackbar(
-          `Failed to create submission. Status code: ${response.status}`,
-          { variant: "error" }
-        );
+        enqueueSnackbar(`Failed to create submission. Status code: ${response.status}`, { variant: "error" });
         setLoading(false);
         return;
       }
-      const data = await response.json();
-      const submissionId = data["token"];
 
-      setTimeout(() => {
-        fetch(
-          `${judge0SubmitUrl}/${submissionId}?base64_encoded=true&fields=*`,
-          {
-            method: "GET",
-            headers: {
-              "X-RapidAPI-Key": rapidApiKey,
-              "X-RapidAPI-Host": rapidApiHost,
-            },
-          }
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            if (!data.stdout) {
-              enqueueSnackbar("Please check the code", { variant: "error" });
-              setOutput(data.message);
-              return;
+      const data = await response.json();
+      const submissionToken = data?.token || data?.id || null;
+
+      if (!submissionToken) {
+        enqueueSnackbar("Failed to get submission token", { variant: "error" });
+        setLoading(false);
+        return;
+      }
+
+      // single delayed fetch to check result (keeps simple). Store timeout so we can clear on unmount
+      timeoutRef.current = setTimeout(async () => {
+        try {
+          const res = await fetch(
+            `${judge0SubmitUrl}/${submissionToken}?base64_encoded=true&fields=*`,
+            {
+              method: "GET",
+              headers: {
+                "X-RapidAPI-Key": rapidApiKey,
+                "X-RapidAPI-Host": rapidApiHost,
+              },
             }
-            const decodedOutput = atob(data.stdout);
-            const formattedData = decodedOutput.split("\n");
-            setOutput(formattedData);
-          })
-          .catch((error) => {
-            enqueueSnackbar("Error retrieving output: " + error.message, {
-              variant: "error",
-            });
-          })
-          .finally(() => setLoading(false));
+          );
+
+          if (!res.ok) {
+            enqueueSnackbar(`Failed to retrieve output. Status: ${res.status}`, { variant: "error" });
+            setLoading(false);
+            return;
+          }
+
+          const result = await res.json();
+
+          // judge0 returns stdout as base64 when base64_encoded=true
+          if (result && result.stdout) {
+            try {
+              const decoded = atob(result.stdout);
+              const formatted = decoded.split("\n");
+              setOutput(formatted);
+            } catch (err) {
+              // fallback: if decoding fails, show raw stdout
+              setOutput([String(result.stdout)]);
+            }
+          } else if (result && result.compile_output) {
+            // compile errors
+            try {
+              const decoded = atob(result.compile_output);
+              setOutput(decoded.split("\n"));
+            } catch (err) {
+              setOutput([String(result.compile_output)]);
+            }
+            enqueueSnackbar("Compilation error. See output.", { variant: "error" });
+          } else if (result && result.stderr) {
+            try {
+              const decoded = atob(result.stderr);
+              setOutput(decoded.split("\n"));
+            } catch (err) {
+              setOutput([String(result.stderr)]);
+            }
+            enqueueSnackbar("Runtime error. See output.", { variant: "error" });
+          } else if (result && result.message) {
+            setOutput([String(result.message)]);
+            enqueueSnackbar("No output produced", { variant: "warning" });
+          } else {
+            setOutput([]);
+            enqueueSnackbar("No output received from judge", { variant: "warning" });
+          }
+        } catch (err) {
+          enqueueSnackbar("Error retrieving output: " + err.message, { variant: "error" });
+        } finally {
+          setLoading(false);
+          timeoutRef.current = null;
+        }
       }, 2000);
     } catch (error) {
-      enqueueSnackbar("Error: " + error.message, { variant: "error" });
+      enqueueSnackbar("Error submitting code: " + error.message, { variant: "error" });
+      setLoading(false);
     }
   }, [enqueueSnackbar, languageDetails]);
 
-  // import file
-  const [isImporting, setIsImporting] = React.useState(false);
-  const isImportingRef = useRef(false);
-  const fileInputRef = React.useRef(null);
-
+  // File import handler
   const handleFileImport = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
+    // reset editor content while importing
     setCode("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -245,22 +305,24 @@ function EditorComponent() {
 
     const languageMap = {
       js: "Javascript",
+      jsx: "Javascript",
+      ts: "Typescript",
       py: "Python3",
       cpp: "C++",
+      c: "C",
       java: "Java",
     };
 
     const languageName = languageMap[extension];
-    const selectedLanguage = LANGUAGES.find(
-      (lang) => lang.NAME === languageName
-    );
+    const selectedLanguage = LANGUAGES.find((lang) => lang.NAME === languageName);
+
     if (!selectedLanguage) {
-      console.error("Unsupported file type");
       enqueueSnackbar("Unsupported file type", { variant: "error" });
       isImportingRef.current = false;
       setIsImporting(false);
       return;
     }
+
     const reader = new FileReader();
     reader.onload = (event) => {
       setCurrentLanguage(selectedLanguage.DEFAULT_LANGUAGE);
@@ -269,36 +331,45 @@ function EditorComponent() {
         NAME: selectedLanguage.NAME,
         DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
         LANGUAGE_NAME: selectedLanguage.NAME,
+        HELLO_WORLD: selectedLanguage.HELLO_WORLD,
+        LOGO: selectedLanguage.LOGO,
       });
-      setCode(event.target.result);
-      // console.log("file code ", event.target.result);
-      setOutput("");
+      setCode(String(event.target.result ?? ""));
+      setOutput([]);
+      isImportingRef.current = false;
       setIsImporting(false);
     };
     reader.onerror = () => {
-      console.error("Error reading file");
+      enqueueSnackbar("Error reading file", { variant: "error" });
       isImportingRef.current = false;
       setIsImporting(false);
     };
     reader.readAsText(file);
   };
 
-  // download file
-  const [isDownloading, setDownloading] = React.useState(false);
+  // Export file handler
+  const [isDownloading, setDownloading] = useState(false);
   const exportFile = () => {
-    if (!code) return;
+    if (typeof code !== "string" || code.length === 0) {
+      enqueueSnackbar("No code to export", { variant: "warning" });
+      return;
+    }
 
     setDownloading(true);
     const fileContent = code;
 
     const extensionMap = {
       javascript: "js",
+      javascriptreact: "js",
+      typescript: "ts",
       python: "py",
       cpp: "cpp",
+      c: "c",
       java: "java",
     };
 
-    const extension = extensionMap[languageDetails.DEFAULT_LANGUAGE] || "txt";
+    const langKey = (languageDetails?.DEFAULT_LANGUAGE || "").toString().toLowerCase();
+    const extension = extensionMap[langKey] || "txt";
 
     const blob = new Blob([fileContent], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -308,61 +379,69 @@ function EditorComponent() {
     link.download = `code.${extension}`;
     document.body.appendChild(link);
     link.click();
-
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     setDownloading(false);
   };
 
+  // Editor mount
   const handleEditorDidMount = useCallback(
     (editor, monaco) => {
-      console.log("Editor mounted"); // Debug log
       editorRef.current = editor;
       monacoRef.current = monaco;
-      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-        console.log("Ctrl+Enter pressed in editor");
-        submitCode();
-      });
+
+      // register Ctrl/Cmd + Enter only once per editor instance
+      try {
+        editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+          submitCode();
+        });
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        if (process.env.NODE_ENV !== "production") console.error("Failed to register command:", err);
+      }
     },
     [submitCode]
   );
 
+  // Global key handler for convenience (also triggers submit)
   useEffect(() => {
     const handleKeyDown = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
-        console.log("Ctrl+Enter pressed globally");
         event.preventDefault();
         submitCode();
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
-
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [submitCode]);
 
+  // Cleanup any pending timeout on unmount to avoid setState-after-unmount
   useEffect(() => {
-    if (editorRef.current && monacoRef.current) {
-      const editor = editorRef.current;
-      const monaco = monacoRef.current;
-      handleEditorDidMount(editor, monaco);
-    }
-  }, [handleEditorDidMount]);
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, []);
 
+  // Language change from selector
   function handleLanguageChange(_, value) {
     if (isImporting) return;
     setCurrentLanguage(value.DEFAULT_LANGUAGE);
-    setOutput("");
-    setCode(code ? code : value.HELLO_WORLD);
+    setOutput([]);
+    setCode((prev) => (prev ? prev : value.HELLO_WORLD || ""));
   }
 
   const handleSignOut = async () => {
     try {
       await logOut();
     } catch (error) {
-      console.log(error);
+      // eslint-disable-next-line no-console
+      if (process.env.NODE_ENV !== "production") console.error("Sign out error:", error);
     }
   };
 
@@ -386,12 +465,12 @@ function EditorComponent() {
       return;
     }
 
-    const outputText = Array.isArray(output) ? output.join("\n") : output.toString();
+    const outputText = Array.isArray(output) ? output.join("\n") : String(output);
     try {
       await navigator.clipboard.writeText(outputText);
       enqueueSnackbar("Output copied to clipboard!", { variant: "success" });
     } catch (err) {
-      // Fallback for browsers that don't support clipboard API
+      // Fallback for older browsers
       const textArea = document.createElement("textarea");
       textArea.value = outputText;
       document.body.appendChild(textArea);
@@ -411,6 +490,7 @@ function EditorComponent() {
     enqueueSnackbar("Output cleared", { variant: "info" });
   };
 
+  // Renderers for authenticated vs unauthenticated users
   const renderAuthenticatedContent = () => (
     <>
       <StyledLayout>
@@ -419,13 +499,13 @@ function EditorComponent() {
           theme={currentEditorTheme.NAME}
           onMount={handleEditorDidMount}
           value={code}
-          onChange={setCode}
+          onChange={(value) => setCode(value ?? "")}
           language={languageDetails.DEFAULT_LANGUAGE}
           options={{
             minimap: { enabled: false },
             lineNumbers: showLineNumbers ? "on" : "off",
             wordWrap: wordWrap ? "on" : "off",
-            fontSize: fontSize,
+            fontSize,
           }}
         />
         <div
@@ -489,7 +569,7 @@ function EditorComponent() {
               type="file"
               ref={fileInputRef}
               style={{ display: "none" }}
-              accept=".java,.js,.py,.cpp"
+              accept=".java,.js,.jsx,.ts,.py,.cpp,.c"
               onChange={handleFileImport}
             />
 
@@ -545,9 +625,9 @@ function EditorComponent() {
             </StyledButton>
           </div>
 
-          {getLanguageLogoById(languageDetails.ID)}
+          {getLanguageLogoById(languageDetails?.ID)}
           <div style={{ fontWeight: "bold" }}>
-            {languageDetails.LANGUAGE_NAME}
+            {languageDetails?.LANGUAGE_NAME || languageDetails?.NAME}
           </div>
           <div style={styles.languageDropdown}>
             <EditorThemeSelect
@@ -640,7 +720,7 @@ function EditorComponent() {
             <span>
               {loading ? <CircularProgress size={13} /> : <FaPlay size="13" />}
             </span>
-            Run {languageDetails.LANGUAGE_NAME}
+            Run {languageDetails?.LANGUAGE_NAME || languageDetails?.NAME}
           </StyledButton>
         </div>
       </StyledLayout>
@@ -771,9 +851,7 @@ function EditorComponent() {
           )}
         </div>
       </Box>
-      {currentUser
-        ? renderAuthenticatedContent()
-        : renderUnauthenticatedContent()}
+      {currentUser ? renderAuthenticatedContent() : renderUnauthenticatedContent()}
       <div className="footer">
         <Footer />
       </div>
