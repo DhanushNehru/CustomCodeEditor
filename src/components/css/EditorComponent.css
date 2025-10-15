@@ -116,3 +116,118 @@
   margin-bottom: 12px;
   margin-top: -8px;
 }
+
+/* Editor Settings Styles */
+.editor-settings {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.editor-settings-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: inherit;
+}
+
+.editor-settings-control {
+  display: block;
+  margin: 0.25rem 0;
+}
+
+.editor-settings-slider {
+  margin: 0.5rem 0;
+  padding: 0 0.5rem;
+}
+
+/* Dark mode styles for editor settings */
+@media (prefers-color-scheme: dark) {
+  .editor-settings {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Enhanced Output Panel Styles */
+.output-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.output-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.output-content {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  overflow-y: auto;
+  max-height: calc(100% - 60px);
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.output-line {
+  margin-bottom: 0.25rem;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  color: inherit;
+}
+
+.output-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: rgba(0, 0, 0, 0.6);
+  font-style: italic;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Responsive design for output panel */
+@media (max-width: 768px) {
+  .output-header {
+    padding: 0.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  
+  .output-controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .output-content {
+    padding: 0.5rem;
+    font-size: 0.8125rem;
+  }
+  
+  .output-empty {
+    padding: 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Dark mode styles for output panel */
+@media (prefers-color-scheme: dark) {
+  .output-header {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  
+  .output-empty {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}

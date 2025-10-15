@@ -1,11 +1,21 @@
-import "@fortawesome/fontawesome-free/css/all.css";
-import { Editor } from "@monaco-editor/react";
-import { Avatar, Button, CircularProgress, styled } from "@mui/material";
-import Box from "@mui/material/Box";
-import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FaPlay, FaFileUpload, FaFileDownload } from "react-icons/fa";
-// import { FaFileUpload } from "react-icons/fa";
+import { useSnackbar } from "notistack";
+import {
+  Avatar,
+  Button,
+  CircularProgress,
+  FormControlLabel,
+  Slider,
+  styled,
+  Switch,
+  Typography,
+} from "@mui/material";
+import Box from "@mui/material/Box";
+import { Editor } from "@monaco-editor/react";
+import { FaPlay, FaFileUpload, FaFileDownload, FaCopy, FaTrash } from "react-icons/fa";
+import "@fortawesome/fontawesome-free/css/all.css";
+
+// Local imports after external imports
 import GithubSignIn from "../components/GithubSignIn";
 import GoogleSignIn from "../components/GoogleSignIn";
 import "../components/css/EditorComponent.css";
@@ -23,7 +33,6 @@ import {
 } from "../constants/constants";
 import { useAuth } from "../context/AuthContext";
 import Footer from "../components/Footer";
-// import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -83,6 +92,11 @@ function EditorComponent() {
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
   const { currentUser, logOut } = useAuth();
+
+  // Editor settings state
+  const [showLineNumbers, setShowLineNumbers] = useState(true);
+  const [wordWrap, setWordWrap] = useState(false);
+  const [fontSize, setFontSize] = useState(14);
 
   const styles = {
     flex: {
@@ -359,6 +373,51 @@ function EditorComponent() {
     }
   };
 
+  // Editor settings handlers
+  const handleLineNumbersToggle = (event) => {
+    setShowLineNumbers(event.target.checked);
+  };
+
+  const handleWordWrapToggle = (event) => {
+    setWordWrap(event.target.checked);
+  };
+
+  const handleFontSizeChange = (event, newValue) => {
+    setFontSize(newValue);
+  };
+
+  // Output management handlers
+  const copyOutput = async () => {
+    if (!output || output.length === 0) {
+      enqueueSnackbar("No output to copy", { variant: "warning" });
+      return;
+    }
+
+    const outputText = Array.isArray(output) ? output.join("\n") : output.toString();
+    try {
+      await navigator.clipboard.writeText(outputText);
+      enqueueSnackbar("Output copied to clipboard!", { variant: "success" });
+    } catch (err) {
+      // Fallback for browsers that don't support clipboard API
+      const textArea = document.createElement("textarea");
+      textArea.value = outputText;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        enqueueSnackbar("Output copied to clipboard!", { variant: "success" });
+      } catch (fallbackErr) {
+        enqueueSnackbar("Failed to copy output", { variant: "error" });
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
+  const clearOutput = () => {
+    setOutput([]);
+    enqueueSnackbar("Output cleared", { variant: "info" });
+  };
+
   const renderAuthenticatedContent = () => (
     <>
       <StyledLayout>
@@ -369,7 +428,12 @@ function EditorComponent() {
           value={code}
           onChange={setCode}
           language={languageDetails.DEFAULT_LANGUAGE}
-          options={{ minimap: { enabled: false } }}
+          options={{
+            minimap: { enabled: false },
+            lineNumbers: showLineNumbers ? "on" : "off",
+            wordWrap: wordWrap ? "on" : "off",
+            fontSize: fontSize,
+          }}
         />
         <div
           className="sidebar"
@@ -504,6 +568,61 @@ function EditorComponent() {
               defaultLanguage={languageDetails}
             />
           </div>
+
+          {/* Editor Settings Section */}
+          <div className="editor-settings">
+            <Typography variant="subtitle2" className="editor-settings-title">
+              Editor Settings
+            </Typography>
+
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={showLineNumbers}
+                  onChange={handleLineNumbersToggle}
+                  size="small"
+                />
+              }
+              label="Line Numbers"
+              className="editor-settings-control"
+            />
+
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={wordWrap}
+                  onChange={handleWordWrapToggle}
+                  size="small"
+                />
+              }
+              label="Word Wrap"
+              className="editor-settings-control"
+            />
+
+            <Typography
+              variant="body2"
+              sx={{ margin: "0.5rem 0 0.25rem 0" }}
+            >
+              Font Size: {fontSize}px
+            </Typography>
+            <div className="editor-settings-slider">
+              <Slider
+                value={fontSize}
+                onChange={handleFontSizeChange}
+                min={12}
+                max={20}
+                step={1}
+                marks={[
+                  { value: 12, label: "12" },
+                  { value: 14, label: "14" },
+                  { value: 16, label: "16" },
+                  { value: 18, label: "18" },
+                  { value: 20, label: "20" },
+                ]}
+                size="small"
+              />
+            </div>
+          </div>
           <StyledButton
             sx={(theme) => ({
               marginTop: "1rem",
@@ -533,8 +652,47 @@ function EditorComponent() {
         </div>
       </StyledLayout>
       <OutputLayout>
-        {Array.isArray(output) &&
-          output.map((result, i) => <div key={i}>{result}</div>)}
+        <div className="output-header">
+          <Typography
+            variant="h6"
+            sx={{ fontSize: "1rem", fontWeight: "bold" }}
+          >
+            Output
+          </Typography>
+          <div className="output-controls">
+            <Button
+              size="small"
+              onClick={copyOutput}
+              startIcon={<FaCopy />}
+              variant="outlined"
+              sx={{ minWidth: "auto", padding: "4px 8px" }}
+            >
+              Copy
+            </Button>
+            <Button
+              size="small"
+              onClick={clearOutput}
+              startIcon={<FaTrash />}
+              variant="outlined"
+              sx={{ minWidth: "auto", padding: "4px 8px", marginLeft: "0.5rem" }}
+            >
+              Clear
+            </Button>
+          </div>
+        </div>
+        <div className="output-content">
+          {Array.isArray(output) && output.length > 0 ? (
+            output.map((result, i) => (
+              <div key={i} className="output-line">
+                {result}
+              </div>
+            ))
+          ) : (
+            <div className="output-empty">
+              No output yet. Run your code to see results!
+            </div>
+          )}
+        </div>
       </OutputLayout>
     </>
   );
