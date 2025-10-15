@@ -1,5 +1,4 @@
 // src/pages/EditorComponent.js
-// (All your existing imports remain the same)
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSnackbar } from "notistack";
 import {
@@ -88,7 +87,6 @@ function EditorComponent() {
   const [showLineNumbers, setShowLineNumbers] = useState(true);
   const [wordWrap, setWordWrap] = useState(false);
   const [fontSize, setFontSize] = useState(14);
-
   const [isImporting, setIsImporting] = useState(false);
   const isImportingRef = useRef(false);
   const fileInputRef = useRef(null);
@@ -151,11 +149,6 @@ function EditorComponent() {
     }
   };
 
-  const getLanguageLogoById = (id) => {
-    const language = LANGUAGES.find((lang) => parseInt(lang.ID, 10) === parseInt(id, 10));
-    return language ? language.LOGO : null;
-  };
-
   const submitCode = useCallback(async () => {
     if (!editorRef.current) {
       enqueueSnackbar("Editor not ready", { variant: "error" });
@@ -176,6 +169,7 @@ function EditorComponent() {
 
     try {
       const encodedCode = btoa(codeToSubmit);
+
       const response = await fetch(
         `${judge0SubmitUrl}?base64_encoded=true&wait=false&fields=*`,
         {
@@ -261,65 +255,199 @@ function EditorComponent() {
     }
   }, [enqueueSnackbar, languageDetails]);
 
-  // --- START: KEYBOARD SHORTCUT HANDLER ---
+  const handleFileImport = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setCode("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+
+    isImportingRef.current = true;
+    setIsImporting(true);
+
+    const extension = file.name.split(".").pop().toLowerCase();
+    const languageMap = { js: "Javascript", jsx: "Javascript", ts: "Typescript", py: "Python3", cpp: "C++", c: "C", java: "Java" };
+    const languageName = languageMap[extension];
+    const selectedLanguage = LANGUAGES.find((lang) => lang.NAME === languageName);
+
+    if (!selectedLanguage) {
+      enqueueSnackbar("Unsupported file type", { variant: "error" });
+      isImportingRef.current = false;
+      setIsImporting(false);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setCurrentLanguage(selectedLanguage.DEFAULT_LANGUAGE);
+      setLanguageDetails({
+        ID: selectedLanguage.ID,
+        NAME: selectedLanguage.NAME,
+        DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
+        LANGUAGE_NAME: selectedLanguage.NAME,
+        HELLO_WORLD: selectedLanguage.HELLO_WORLD,
+        LOGO: selectedLanguage.LOGO,
+      });
+      setCode(String(event.target.result ?? ""));
+      setOutput([]);
+      isImportingRef.current = false;
+      setIsImporting(false);
+    };
+    reader.onerror = () => {
+      enqueueSnackbar("Error reading file", { variant: "error" });
+      isImportingRef.current = false;
+      setIsImporting(false);
+    };
+    reader.readAsText(file);
+  };
+
+  // ------------------- MISSING FUNCTIONS FIX -------------------
+  const copyOutput = async () => {
+    if (!output || output.length === 0) {
+      enqueueSnackbar("No output to copy", { variant: "warning" });
+      return;
+    }
+    const outputText = Array.isArray(output) ? output.join("\n") : String(output);
+    try {
+      await navigator.clipboard.writeText(outputText);
+      enqueueSnackbar("Output copied to clipboard!", { variant: "success" });
+    } catch {
+      enqueueSnackbar("Failed to copy output", { variant: "error" });
+    }
+  };
+
+  const clearOutput = () => {
+    setOutput([]);
+    enqueueSnackbar("Output cleared", { variant: "info" });
+  };
+
+  const exportFile = () => {
+    if (!code || code.length === 0) {
+      enqueueSnackbar("No code to export", { variant: "warning" });
+      return;
+    }
+
+    const extensionMap = { javascript: "js", javascriptreact: "js", typescript: "ts", python: "py", cpp: "cpp", c: "c", java: "java" };
+    const langKey = (languageDetails?.DEFAULT_LANGUAGE || "").toLowerCase();
+    const extension = extensionMap[langKey] || "txt";
+
+    const blob = new Blob([code], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `code.${extension}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+  // --------------------------------------------------------------
+
+  const handleEditorDidMount = useCallback(
+    (editor, monaco) => {
+      editorRef.current = editor;
+      monacoRef.current = monaco;
+
+      try {
+        editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+          submitCode();
+        });
+      } catch (err) {
+        if (process.env.NODE_ENV !== "production") console.error("Failed to register command:", err);
+      }
+    },
+    [submitCode]
+  );
+
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (!editorRef.current) return;
-
-      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-      const ctrlKey = isMac ? e.metaKey : e.ctrlKey;
-
-      // Ctrl+S → Export file
-      if (ctrlKey && e.key === "s") {
-        e.preventDefault();
-        exportFile();
-      }
-      // Ctrl+O → Import file
-      else if (ctrlKey && e.key === "o") {
-        e.preventDefault();
-        fileInputRef.current?.click();
-      }
-      // Ctrl+L → Clear output
-      else if (ctrlKey && e.key.toLowerCase() === "l") {
-        e.preventDefault();
-        clearOutput();
-      }
-      // Ctrl+C → Copy output
-      else if (ctrlKey && e.key.toLowerCase() === "c") {
-        e.preventDefault();
-        copyOutput();
-      }
-      // Ctrl+/ → Toggle line numbers
-      else if (ctrlKey && e.key === "/") {
-        e.preventDefault();
-        setShowLineNumbers((prev) => !prev);
-      }
-      // Ctrl+Shift+W → Toggle word wrap
-      else if (ctrlKey && e.shiftKey && e.key.toLowerCase() === "w") {
-        e.preventDefault();
-        setWordWrap((prev) => !prev);
-      }
-      // Ctrl+Enter → Run code
-      else if (ctrlKey && e.key === "Enter") {
-        e.preventDefault();
+    const handleKeyDown = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        event.preventDefault();
         submitCode();
       }
     };
-
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [exportFile, fileInputRef, clearOutput, copyOutput, submitCode]);
-  // --- END: KEYBOARD SHORTCUT HANDLER ---
+  }, [submitCode]);
 
-  // (All your existing EditorComponent code remains unchanged after this point)
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, []);
 
-  // For brevity: existing Editor rendering, import/export buttons, output area, settings, and footer remain unchanged
+  function handleLanguageChange(_, value) {
+    if (isImporting) return;
+    setCurrentLanguage(value.DEFAULT_LANGUAGE);
+    setOutput([]);
+    setCode((prev) => (prev ? prev : value.HELLO_WORLD || ""));
+  }
+
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      if (process.env.NODE_ENV !== "production") console.error("Sign out error:", error);
+    }
+  };
+
+  const handleLineNumbersToggle = (event) => setShowLineNumbers(event.target.checked);
+  const handleWordWrapToggle = (event) => setWordWrap(event.target.checked);
+  const handleFontSizeChange = (event, newValue) => setFontSize(newValue);
+
+  // ------------------- JSX RENDER -------------------
+  const renderAuthenticatedContent = () => (
+    <>
+      {/* Editor + Sidebar */}
+      <StyledLayout>
+        <Editor
+          className="editor"
+          theme={currentEditorTheme.NAME}
+          onMount={handleEditorDidMount}
+          value={code}
+          onChange={(value) => setCode(value ?? "")}
+          language={languageDetails.DEFAULT_LANGUAGE}
+          options={{ minimap: { enabled: false }, lineNumbers: showLineNumbers ? "on" : "off", wordWrap: wordWrap ? "on" : "off", fontSize }}
+        />
+        <div className="sidebar">
+          {/* Import / Export */}
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            <StyledButton onClick={() => fileInputRef.current.click()} disabled={isImporting}>
+              {isImporting ? <CircularProgress size={16} /> : <><FaFileUpload /> Import</>}
+            </StyledButton>
+            <input type="file" ref={fileInputRef} style={{ display: "none" }} accept=".java,.js,.jsx,.ts,.py,.cpp,.c" onChange={handleFileImport} />
+            <StyledButton onClick={exportFile}>
+              {isDownloading ? <CircularProgress size={16} /> : <><FaFileDownload /> Export</>}
+            </StyledButton>
+          </div>
+          {/* Run, Copy, Clear */}
+          <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
+            <StyledButton onClick={submitCode}><FaPlay /> Run</StyledButton>
+            <StyledButton onClick={copyOutput}><FaCopy /> Copy Output</StyledButton>
+            <StyledButton onClick={clearOutput}><FaTrash /> Clear Output</StyledButton>
+          </div>
+          {/* Output */}
+          <OutputLayout>
+            <pre>{output && output.length ? output.join("\n") : "Output will appear here..."}</pre>
+          </OutputLayout>
+        </div>
+      </StyledLayout>
+    </>
+  );
 
   return (
-    <div className="editor-container">
-      {/* existing JSX remains */}
-      {/* ... */}
-    </div>
+    <Box sx={{ flexGrow: 1 }}>
+      {currentUser ? renderAuthenticatedContent() : (
+        <div>
+          <GithubSignIn />
+          <GoogleSignIn />
+        </div>
+      )}
+      <Footer />
+    </Box>
   );
 }
 
