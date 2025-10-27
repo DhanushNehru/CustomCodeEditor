@@ -229,15 +229,12 @@ function EditorComponent() {
           const result = await res.json();
 
           if (result && result.stdout) {
-            const decoded = atob(result.stdout);
-            setOutput(decoded.split("\n"));
+            setOutput(decodeFormat(result.stdout));
           } else if (result && result.compile_output) {
-            const decoded = atob(result.compile_output);
-            setOutput(decoded.split("\n"));
+            setOutput(decodeFormat(result.compile_output));
             enqueueSnackbar("Compilation error. See output.", { variant: "error" });
           } else if (result && result.stderr) {
-            const decoded = atob(result.stderr);
-            setOutput(decoded.split("\n"));
+            setOutput(decodeFormat(result.stderr));
             enqueueSnackbar("Runtime error. See output.", { variant: "error" });
           } else if (result && result.message) {
             setOutput([String(result.message)]);
