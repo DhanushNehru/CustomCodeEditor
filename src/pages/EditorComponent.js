@@ -96,7 +96,6 @@ function EditorComponent() {
   const isImportingRef = useRef(false);
   const fileInputRef = useRef(null);
   const timeoutRef = useRef(null);
-  const [isDownloading, setDownloading] = useState(false);
 
   const styles = {
     flex: {
