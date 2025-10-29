@@ -133,24 +133,34 @@ function EditorComponent() {
       DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
       NAME: selectedLanguage.NAME,
     });
-    const savedCode = localStorage.getItem(`code-${selectedLanguage.DEFAULT_LANGUAGE}`);
-    if (savedCode !== null) {
-      setCode(savedCode);
-    } else {
-      setCode(selectedLanguage.HELLO_WORLD);
-    }
-  }, [currentLanguage]);
+            let savedCode = null;
+            try {
+              savedCode = localStorage.getItem(`code-${selectedLanguage.DEFAULT_LANGUAGE}`);
+            } catch (e) {
+              enqueueSnackbar("Failed to load saved code. Local storage might be unavailable.", { variant: "error" });
+              console.error("Local storage load error:", e);
+            }
+    
+            if (savedCode !== null) {
+              setCode(savedCode);
+            } else {
+              setCode(selectedLanguage.HELLO_WORLD);
+            }  }, [currentLanguage]);
 
   useEffect(() => {
     if (isImportingRef.current) return;
 
     const handler = setTimeout(() => {
-      if (code) {
-        localStorage.setItem(`code-${currentLanguage}`, code);
-      } else {
-        localStorage.removeItem(`code-${currentLanguage}`);
-      }
-    }, 500); // 500ms debounce
+                try {
+                  if (code) {
+                    localStorage.setItem(`code-${currentLanguage}`, code);
+                  } else {
+                    localStorage.removeItem(`code-${currentLanguage}`);
+                  }
+                } catch (e) {
+                  enqueueSnackbar("Failed to save code automatically. Local storage might be full or unavailable.", { variant: "error" });
+                  console.error("Local storage save error:", e);
+                }    }, 500); // 500ms debounce
 
     return () => {
       clearTimeout(handler);
