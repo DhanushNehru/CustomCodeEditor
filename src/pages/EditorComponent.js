@@ -133,8 +133,19 @@ function EditorComponent() {
       DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
       NAME: selectedLanguage.NAME,
     });
-    setCode(selectedLanguage.HELLO_WORLD);
+    const savedCode = localStorage.getItem(`code-${currentLanguage}`);
+    if (savedCode) {
+      setCode(savedCode);
+    } else {
+      setCode(selectedLanguage.HELLO_WORLD);
+    }
   }, [currentLanguage]);
+
+  useEffect(() => {
+    if (code) {
+      localStorage.setItem(`code-${currentLanguage}`, code);
+    }
+  }, [code, currentLanguage]);
 
   const handleEditorThemeChange = async (_, theme) => {
     if (["light", "vs-dark"].includes(theme.ID)) {
