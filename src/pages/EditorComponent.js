@@ -133,8 +133,8 @@ function EditorComponent() {
       DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
       NAME: selectedLanguage.NAME,
     });
-    const savedCode = localStorage.getItem(`code-${currentLanguage}`);
-    if (savedCode) {
+    const savedCode = localStorage.getItem(`code-${selectedLanguage.DEFAULT_LANGUAGE}`);
+    if (savedCode !== null) {
       setCode(savedCode);
     } else {
       setCode(selectedLanguage.HELLO_WORLD);
@@ -142,10 +142,20 @@ function EditorComponent() {
   }, [currentLanguage]);
 
   useEffect(() => {
-    if (code) {
-      localStorage.setItem(`code-${currentLanguage}`, code);
-    }
-  }, [code, currentLanguage]);
+    if (isImportingRef.current) return;
+
+    const handler = setTimeout(() => {
+      if (code) {
+        localStorage.setItem(`code-${currentLanguage}`, code);
+      } else {
+        localStorage.removeItem(`code-${currentLanguage}`);
+      }
+    }, 500); // 500ms debounce
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [code]);
 
   const handleEditorThemeChange = async (_, theme) => {
     if (["light", "vs-dark"].includes(theme.ID)) {
