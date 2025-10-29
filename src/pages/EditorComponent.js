@@ -169,8 +169,8 @@ function EditorComponent() {
       DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
       NAME: selectedLanguage.NAME,
     });
-    const savedCode = localStorage.getItem(`code-${currentLanguage}`);
-    if (savedCode) {
+    const savedCode = localStorage.getItem(`code-${selectedLanguage.DEFAULT_LANGUAGE}`);
+    if (savedCode !== null) {
       setCode(savedCode);
     } else {
       setCode(selectedLanguage.HELLO_WORLD);
@@ -178,10 +178,18 @@ function EditorComponent() {
   }, [currentLanguage]);
 
   useEffect(() => {
-    if (code) {
-      localStorage.setItem(`code-${currentLanguage}`, code);
-    }
-  }, [code, currentLanguage]);
+    const handler = setTimeout(() => {
+      if (code) {
+        localStorage.setItem(`code-${currentLanguage}`, code);
+      } else {
+        localStorage.removeItem(`code-${currentLanguage}`);
+      }
+    }, 500); 
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [code]);
 
   const handleEditorThemeChange = async (_, theme) => {
     if (["light", "vs-dark"].includes(theme.ID)) {
@@ -256,16 +264,22 @@ function EditorComponent() {
           .then((response) => response.json())
           .then((data) => {
             const newOutput = [];
+            let errorMessage = [];
+
             if (data.stdout) {
               newOutput.push(...decodeFormat(data.stdout));
             }
             if (data.stderr) {
               newOutput.push(...decodeFormat(data.stderr));
-              enqueueSnackbar("Error in code", { variant: "error" });
+              errorMessage.push("Error in code");
             }
             if (data.compile_output) {
               newOutput.push(...decodeFormat(data.compile_output));
-              enqueueSnackbar("Compilation error", { variant: "error" });
+              errorMessage.push("Compilation error");
+            }
+
+            if (errorMessage.length > 0) {
+              enqueueSnackbar(errorMessage.join(" and "), { variant: "error" });
             }
             setOutput(newOutput);
           })
