@@ -133,39 +133,39 @@ function EditorComponent() {
       DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
       NAME: selectedLanguage.NAME,
     });
-            let savedCode = null;
-            try {
-              savedCode = localStorage.getItem(`code-${selectedLanguage.DEFAULT_LANGUAGE}`);
-            } catch (e) {
-              enqueueSnackbar("Failed to load saved code. Local storage might be unavailable.", { variant: "error" });
-              console.error("Local storage load error:", e);
-            }
+    let savedCode = null;
+    try {
+      savedCode = localStorage.getItem(`code-${selectedLanguage.DEFAULT_LANGUAGE}`);
+    } catch (e) {
+      enqueueSnackbar("Failed to load saved code. Local storage might be unavailable.", { variant: "error" });
+      console.error("Local storage load error:", e);
+    }
     
-            if (savedCode !== null) {
-              setCode(savedCode);
-            } else {
-              setCode(selectedLanguage.HELLO_WORLD);
-            }  }, [currentLanguage]);
+    if (savedCode !== null) {
+      setCode(savedCode);
+    } else {
+      setCode(selectedLanguage.HELLO_WORLD);
+    }  }, [currentLanguage, enqueueSnackbar]);
 
   useEffect(() => {
     if (isImportingRef.current) return;
 
     const handler = setTimeout(() => {
-                try {
-                  if (code) {
-                    localStorage.setItem(`code-${currentLanguage}`, code);
-                  } else {
-                    localStorage.removeItem(`code-${currentLanguage}`);
-                  }
-                } catch (e) {
-                  enqueueSnackbar("Failed to save code automatically. Local storage might be full or unavailable.", { variant: "error" });
-                  console.error("Local storage save error:", e);
-                }    }, 500); // 500ms debounce
+      try {
+        if (code) {
+          localStorage.setItem(`code-${currentLanguage}`, code);
+        } else {
+          localStorage.removeItem(`code-${currentLanguage}`);
+        }
+      } catch (e) {
+        enqueueSnackbar("Failed to save code automatically. Local storage might be full or unavailable.", { variant: "error" });
+        console.error("Local storage save error:", e);
+      }    }, 500); // 500ms debounce
 
     return () => {
       clearTimeout(handler);
     };
-  }, [code]);
+  }, [code, currentLanguage, enqueueSnackbar]);
 
   const handleEditorThemeChange = async (_, theme) => {
     if (["light", "vs-dark"].includes(theme.ID)) {
