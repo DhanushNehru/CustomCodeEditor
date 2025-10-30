@@ -65,41 +65,6 @@ const OutputLayout = styled("div")(({ theme }) => ({
   "@media (min-width: 1024px)": {
     height: "30vh",
     padding: "1rem",
-    width: "50%",
-  },
-}));
-
-const InputLayout = styled("div")(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
-  height: "20vh",
-  margin: "1rem 0",
-  overflow: "auto",
-  border: `2px solid ${theme.palette.divider}`,
-  borderRadius: "1rem",
-  padding: "1rem",
-  "@media (min-width: 1024px)": {
-    height: "30vh",
-    padding: "1rem",
-    width: "50%",
-    margin: "1rem 0 0 1rem",
-  },
-}));
-
-const StyledTextArea = styled("textarea")(({ theme }) => ({
-  width: "100%",
-  height: "calc(100% - 40px)",
-  background: "transparent",
-  color: theme.palette.text.primary,
-  border: "none",
-  resize: "none",
-  outline: "none",
-  fontSize: "1rem",
-  "&::placeholder": {
-    color: theme.palette.text.secondary,
-    opacity: 0.8,
-  },
-  "&:focus::placeholder": {
-    color: "transparent",
   },
 }));
 
@@ -114,7 +79,6 @@ const decodeFormat = (data) => {
 
 function EditorComponent() {
   const [code, setCode] = useState(null);
-  const [stdin, setStdin] = useState("");
   const [output, setOutput] = useState([]);
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE
@@ -169,27 +133,8 @@ function EditorComponent() {
       DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
       NAME: selectedLanguage.NAME,
     });
-    const savedCode = localStorage.getItem(`code-${selectedLanguage.DEFAULT_LANGUAGE}`);
-    if (savedCode !== null) {
-      setCode(savedCode);
-    } else {
-      setCode(selectedLanguage.HELLO_WORLD);
-    }
+    setCode(selectedLanguage.HELLO_WORLD);
   }, [currentLanguage]);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      if (code) {
-        localStorage.setItem(`code-${currentLanguage}`, code);
-      } else {
-        localStorage.removeItem(`code-${currentLanguage}`);
-      }
-    }, 500); 
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [code]);
 
   const handleEditorThemeChange = async (_, theme) => {
     if (["light", "vs-dark"].includes(theme.ID)) {
@@ -233,7 +178,7 @@ function EditorComponent() {
           body: JSON.stringify({
             source_code: encodedCode,
             language_id: languageDetails.ID,
-            stdin: btoa(stdin),
+            stdin: "",
             expected_output: "",
           }),
         }
@@ -263,25 +208,16 @@ function EditorComponent() {
         )
           .then((response) => response.json())
           .then((data) => {
-            const newOutput = [];
-            let errorMessage = [];
-
-            if (data.stdout) {
-              newOutput.push(...decodeFormat(data.stdout));
+            if (!data.stdout) {
+              enqueueSnackbar("Please check the code", { variant: "error" });
+              if (data.stderr) {
+                setOutput(decodeFormat(data.stderr));
+              } else if (data.compile_output) {
+                setOutput(decodeFormat(data.compile_output));
+              }
+              return;
             }
-            if (data.stderr) {
-              newOutput.push(...decodeFormat(data.stderr));
-              errorMessage.push("Error in code");
-            }
-            if (data.compile_output) {
-              newOutput.push(...decodeFormat(data.compile_output));
-              errorMessage.push("Compilation error");
-            }
-
-            if (errorMessage.length > 0) {
-              enqueueSnackbar(errorMessage.join(" and "), { variant: "error" });
-            }
-            setOutput(newOutput);
+            setOutput(decodeFormat(data.stdout));
           })
           .catch((error) => {
             enqueueSnackbar("Error retrieving output: " + error.message, {
@@ -293,7 +229,7 @@ function EditorComponent() {
     } catch (error) {
       enqueueSnackbar("Error: " + error.message, { variant: "error" });
     }
-  }, [enqueueSnackbar, languageDetails, stdin]);
+  }, [enqueueSnackbar, languageDetails]);
 
   // import file
   const [isImporting, setIsImporting] = React.useState(false);
@@ -715,61 +651,49 @@ function EditorComponent() {
           </StyledButton>
         </div>
       </StyledLayout>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <OutputLayout>
-          <div className="output-header">
-            <Typography
-              variant="h6"
-              sx={{ fontSize: "1rem", fontWeight: "bold" }}
-            >
-              Output
-            </Typography>
-            <div className="output-controls">
-              <Button
-                size="small"
-                onClick={copyOutput}
-                startIcon={<FaCopy />}
-                variant="outlined"
-                sx={{ minWidth: "auto", padding: "4px 8px" }}
-              >
-                Copy
-              </Button>
-              <Button
-                size="small"
-                onClick={clearOutput}
-                startIcon={<FaTrash />}
-                variant="outlined"
-                sx={{ minWidth: "auto", padding: "4px 8px", marginLeft: "0.5rem" }}
-              >
-                Clear
-              </Button>
-            </div>
-          </div>
-          <div className="output-content">
-            {Array.isArray(output) && output.length > 0 ? (
-              output.map((result, i) => (
-                <div key={i} className="output-line">
-                  {result}
-                </div>
-              ))
-            ) : (
-              <div className="output-empty">
-                No output yet. Run your code to see results!
-              </div>
-            )}
-          </div>
-        </OutputLayout>
-        <InputLayout>
-          <Typography variant="h6" sx={{ fontSize: "1rem", fontWeight: "bold" }}>
-            Input
+      <OutputLayout>
+        <div className="output-header">
+          <Typography
+            variant="h6"
+            sx={{ fontSize: "1rem", fontWeight: "bold" }}
+          >
+            Output
           </Typography>
-          <StyledTextArea
-            value={stdin}
-            onChange={(e) => setStdin(e.target.value)}
-            placeholder="Provide all program input here before running"
-          />
-        </InputLayout>
-      </div>
+          <div className="output-controls">
+            <Button
+              size="small"
+              onClick={copyOutput}
+              startIcon={<FaCopy />}
+              variant="outlined"
+              sx={{ minWidth: "auto", padding: "4px 8px" }}
+            >
+              Copy
+            </Button>
+            <Button
+              size="small"
+              onClick={clearOutput}
+              startIcon={<FaTrash />}
+              variant="outlined"
+              sx={{ minWidth: "auto", padding: "4px 8px", marginLeft: "0.5rem" }}
+            >
+              Clear
+            </Button>
+          </div>
+        </div>
+        <div className="output-content">
+          {Array.isArray(output) && output.length > 0 ? (
+            output.map((result, i) => (
+              <div key={i} className="output-line">
+                {result}
+              </div>
+            ))
+          ) : (
+            <div className="output-empty">
+              No output yet. Run your code to see results!
+            </div>
+          )}
+        </div>
+      </OutputLayout>
     </>
   );
 
