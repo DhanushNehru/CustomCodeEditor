@@ -89,15 +89,13 @@ To start the project using Docker Compose:
 
 3. **Access the RapidAPI Dashboard**:
    - After signing up, go to the [RapidAPI Dashboard](https://rapidapi.com/judge0-official/api/judge0-ce).
-   - In the navigation bar, select **API Hub**.
 
 4. **Navigate to the API's Section**:
-   - Click on **Endpoints** to view
-   - You will see multiple endpoints such as Submissions, About, and Languages.
+   - In the navigation sidebar, you will see multiple endpoints such as Submissions, Statuses, Configuration, Information, and Languages.
      
 5. **Using the Submissions Endpoint**:
    - For code submissions, go to the **Submissions** endpoint and then select **Create Submission**.
-   - Here, you will find `X-RapidAPI-Key`, `X-RapidAPI-Host`, and the URL (`url`) needed for API calls. Url is located below the "Code Snippets" section.
+   - Here, you will find `X-RapidAPI-Key`, `X-RapidAPI-Host`, and the URL (`url`) needed for API calls. API-Key, API-Host and the URL is located below the "Code Snippets" section.
 
 6. **Copy Required Keys**:
    - Copy the `RAPIDAPI_HOST` and `RAPIDAPI_KEY` values. These are necessary to perform API calls to the code execution system.
@@ -107,12 +105,26 @@ By following these steps, you'll be able to set up Judge0 for code submissions u
 
 ## Firebase Configuration
 
-1. Create a Firebase account at [firebase.google.com](https://firebase.google.com/) and go to the console.
-2. Go to Authentication.
-3. In Sign-in method, choose the Google provider.
-4. Go to settings and you'll see authorized domains.
-5. Add your production URL in authorized domains for our project: `https://custom-code-editor.vercel.app/`
-6. Create a `.env` file in your root directory and add these values:
+1. Create a Firebase account at [firebase.google.com](https://firebase.google.com/) and click on "go to the console".
+2. Go to `Get Started by setting up a Firebase project` or `Add project` if you've used Firebase before.
+3. Enter a project name (e.g., CustomCodeEditor) then click Continue (disable Google Analytics (optional)), 
+4. Copy your SDK config snippet and then Create project.
+
+-SDK config snippet should look like:
+const firebaseConfig = {
+  apiKey: "AIzaSy....", 
+  authDomain: "your-app-name.firebaseapp.com",
+  projectId: "your-app-name",
+  storageBucket: "your-app-name.appspot.com",
+  messagingSenderId: "1234567890",
+  appId: "1:1234567890:web:abc123"
+};
+
+5. After it's ready click on continue to proceed to the Firebase dashboard.
+6. On the Project Overview page, click "+add app" and select "</>" Web option.
+7. Enter an App nickname (e.g., CustomCodeEditor) and click on Register app then continue to console.
+8. Go to the **Build** endpoint and select `Authentication` then in [`sign in providers`] select `Google`. Enable and select support email for the project then click on the save button
+9. Create a `.env` file in your root directory and add these values:
 ```
 REACT_APP_FIREBASE_API_KEY=""
 REACT_APP_FIREBASE_AUTH_DOMAIN=""
