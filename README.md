@@ -123,7 +123,7 @@ const firebaseConfig = {
 5. After it's ready click on continue to proceed to the Firebase dashboard.
 6. On the Project Overview page, click "+add app" and select "</>" Web option.
 7. Enter an App nickname (e.g., CustomCodeEditor) and click on Register app then continue to console.
-8. Go to the **Build** endpoint and select `Authentication` then in [`sign in providers`] select `Google`. Enable and select support email for the project then       click on the save button
+8. Go to the **Build** endpoint and select `Authentication` then in [`sign in providers`] select `Google`. Enable and select support email for the project then click on the save button
 9. Create a `.env` file in your root directory and add these values:
 ```
 REACT_APP_FIREBASE_API_KEY=""
