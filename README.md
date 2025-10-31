@@ -95,7 +95,7 @@ To start the project using Docker Compose:
      
 5. **Using the Submissions Endpoint**:
    - For code submissions, go to the **Submissions** endpoint and then select **Create Submission**.
-   - Here, you will find `X-RapidAPI-Key`, `X-RapidAPI-Host`, and the URL (`url`) needed for API calls. API-Key, API-Host and the Url is located below the "Code Snippets" section.
+   - Here, you will find `X-RapidAPI-Key`, `X-RapidAPI-Host`, and the URL (`url`) needed for API calls. API-Key, API-Host and the URL is located below the "Code Snippets" section.
 
 6. **Copy Required Keys**:
    - Copy the `RAPIDAPI_HOST` and `RAPIDAPI_KEY` values. These are necessary to perform API calls to the code execution system.
