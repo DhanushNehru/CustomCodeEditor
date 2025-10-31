@@ -113,11 +113,11 @@ By following these steps, you'll be able to set up Judge0 for code submissions u
 -SDK config snippet should look like:
 const firebaseConfig = {
   apiKey: "AIzaSy....", 
-  authDomain: `your-app-name.firebaseapp.com`,
-  projectId: `your-app-name`,
-  storageBucket: `your-app-name.appspot.com`,
-  messagingSenderId: `1234567890`,
-  appId: `1:1234567890:web:abc123`
+  authDomain: "your-app-name.firebaseapp.com",
+  projectId: "your-app-name",
+  storageBucket: "your-app-name.appspot.com",
+  messagingSenderId: "1234567890",
+  appId: "1:1234567890:web:abc123"
 };
 
 5. After it's ready click on continue to proceed to the Firebase dashboard.
