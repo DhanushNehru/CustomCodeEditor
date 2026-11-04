@@ -20,15 +20,15 @@ const Stars = () => {
     );
 
   return (
-    <Link to="https://github.com/DhanushNehru/CustomCodeEditor" target="_blank" style={styles.githubLink}>
+    <Link to="https://github.com/DhanushNehru/CustomCodeEditor" target="_blank" rel="noopener noreferrer" style={styles.githubLink}>
       <div style={styles.starsCon}>
         <div style={styles.stars}>
-          <FaGithub fontSize={32} />
+          <FaGithub fontSize={24} aria-hidden="true" />
           <div style={styles.starsCount}>
             <span>Stars on GitHub</span>
             <span style={{ color: "gold" }}>
               {repositoryStarts} {repositoryStarts > 1 ? "stars" : "star"}{" "}
-              <FaStar style={styles.star} color='gold' />
+              <FaStar style={styles.star} color='gold' aria-hidden="true" />
             </span>
           </div>
         </div>
@@ -46,10 +46,11 @@ const styles = {
     justifyContent: "center",
     gap: "0.5rem",
     fontWeight: "bold",
-    height: "4.2rem",
+    minHeight: "2.5rem",
+    fontSize: "0.75rem",
   },
   stars: {
-    padding: ".25rem 1rem",
+    padding: ".25rem 0",
     display: "flex",
     alignItems: "center",
     gap: ".5rem",

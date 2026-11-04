@@ -31,21 +31,10 @@
   }
 }
 
-.flex-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 @media (min-width: 576px) {
   .editor {
     width: 100%;
     height: 50vh;
-  }
-  .flex-container {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 0.6em;
   }
 }
 
@@ -62,53 +51,97 @@
   margin-right: 8px;
 }
 
-.welcome-text {
-  color: #000;
-  font-weight: bold;
+/* Header: keep branding, repository controls and account controls grouped. */
+.editor-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: 12px 24px;
+  margin: 0.5rem;
+  padding: 12px 16px;
+  border: 2px solid;
+  border-radius: 1rem;
 }
 
-.signout-container {
+.editor-header-brand {
   display: flex;
   align-items: center;
-  border: 1px solid #d1d1d1; /* border-gray-300 */
+  gap: 8px;
+  min-width: 0;
+}
+
+.editor-header-brand img {
+  flex-shrink: 0;
+}
+
+.editor-header-title {
+  background: linear-gradient(#2837BA 0%, #2F1888 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.editor-header-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.editor-header-github {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.editor-header-github a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
   border-radius: 4px;
-  padding: 4px 8px;
-  background-color: #fff;
-  transition: background-color 0.25s;
 }
 
-.signout-container:hover {
-  background-color: #fff;
-
-  transition: 0.5s all ease;
+.editor-header-account {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
 }
 
-.signout-button {
-  font-weight: bold;
-  color: #4a4a4a; /* text-gray-700 */
-  background: none;
-  border: none;
-  cursor: pointer;
+.editor-header .editor-header-welcome {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
-.signout-button span:hover {
-  color: #000; /* Black text */
-}
-
-/* Dark mode styles */
-@media (prefers-color-scheme: dark) {
-  .welcome-text {
-    color: #fff; /* text-white */
+@media (min-width: 600px) {
+  .editor-header {
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
-  .signout-container {
-    background-color: #000; /* dark:bg-black */
-    color: #fff;
-    border-color: #666; /* dark:border-gray-500 */
+  .editor-header-account {
+    grid-column: 1 / -1;
+    justify-self: end;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .editor-header {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, auto);
   }
 
-  .signout-button span {
-    color: #fff;
+  .editor-header-account {
+    grid-column: auto;
+    max-width: 20rem;
   }
 }
 
@@ -117,38 +150,55 @@
   margin-top: -8px;
 }
 
-/* Editor Settings Styles */
+/* Editor settings use the active MUI palette, independent of OS preference. */
 .editor-settings {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 16rem;
   margin-top: 1rem;
-  padding: 0.75rem;
-  background-color: rgba(0, 0, 0, 0.02);
+  padding: 12px;
+  border: 1px solid;
   border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.editor-settings-title {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+.editor-settings .editor-settings-title {
+  margin-bottom: 8px;
+  font-weight: 600;
   font-size: 0.875rem;
-  color: inherit;
 }
 
-.editor-settings-control {
-  display: block;
-  margin: 0.25rem 0;
+.editor-settings .editor-settings-control {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 32px;
+  margin: 0;
+}
+
+.editor-settings .MuiFormControlLabel-label {
+  font-size: 0.8125rem;
+}
+
+.editor-settings-font {
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid;
+}
+
+.editor-settings-font-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .editor-settings-slider {
-  margin: 0.5rem 0;
-  padding: 0 0.5rem;
+  margin-top: 4px;
+  padding: 0 8px;
 }
 
-/* Dark mode styles for editor settings */
-@media (prefers-color-scheme: dark) {
-  .editor-settings {
-    background-color: rgba(255, 255, 255, 0.02);
-    border-color: rgba(255, 255, 255, 0.08);
-  }
+.editor-settings .MuiSlider-markLabel {
+  font-size: 0.75rem;
 }
 
 /* Enhanced Output Panel Styles */
