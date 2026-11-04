@@ -224,37 +224,55 @@ function EditorComponent() {
       const data = await response.json();
       const submissionId = data["token"];
 
-      setTimeout(() => {
-        fetch(
-          `${judge0SubmitUrl}/${submissionId}?base64_encoded=true&fields=*`,
-          {
-            method: "GET",
-            headers: {
-              "X-RapidAPI-Key": rapidApiKey,
-              "X-RapidAPI-Host": rapidApiHost,
-            },
-          }
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            if (!data.stdout) {
-              enqueueSnackbar("Please check the code", { variant: "error" });
-              if (data.stderr) {
-                setOutput(decodeFormat(data.stderr));
-              } else if (data.compile_output) {
-                setOutput(decodeFormat(data.compile_output));
-              }
+      const maxPolls = 15;
+      const pollInterval = 1000;
+      const isPending = (status) => status && (status.id === 1 || status.id === 2);
+
+      const pollForResult = async (attempt) => {
+        try {
+          const response = await fetch(
+            `${judge0SubmitUrl}/${submissionId}?base64_encoded=true&fields=*`,
+            {
+              method: "GET",
+              headers: {
+                "X-RapidAPI-Key": rapidApiKey,
+                "X-RapidAPI-Host": rapidApiHost,
+              },
+            }
+          );
+          const data = await response.json();
+          if (isPending(data.status)) {
+            if (attempt >= maxPolls) {
+              setOutput(
+                "The submission is still running. Please try again in a moment."
+              );
+              setLoading(false);
               return;
             }
+            setOutput(
+              `Running... (${data.status && data.status.description ? data.status.description : "waiting"})`
+            );
+            setTimeout(() => pollForResult(attempt + 1), pollInterval);
+            return;
+          }
+          if (!data.stdout) {
+            enqueueSnackbar("Please check the code", { variant: "error" });
+            if (data.stderr) {
+              setOutput(decodeFormat(data.stderr));
+            } else if (data.compile_output) {
+              setOutput(decodeFormat(data.compile_output));
+            }
+          } else {
             setOutput(decodeFormat(data.stdout));
-          })
-          .catch((error) => {
-            enqueueSnackbar("Error retrieving output: " + error.message, {
-              variant: "error",
-            });
-          })
-          .finally(() => setLoading(false));
-      }, 2000);
+          }
+        } catch (error) {
+          enqueueSnackbar("Error retrieving output: " + error.message, {
+            variant: "error",
+          });
+        }
+        setLoading(false);
+      };
+      pollForResult(1);
     } catch (error) {
       enqueueSnackbar("Error: " + error.message, { variant: "error" });
     }
