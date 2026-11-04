@@ -1,13 +1,14 @@
+/* eslint-env jest */
 import { encodeUtf8ToBase64, decodeBase64ToUtf8 } from "./base64";
 
 describe("UTF-8 base64 helpers", () => {
   test("round-trips ASCII", () => {
-    const text = 'print("hello")';
+    const text = "print(\"hello\")";
     expect(decodeBase64ToUtf8(encodeUtf8ToBase64(text))).toBe(text);
   });
 
   test("round-trips Tamil, emoji, and CJK", () => {
-    const text = 'print("வணக்கம் 👋 你好")';
+    const text = "print(\"வணக்கம் 👋 你好\")";
     const encoded = encodeUtf8ToBase64(text);
     expect(encoded).not.toContain("வ");
     expect(decodeBase64ToUtf8(encoded)).toBe(text);
