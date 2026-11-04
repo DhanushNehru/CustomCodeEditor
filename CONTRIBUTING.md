@@ -30,13 +30,13 @@ Please report unacceptable behavior [here](https://discord.com/invite/Yn9g6KuWyA
 1. Read through the [README](README.md) file for prerequisites, installation details and configuration requirements.
 2. The editor is live [here](https://custom-code-editor.vercel.app/).
 3. If you want to contribute, see [here](#how-can-i-contribute).
-4. If you have a question, see the [FAQ](#faq) before opening an issue. It could be answered already
+4. If you have a question, see the [FAQ](#faq) before opening an issue. It may already be answered.
 
 ## How can I contribute? :hand:
 
 ### Reporting Bugs :bug:
 
-This section guides you through submitting a bug report for the Custom Code Editor. 
+This section explains how to submit a bug report for Custom Code Editor. 
 
 **Following these guidelines** helps maintainers and the community...
 
@@ -47,7 +47,7 @@ This section guides you through submitting a bug report for the Custom Code Edit
 #### Guidelines for Reporting Bugs
 
 1. Perform a cursory search [here](https://github.com/DhanushNehru/CustomCodeEditor/issues) for whether the issue has already been reported.
-2. Asumming no, please be as detailed as possible in describing the issue.
+2. Assuming no, please be as detailed as possible in describing the issue.
 3. Fill out the below template when *opening an issue*.
 
 ---
@@ -88,7 +88,7 @@ This section guides you through submitting a bug report for the Custom Code Edit
 
 1. Perform a cursory search [here](https://github.com/DhanushNehru/CustomCodeEditor/issues) for whether the enhancement has already been suggested.
 2. If it has already been suggested, add a comment to **that issue** instead of opening a new issue.
-3. Asumming no, please do the following when describing the enhancements.
+3. Assuming no, please do the following when describing the enhancements.
     * Use a clear and descriptive title for the issue to identify the suggestion.
     * Provide a step-by-step description of the suggested enhancement in as many details as possible.
     * Provide specific examples to demonstrate the steps. Include copy/pasteable snippets which you use in those examples, as Markdown code blocks.
