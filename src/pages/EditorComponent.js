@@ -128,10 +128,8 @@ function EditorComponent() {
       (lang) => lang.DEFAULT_LANGUAGE === currentLanguage
     );
     setLanguageDetails({
-      ID: selectedLanguage.ID,
+      ...selectedLanguage,
       LANGUAGE_NAME: selectedLanguage.NAME,
-      DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
-      NAME: selectedLanguage.NAME,
     });
     let savedCode = null;
     try {
@@ -281,16 +279,8 @@ function EditorComponent() {
 
     const extension = file.name.split(".").pop().toLowerCase();
 
-    const languageMap = {
-      js: "Javascript",
-      py: "Python3",
-      cpp: "C++",
-      java: "Java",
-    };
-
-    const languageName = languageMap[extension];
     const selectedLanguage = LANGUAGES.find(
-      (lang) => lang.NAME === languageName
+      (lang) => lang.EXTENSION === extension
     );
     if (!selectedLanguage) {
       console.error("Unsupported file type");
@@ -303,9 +293,7 @@ function EditorComponent() {
     reader.onload = (event) => {
       setCurrentLanguage(selectedLanguage.DEFAULT_LANGUAGE);
       setLanguageDetails({
-        ID: selectedLanguage.ID,
-        NAME: selectedLanguage.NAME,
-        DEFAULT_LANGUAGE: selectedLanguage.DEFAULT_LANGUAGE,
+        ...selectedLanguage,
         LANGUAGE_NAME: selectedLanguage.NAME,
       });
       setCode(event.target.result);
@@ -329,14 +317,7 @@ function EditorComponent() {
     setDownloading(true);
     const fileContent = code;
 
-    const extensionMap = {
-      javascript: "js",
-      python: "py",
-      cpp: "cpp",
-      java: "java",
-    };
-
-    const extension = extensionMap[languageDetails.DEFAULT_LANGUAGE] || "txt";
+    const extension = languageDetails.EXTENSION || "txt";
 
     const blob = new Blob([fileContent], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -527,7 +508,7 @@ function EditorComponent() {
               type="file"
               ref={fileInputRef}
               style={{ display: "none" }}
-              accept=".java,.js,.py,.cpp"
+              accept={LANGUAGES.map((lang) => `.${lang.EXTENSION}`).join(",")}
               onChange={handleFileImport}
             />
 
