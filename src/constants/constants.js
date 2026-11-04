@@ -17,6 +17,7 @@ export const LANGUAGES = [
     ID: LANGUAGE_ID_FOR_JAVASCRIPT,
     NAME: "Javascript",
     DEFAULT_LANGUAGE: "javascript",
+    EXTENSION: "js",
     LOGO: <JavascriptLogo />,
     HELLO_WORLD: `console.log("Hello World")
 `,
@@ -25,6 +26,7 @@ export const LANGUAGES = [
     ID: LANGUAGE_ID_FOR_PYTHON3,
     NAME: "Python3",
     DEFAULT_LANGUAGE: "python",
+    EXTENSION: "py",
     LOGO: <PythonLogo/>,
     HELLO_WORLD: `print("Hello World")
 `,
@@ -33,6 +35,7 @@ export const LANGUAGES = [
     ID: LANGUAGE_ID_FOR_CPP,
     NAME: "C++",
     DEFAULT_LANGUAGE: "C++(Clang 7.0.1)",
+    EXTENSION: "cpp",
     LOGO: <CppLogo />,
     HELLO_WORLD: `#include<iostream>
 using namespace std;
@@ -45,6 +48,7 @@ int main(){
     ID: LANGUAGE_ID_FOR_JAVA,
     NAME: "Java",
     DEFAULT_LANGUAGE: "java",
+    EXTENSION: "java",
     LOGO: <JavaLogo />,
     HELLO_WORLD: `public class Main
 {
