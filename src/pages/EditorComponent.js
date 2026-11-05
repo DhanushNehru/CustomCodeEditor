@@ -24,6 +24,7 @@ import LanguageSelect from "../components/js/LanguageSelect";
 import Stars from "../components/js/Stars";
 import ToggleTheme from "../components/js/ToggleTheme";
 import { defineEditorTheme } from "../components/js/defineEditorTheme";
+import { decodeBase64ToUtf8, encodeUtf8ToBase64 } from "../utils/base64";
 import {
   EDITOR_THEMES,
   LANGUAGES,
@@ -74,8 +75,8 @@ const WelcomeText = styled("span")(({ theme }) => ({
 }));
 
 const decodeFormat = (data) => {
-  return data ? atob(data).split("\n") : [];
-}
+  return data ? decodeBase64ToUtf8(data).split("\n") : [];
+};
 
 function EditorComponent() {
   const [code, setCode] = useState(null);
@@ -194,7 +195,7 @@ function EditorComponent() {
     }
     setLoading(true);
     try {
-      const encodedCode = btoa(codeToSubmit);
+      const encodedCode = encodeUtf8ToBase64(codeToSubmit);
       const response = await fetch(
         `${judge0SubmitUrl}?base64_encoded=true&wait=false&fields=*`,
         {

@@ -31,7 +31,8 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
-    "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix"
+    "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
+    "test": "react-scripts test --watchAll=false --coverage=false"
   },
   "eslintConfig": {
     "extends": [
