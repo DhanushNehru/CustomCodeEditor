@@ -1,5 +1,5 @@
-require("babel-register")({
-  presets: ["es2015", "react"]
+require("@babel/register")({
+  presets: ["@babel/preset-env", "@babel/preset-react"]
 });
 
 const Sitemap = require("@snaddyvitch-dispenser/react-router-sitemap").default;
