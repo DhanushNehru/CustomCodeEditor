@@ -69,11 +69,6 @@ const OutputLayout = styled("div")(({ theme }) => ({
   },
 }));
 
-const WelcomeText = styled("span")(({ theme }) => ({
-  color: theme.palette.text.primary,
-  fontWeight: "bold",
-}));
-
 const decodeFormat = (data) => {
   return data ? decodeBase64ToUtf8(data).split("\n") : [];
 };
@@ -100,25 +95,10 @@ function EditorComponent() {
   const [fontSize, setFontSize] = useState(14);
 
   const styles = {
-    flex: {
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-    },
     languageDropdown: {
       marginTop: "1rem",
       display: "flex",
       alignItems: "center",
-    },
-    "@media (min-width: 576px)": {
-      flex: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        gap: "0.6em",
-      },
     },
   };
 
@@ -583,8 +563,18 @@ function EditorComponent() {
           </div>
 
           {/* Editor Settings Section */}
-          <div className="editor-settings">
-            <Typography variant="subtitle2" className="editor-settings-title">
+          <Box
+            component="section"
+            className="editor-settings"
+            aria-labelledby="editor-settings-title"
+            sx={{ bgcolor: "background.paper", borderColor: "divider" }}
+          >
+            <Typography
+              component="h2"
+              variant="subtitle2"
+              id="editor-settings-title"
+              className="editor-settings-title"
+            >
               Editor Settings
             </Typography>
 
@@ -597,6 +587,7 @@ function EditorComponent() {
                 />
               }
               label="Line Numbers"
+              labelPlacement="start"
               className="editor-settings-control"
             />
 
@@ -609,33 +600,43 @@ function EditorComponent() {
                 />
               }
               label="Word Wrap"
+              labelPlacement="start"
               className="editor-settings-control"
             />
 
-            <Typography
-              variant="body2"
-              sx={{ margin: "0.5rem 0 0.25rem 0" }}
+            <Box
+              className="editor-settings-font"
+              sx={{ borderColor: "divider" }}
             >
-              Font Size: {fontSize}px
-            </Typography>
-            <div className="editor-settings-slider">
-              <Slider
-                value={fontSize}
-                onChange={handleFontSizeChange}
-                min={12}
-                max={20}
-                step={1}
-                marks={[
-                  { value: 12, label: "12" },
-                  { value: 14, label: "14" },
-                  { value: 16, label: "16" },
-                  { value: 18, label: "18" },
-                  { value: 20, label: "20" },
-                ]}
-                size="small"
-              />
-            </div>
-          </div>
+              <div className="editor-settings-font-label">
+                <Typography variant="body2" id="editor-font-size-label">
+                  Font Size
+                </Typography>
+                <Typography variant="body2" component="span" sx={{ fontWeight: 600 }}>
+                  {fontSize}px
+                </Typography>
+              </div>
+              <div className="editor-settings-slider">
+                <Slider
+                  aria-labelledby="editor-font-size-label"
+                  getAriaValueText={(value) => `${value} pixels`}
+                  value={fontSize}
+                  onChange={handleFontSizeChange}
+                  min={12}
+                  max={20}
+                  step={1}
+                  marks={[
+                    { value: 12, label: "12" },
+                    { value: 14, label: "14" },
+                    { value: 16, label: "16" },
+                    { value: 18, label: "18" },
+                    { value: 20, label: "20" },
+                  ]}
+                  size="small"
+                />
+              </div>
+            </Box>
+          </Box>
           <StyledButton
             sx={(theme) => ({
               marginTop: "1rem",
@@ -730,66 +731,43 @@ function EditorComponent() {
   return (
     <div className="editor-container">
       <Box
-        sx={[
-          (theme) => ({
-            height: "auto",
-            margin: "0.5rem",
-            paddingLeft: "0.5rem",
-            paddingRight: "0.5rem",
-            border: `2px solid ${theme.palette.divider}`,
-            borderRadius: "1rem",
-          }),
-        ]}
+        component="header"
+        className="editor-header"
+        sx={{ borderColor: "divider", bgcolor: "background.paper" }}
       >
-        <div style={styles.flex}>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <img
-              src="./images/custom-code-editor-rounded.svg"
-              alt="Custom Code Editor icon"
-              width={32}
-              style={{ marginLeft: "0.5rem" }}
-            />
-            <span
-              style={{
-                backgroundClip: "text",
-                background: "linear-gradient(#2837BA 0%, #2F1888 100%)",
-                WebkitBackgroundClip: "text",
-                color: "transparent",
-                marginLeft: "0.5rem",
-                fontWeight: "bold",
-                fontSize: "1.5em",
-              }}
-            >
-              Custom Code Editor
-            </span>
-          </div>
-          <Stars />
-          <ToggleTheme />
-          {currentUser && (
-            <div className="flex-container">
-              <div className="flex items-center space-x-2">
-                <>
-                  <WelcomeText>Welcome, {currentUser.displayName}</WelcomeText>
-                  <Avatar
-                    src={currentUser.photoURL}
-                    alt={currentUser.displayName}
-                    sx={{
-                      width: 32,
-                      height: 32,
-                      marginLeft: "0.5rem",
-                      marginRight: "0.5rem",
-                    }}
-                  />
-                  <div className="signout-container">
-                    <button onClick={handleSignOut} className="signout-button">
-                      <span>Logout</span>
-                    </button>
-                  </div>
-                </>
-              </div>
-            </div>
-          )}
+        <div className="editor-header-brand">
+          <img
+            src="./images/custom-code-editor-rounded.svg"
+            alt="Custom Code Editor icon"
+            width={32}
+            height={32}
+          />
+          <span className="editor-header-title">Custom Code Editor</span>
         </div>
+        <div className="editor-header-tools">
+          <div className="editor-header-github"><Stars /></div>
+          <ToggleTheme />
+        </div>
+        {currentUser && (
+          <div className="editor-header-account">
+            <Avatar
+              src={currentUser.photoURL}
+              alt={currentUser.displayName}
+              sx={{ width: 32, height: 32 }}
+            />
+            <Typography component="span" className="editor-header-welcome">
+              Welcome, {currentUser.displayName}
+            </Typography>
+            <Button
+              onClick={handleSignOut}
+              variant="outlined"
+              size="small"
+              sx={{ color: "text.primary", borderColor: "divider", textTransform: "none" }}
+            >
+              Logout
+            </Button>
+          </div>
+        )}
       </Box>
       {currentUser
         ? renderAuthenticatedContent()

@@ -6,6 +6,11 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
   height: 34,
   padding: 7,
+  flexShrink: 0,
+  "& .Mui-focusVisible .MuiSwitch-thumb": {
+    outline: `2px solid ${theme.palette.text.primary}`,
+    outlineOffset: 2,
+  },
   "& .MuiSwitch-switchBase": {
     margin: 1,
     padding: 0,
@@ -79,7 +84,11 @@ function ToggleTheme() {
 
   return (
     <>
-      <MaterialUISwitch onChange={changeMode} checked={mode === "dark"} />
+      <MaterialUISwitch
+        onChange={changeMode}
+        checked={mode === "dark"}
+        inputProps={{ "aria-label": "Dark mode" }}
+      />
     </>
   );
 }
