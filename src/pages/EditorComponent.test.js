@@ -1,5 +1,6 @@
 /* eslint-env jest */
 import React, { act } from "react";
+import { Simulate } from "react-dom/test-utils";
 import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@mui/material";
 import { LANGUAGES } from "../constants/constants";
@@ -84,6 +85,50 @@ describe("language configuration for file import and export", () => {
     act(() => input.dispatchEvent(new Event("change", { bubbles: true })));
     return file;
   };
+
+  test("import restores stdin for the imported language", () => {
+    localStorage.setItem("stdin-python", "python input");
+    localStorage.setItem("stdin-javascript", "js input");
+    chooseFile("example.py");
+    act(() => reader.onload({ target: { result: "print(input())" } }));
+    const show = Array.from(container.querySelectorAll("button")).find(b => b.textContent === "Show");
+    act(() => show.click());
+    expect(container.querySelector("textarea[aria-label='Standard input']").value).toBe("python input");
+  });
+
+  test("stdin saves after import, clears, switches language, and sends Unicode payload", async () => {
+    localStorage.setItem("stdin-python", "python saved");
+    chooseFile("example.py");
+    act(() => reader.onload({ target: { result: "print(input())" } }));
+    const button = text => Array.from(container.querySelectorAll("button")).find(b => b.textContent === text);
+    act(() => button("Show").click());
+    const input = () => container.querySelector("textarea[aria-label='Standard input']");
+    act(() => Simulate.change(input(), { target: { value: "தமிழ் café\n42" } }));
+    act(() => jest.advanceTimersByTime(600));
+    expect(localStorage.getItem("stdin-python")).toBe("தமிழ் café\n42");
+    act(() => mockLanguageProps.handleLanguageChange(null, LANGUAGES[0]));
+    expect(input().value).toBe("");
+    act(() => mockLanguageProps.handleLanguageChange(null, LANGUAGES[1]));
+    expect(input().value).toBe("தமிழ் café\n42");
+    const oldFetch = global.fetch;
+    global.fetch = jest.fn().mockResolvedValueOnce({ ok:true,json:async()=>({ token:"test" }) }).mockResolvedValueOnce({ json:async()=>({ status:{ id:3 },stdout:btoa("ok") }) });
+    const editor = { getValue:()=>"print(input())",addCommand:jest.fn() };
+    act(() => mockEditorProps.onMount(editor,{ KeyMod:{ CtrlCmd:1 },KeyCode:{ Enter:2 } }));
+    const run = Array.from(container.querySelectorAll("button")).find(b=>b.textContent.includes("Run Python"));
+    await act(async()=>run.click());
+    const payload=JSON.parse(global.fetch.mock.calls[0][1].body);
+    expect(Buffer.from(payload.stdin,"base64").toString("utf8")).toBe("தமிழ் café\n42");
+    expect(payload.language_id).toBe(71);
+    act(() => button("Clear").click());
+    act(() => jest.advanceTimersByTime(600));
+    expect(input().value).toBe("");
+    expect(localStorage.getItem("stdin-python")).toBeNull();
+    global.fetch.mockClear();
+    global.fetch.mockResolvedValue({ ok: true, json: async () => ({ token: "empty", status: { id: 3 }, stdout: btoa("ok") }) });
+    await act(async () => run.click());
+    expect(JSON.parse(global.fetch.mock.calls[0][1].body).stdin).toBe("");
+    global.fetch=oldFetch;
+  });
 
   const expectMetadata = (language) => {
     expect(mockLanguageProps.defaultLanguage).toEqual({
