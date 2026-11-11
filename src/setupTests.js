@@ -1,5 +1,6 @@
 // jest environment polyfills for react-router v7 under jsdom
 import { TextEncoder, TextDecoder } from "util";
+import "./i18n";
 
 if (typeof global.TextEncoder === "undefined") {
   global.TextEncoder = TextEncoder;

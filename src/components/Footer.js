@@ -15,9 +15,11 @@ import {
   WhatsappIcon,
   WhatsappShareButton,
 } from "react-share";
+import { useTranslation } from "react-i18next";
 import IconButton from "./IconButton";
 
 function App() {
+  const { t } = useTranslation();
   const containerStyle = {
     display: "flex",
     alignItems: "center",
@@ -52,7 +54,7 @@ function App() {
   return (
     <div style={containerStyle}>
       <div style={madeWithStyle}>
-        <span> Made with ❤️ by {"  "}</span>
+        <span> {t("footer.madeWith")} {"  "}</span>
         <a
           href="https://www.github.com/DhanushNehru"
           style={{ color: "#4CAF50", marginLeft: "0.3rem" }}
@@ -114,7 +116,7 @@ function App() {
       </div>
       <div style={shareStyle}>
         <div className="flex space-x-2">
-          <span>Share</span>
+          <span>{t("footer.share")}</span>
           <div>
             <RedditShareButton url={"custom-code-editor.vercel.app/"}>
               <RedditIcon size={32} round />

@@ -1,0 +1,64 @@
+{
+  "header": {
+    "iconAlt": "Icono de Custom Code Editor",
+    "welcome": "Te damos la bienvenida, {{name}}",
+    "logout": "Cerrar sesión",
+    "darkMode": "Modo oscuro",
+    "uiLanguage": "Idioma de la interfaz"
+  },
+  "auth": {
+    "signInPrompt": "Inicia sesión para usar el editor de código",
+    "googleSignIn": "Iniciar sesión con Google",
+    "googleLogoAlt": "logo de google",
+    "githubSignIn": "Iniciar sesión con Github",
+    "githubLogoAlt": "logo de github",
+    "useGoogleInstead": "Ya tienes una cuenta con este correo electrónico usando Google. Iniciando sesión con Google ahora.",
+    "accountExists": "Ya existe una cuenta con este correo electrónico. Por favor, inicia sesión usando uno de los otros métodos."
+  },
+  "editor": {
+    "import": "Importar",
+    "importing": "Importando...",
+    "export": "Exportar",
+    "exporting": "Exportando...",
+    "selectTheme": "Tema del editor",
+    "selectLanguage": "Lenguaje",
+    "settings": "Configuración del editor",
+    "lineNumbers": "Números de línea",
+    "wordWrap": "Ajuste de línea",
+    "fontSize": "Tamaño de fuente",
+    "fontSizeValue": "{{value}} píxeles",
+    "run": "Ejecutar {{language}}"
+  },
+  "output": {
+    "title": "Salida",
+    "copy": "Copiar",
+    "clear": "Borrar",
+    "empty": "Aún no hay salida. ¡Ejecuta tu código para ver los resultados!"
+  },
+  "messages": {
+    "loadFailed": "Error al cargar el código guardado. Es posible que el almacenamiento local no esté disponible.",
+    "saveFailed": "Error al guardar el código automáticamente. Es posible que el almacenamiento local esté lleno o no esté disponible.",
+    "enterValidCode": "Por favor, introduce un código válido",
+    "submissionFailed": "Error al crear el envío. Código de estado: {{status}}",
+    "checkCode": "Por favor, revisa el código",
+    "retrieveFailed": "Error al recuperar la salida: {{message}}",
+    "error": "Error: {{message}}",
+    "unsupportedFile": "Tipo de archivo no admitido",
+    "noOutputToCopy": "No hay salida para copiar",
+    "outputCopied": "¡Salida copiada al portapapeles!",
+    "copyFailed": "Error al copiar la salida",
+    "outputCleared": "Salida borrada"
+  },
+  "stars": {
+    "label": "Estrellas en GitHub",
+    "count_one": "{{count}} estrella",
+    "count_many": "{{count}} estrellas",
+    "count_other": "{{count}} estrellas",
+    "loadFailed": "No se pudieron recuperar las estrellas del repositorio. Inténtalo de nuevo más tarde.",
+    "retry": "Reintentar"
+  },
+  "footer": {
+    "madeWith": "Hecho con ❤️ por",
+    "share": "Compartir"
+  }
+}

@@ -14,6 +14,7 @@ import Box from "@mui/material/Box";
 import { Editor } from "@monaco-editor/react";
 import { FaPlay, FaFileUpload, FaFileDownload, FaCopy, FaTrash } from "react-icons/fa";
 import "@fortawesome/fontawesome-free/css/all.css";
+import { useTranslation } from "react-i18next";
 
 // Local imports after external imports
 import GithubSignIn from "../components/GithubSignIn";
@@ -34,6 +35,7 @@ import {
 } from "../constants/constants";
 import { useAuth } from "../context/AuthContext";
 import Footer from "../components/Footer";
+import UiLanguageSelect from "../components/js/UiLanguageSelect";
 
 const StyledButton = styled(Button)({
   display: "flex",
@@ -88,6 +90,7 @@ function EditorComponent() {
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
   const { currentUser, logOut } = useAuth();
+  const { t } = useTranslation();
 
   // Editor settings state
   const [showLineNumbers, setShowLineNumbers] = useState(true);
@@ -116,7 +119,7 @@ function EditorComponent() {
     try {
       savedCode = localStorage.getItem(`code-${selectedLanguage.DEFAULT_LANGUAGE}`);
     } catch (e) {
-      enqueueSnackbar("Failed to load saved code. Local storage might be unavailable.", { variant: "error" });
+      enqueueSnackbar(t("messages.loadFailed"), { variant: "error" });
       console.error("Local storage load error:", e);
     }
     
@@ -124,7 +127,7 @@ function EditorComponent() {
       setCode(savedCode);
     } else {
       setCode(selectedLanguage.HELLO_WORLD);
-    }  }, [currentLanguage, enqueueSnackbar]);
+    }  }, [currentLanguage, enqueueSnackbar, t]);
 
   useEffect(() => {
     if (isImportingRef.current) return;
@@ -137,14 +140,14 @@ function EditorComponent() {
           localStorage.removeItem(`code-${currentLanguage}`);
         }
       } catch (e) {
-        enqueueSnackbar("Failed to save code automatically. Local storage might be full or unavailable.", { variant: "error" });
+        enqueueSnackbar(t("messages.saveFailed"), { variant: "error" });
         console.error("Local storage save error:", e);
       }    }, 500); // 500ms debounce
 
     return () => {
       clearTimeout(handler);
     };
-  }, [code, currentLanguage, enqueueSnackbar]);
+  }, [code, currentLanguage, enqueueSnackbar, t]);
 
   const handleEditorThemeChange = async (_, theme) => {
     if (["light", "vs-dark"].includes(theme.ID)) {
@@ -170,7 +173,7 @@ function EditorComponent() {
     }
     const codeToSubmit = editorRef.current.getValue();
     if (codeToSubmit === "") {
-      enqueueSnackbar("Please enter valid code", { variant: "error" });
+      enqueueSnackbar(t("messages.enterValidCode"), { variant: "error" });
       return;
     }
     setLoading(true);
@@ -196,7 +199,7 @@ function EditorComponent() {
 
       if (!response.ok) {
         enqueueSnackbar(
-          `Failed to create submission. Status code: ${response.status}`,
+          t("messages.submissionFailed", { status: response.status }),
           { variant: "error" }
         );
         setLoading(false);
@@ -219,7 +222,7 @@ function EditorComponent() {
           .then((response) => response.json())
           .then((data) => {
             if (!data.stdout) {
-              enqueueSnackbar("Please check the code", { variant: "error" });
+              enqueueSnackbar(t("messages.checkCode"), { variant: "error" });
               if (data.stderr) {
                 setOutput(decodeFormat(data.stderr));
               } else if (data.compile_output) {
@@ -230,16 +233,16 @@ function EditorComponent() {
             setOutput(decodeFormat(data.stdout));
           })
           .catch((error) => {
-            enqueueSnackbar("Error retrieving output: " + error.message, {
+            enqueueSnackbar(t("messages.retrieveFailed", { message: error.message }), {
               variant: "error",
             });
           })
           .finally(() => setLoading(false));
       }, 2000);
     } catch (error) {
-      enqueueSnackbar("Error: " + error.message, { variant: "error" });
+      enqueueSnackbar(t("messages.error", { message: error.message }), { variant: "error" });
     }
-  }, [enqueueSnackbar, languageDetails]);
+  }, [enqueueSnackbar, languageDetails, t]);
 
   // import file
   const [isImporting, setIsImporting] = React.useState(false);
@@ -265,7 +268,7 @@ function EditorComponent() {
     );
     if (!selectedLanguage) {
       console.error("Unsupported file type");
-      enqueueSnackbar("Unsupported file type", { variant: "error" });
+      enqueueSnackbar(t("messages.unsupportedFile"), { variant: "error" });
       isImportingRef.current = false;
       setIsImporting(false);
       return;
@@ -382,14 +385,14 @@ function EditorComponent() {
   // Output management handlers
   const copyOutput = async () => {
     if (!output || output.length === 0) {
-      enqueueSnackbar("No output to copy", { variant: "warning" });
+      enqueueSnackbar(t("messages.noOutputToCopy"), { variant: "warning" });
       return;
     }
 
     const outputText = Array.isArray(output) ? output.join("\n") : output.toString();
     try {
       await navigator.clipboard.writeText(outputText);
-      enqueueSnackbar("Output copied to clipboard!", { variant: "success" });
+      enqueueSnackbar(t("messages.outputCopied"), { variant: "success" });
     } catch (err) {
       // Fallback for browsers that don't support clipboard API
       const textArea = document.createElement("textarea");
@@ -398,9 +401,9 @@ function EditorComponent() {
       textArea.select();
       try {
         document.execCommand("copy");
-        enqueueSnackbar("Output copied to clipboard!", { variant: "success" });
+        enqueueSnackbar(t("messages.outputCopied"), { variant: "success" });
       } catch (fallbackErr) {
-        enqueueSnackbar("Failed to copy output", { variant: "error" });
+        enqueueSnackbar(t("messages.copyFailed"), { variant: "error" });
       }
       document.body.removeChild(textArea);
     }
@@ -408,7 +411,7 @@ function EditorComponent() {
 
   const clearOutput = () => {
     setOutput([]);
-    enqueueSnackbar("Output cleared", { variant: "info" });
+    enqueueSnackbar(t("messages.outputCleared"), { variant: "info" });
   };
 
   const renderAuthenticatedContent = () => (
@@ -476,12 +479,12 @@ function EditorComponent() {
               {isImporting ? (
                 <>
                   <CircularProgress size={16} color="inherit" />
-                  Importing...
+                  {t("editor.importing")}
                 </>
               ) : (
                 <>
                   <FaFileUpload fontSize="small" />
-                  Import
+                  {t("editor.import")}
                 </>
               )}
             </StyledButton>
@@ -534,12 +537,12 @@ function EditorComponent() {
               {isDownloading ? (
                 <>
                   <CircularProgress size={16} color="inherit" />
-                  Exporting...
+                  {t("editor.exporting")}
                 </>
               ) : (
                 <>
                   <FaFileDownload fontSize="small" />
-                  Export
+                  {t("editor.export")}
                 </>
               )}
             </StyledButton>
@@ -575,7 +578,7 @@ function EditorComponent() {
               id="editor-settings-title"
               className="editor-settings-title"
             >
-              Editor Settings
+              {t("editor.settings")}
             </Typography>
 
             <FormControlLabel
@@ -586,7 +589,7 @@ function EditorComponent() {
                   size="small"
                 />
               }
-              label="Line Numbers"
+              label={t("editor.lineNumbers")}
               labelPlacement="start"
               className="editor-settings-control"
             />
@@ -599,7 +602,7 @@ function EditorComponent() {
                   size="small"
                 />
               }
-              label="Word Wrap"
+              label={t("editor.wordWrap")}
               labelPlacement="start"
               className="editor-settings-control"
             />
@@ -610,7 +613,7 @@ function EditorComponent() {
             >
               <div className="editor-settings-font-label">
                 <Typography variant="body2" id="editor-font-size-label">
-                  Font Size
+                  {t("editor.fontSize")}
                 </Typography>
                 <Typography variant="body2" component="span" sx={{ fontWeight: 600 }}>
                   {fontSize}px
@@ -619,7 +622,7 @@ function EditorComponent() {
               <div className="editor-settings-slider">
                 <Slider
                   aria-labelledby="editor-font-size-label"
-                  getAriaValueText={(value) => `${value} pixels`}
+                  getAriaValueText={(value) => t("editor.fontSizeValue", { value })}
                   value={fontSize}
                   onChange={handleFontSizeChange}
                   min={12}
@@ -661,7 +664,7 @@ function EditorComponent() {
             <span>
               {loading ? <CircularProgress size={13} /> : <FaPlay size="13" />}
             </span>
-            Run {languageDetails.LANGUAGE_NAME}
+            {t("editor.run", { language: languageDetails.LANGUAGE_NAME })}
           </StyledButton>
         </div>
       </StyledLayout>
@@ -671,7 +674,7 @@ function EditorComponent() {
             variant="h6"
             sx={{ fontSize: "1rem", fontWeight: "bold" }}
           >
-            Output
+            {t("output.title")}
           </Typography>
           <div className="output-controls">
             <Button
@@ -681,7 +684,7 @@ function EditorComponent() {
               variant="outlined"
               sx={{ minWidth: "auto", padding: "4px 8px" }}
             >
-              Copy
+              {t("output.copy")}
             </Button>
             <Button
               size="small"
@@ -690,7 +693,7 @@ function EditorComponent() {
               variant="outlined"
               sx={{ minWidth: "auto", padding: "4px 8px", marginLeft: "0.5rem" }}
             >
-              Clear
+              {t("output.clear")}
             </Button>
           </div>
         </div>
@@ -703,7 +706,7 @@ function EditorComponent() {
             ))
           ) : (
             <div className="output-empty">
-              No output yet. Run your code to see results!
+              {t("output.empty")}
             </div>
           )}
         </div>
@@ -721,7 +724,7 @@ function EditorComponent() {
         flexDirection: "column",
       }}
     >
-      <h2>Please sign in to use the Code Editor</h2>
+      <h2>{t("auth.signInPrompt")}</h2>
       <GoogleSignIn />
       <br />
       <GithubSignIn />
@@ -738,7 +741,7 @@ function EditorComponent() {
         <div className="editor-header-brand">
           <img
             src="./images/custom-code-editor-rounded.svg"
-            alt="Custom Code Editor icon"
+            alt={t("header.iconAlt")}
             width={32}
             height={32}
           />
@@ -746,6 +749,7 @@ function EditorComponent() {
         </div>
         <div className="editor-header-tools">
           <div className="editor-header-github"><Stars /></div>
+          <UiLanguageSelect />
           <ToggleTheme />
         </div>
         {currentUser && (
@@ -756,7 +760,7 @@ function EditorComponent() {
               sx={{ width: 32, height: 32 }}
             />
             <Typography component="span" className="editor-header-welcome">
-              Welcome, {currentUser.displayName}
+              {t("header.welcome", { name: currentUser.displayName })}
             </Typography>
             <Button
               onClick={handleSignOut}
@@ -764,7 +768,7 @@ function EditorComponent() {
               size="small"
               sx={{ color: "text.primary", borderColor: "divider", textTransform: "none" }}
             >
-              Logout
+              {t("header.logout")}
             </Button>
           </div>
         )}
