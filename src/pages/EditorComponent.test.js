@@ -170,3 +170,76 @@ describe("language configuration for file import and export", () => {
     expectExport("fixture", "fifth language content");
   });
 });
+
+describe("standard input (stdin) support", () => {
+  let container;
+  let root;
+
+  beforeEach(() => {
+    global.IS_REACT_ACT_ENVIRONMENT = true;
+    localStorage.clear();
+    mockSnackbar.mockClear();
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    root = createRoot(container);
+  });
+
+  afterEach(() => {
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  test("input textarea is collapsed by default and expands on click", () => {
+    act(() => {
+      root.render(
+        <ThemeProvider theme={theme}>
+          <EditorComponent />
+        </ThemeProvider>
+      );
+    });
+
+    expect(container.textContent).toContain("Input (stdin)");
+    expect(container.querySelector("textarea[aria-label='Standard input']")).toBeNull();
+
+    const showButton = Array.from(container.querySelectorAll("button")).find(
+      (b) => b.textContent === "Show"
+    );
+    expect(showButton).toBeTruthy();
+
+    act(() => {
+      showButton.click();
+    });
+
+    const textarea = container.querySelector("textarea[aria-label='Standard input']");
+    expect(textarea).not.toBeNull();
+  });
+
+  test("loads saved stdin from localStorage when language is selected", () => {
+    localStorage.setItem("stdin-python", "test input data");
+
+    act(() => {
+      root.render(
+        <ThemeProvider theme={theme}>
+          <EditorComponent />
+        </ThemeProvider>
+      );
+    });
+
+    const pyLang = LANGUAGES.find((l) => l.DEFAULT_LANGUAGE === "python");
+    if (pyLang && mockLanguageProps) {
+      act(() => {
+        mockLanguageProps.handleLanguageChange(null, pyLang);
+      });
+    }
+
+    const showButton = Array.from(container.querySelectorAll("button")).find(
+      (b) => b.textContent === "Show"
+    );
+    act(() => {
+      showButton.click();
+    });
+
+    const textarea = container.querySelector("textarea[aria-label='Standard input']");
+    expect(textarea.value).toBe("test input data");
+  });
+});

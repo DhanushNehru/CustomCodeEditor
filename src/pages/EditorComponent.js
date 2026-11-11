@@ -69,12 +69,45 @@ const OutputLayout = styled("div")(({ theme }) => ({
   },
 }));
 
+const InputLayout = styled("div")(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  margin: "1rem 0",
+  border: `2px solid ${theme.palette.divider}`,
+  borderRadius: "1rem",
+  padding: "0.75rem 1rem",
+}));
+
+const StyledTextArea = styled("textarea")(({ theme }) => ({
+  width: "100%",
+  minHeight: "80px",
+  background: "transparent",
+  color: theme.palette.text.primary,
+  border: `1px solid ${theme.palette.divider}`,
+  borderRadius: "0.5rem",
+  padding: "0.5rem",
+  fontFamily: "monospace",
+  fontSize: "0.9rem",
+  resize: "vertical",
+  outline: "none",
+  marginTop: "0.5rem",
+  boxSizing: "border-box",
+  "&:focus": {
+    borderColor: theme.palette.primary.main,
+  },
+  "&::placeholder": {
+    color: theme.palette.text.secondary,
+    opacity: 0.7,
+  },
+}));
+
 const decodeFormat = (data) => {
   return data ? decodeBase64ToUtf8(data).split("\n") : [];
 };
 
 function EditorComponent() {
   const [code, setCode] = useState(null);
+  const [stdin, setStdin] = useState("");
+  const [isInputOpen, setIsInputOpen] = useState(false);
   const [output, setOutput] = useState([]);
   const [currentLanguage, setCurrentLanguage] = useState(
     LANGUAGES[0].DEFAULT_LANGUAGE
@@ -120,11 +153,39 @@ function EditorComponent() {
       console.error("Local storage load error:", e);
     }
     
+    let savedStdin = "";
+    try {
+      savedStdin = localStorage.getItem(`stdin-${selectedLanguage.DEFAULT_LANGUAGE}`) || "";
+    } catch (e) {
+      console.error("Local storage stdin load error:", e);
+    }
+    setStdin(savedStdin);
+
     if (savedCode !== null) {
       setCode(savedCode);
     } else {
       setCode(selectedLanguage.HELLO_WORLD);
     }  }, [currentLanguage, enqueueSnackbar]);
+
+  useEffect(() => {
+    if (isImportingRef.current) return;
+
+    const handler = setTimeout(() => {
+      try {
+        if (stdin) {
+          localStorage.setItem(`stdin-${currentLanguage}`, stdin);
+        } else {
+          localStorage.removeItem(`stdin-${currentLanguage}`);
+        }
+      } catch (e) {
+        console.error("Local storage stdin save error:", e);
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [stdin, currentLanguage]);
 
   useEffect(() => {
     if (isImportingRef.current) return;
@@ -176,6 +237,7 @@ function EditorComponent() {
     setLoading(true);
     try {
       const encodedCode = encodeUtf8ToBase64(codeToSubmit);
+      const encodedStdin = stdin ? encodeUtf8ToBase64(stdin) : "";
       const response = await fetch(
         `${judge0SubmitUrl}?base64_encoded=true&wait=false&fields=*`,
         {
@@ -188,7 +250,7 @@ function EditorComponent() {
           body: JSON.stringify({
             source_code: encodedCode,
             language_id: languageDetails.ID,
-            stdin: "",
+            stdin: encodedStdin,
             expected_output: "",
           }),
         }
@@ -257,7 +319,7 @@ function EditorComponent() {
     } catch (error) {
       enqueueSnackbar("Error: " + error.message, { variant: "error" });
     }
-  }, [enqueueSnackbar, languageDetails]);
+  }, [enqueueSnackbar, languageDetails, stdin]);
 
   // import file
   const [isImporting, setIsImporting] = React.useState(false);
@@ -683,6 +745,56 @@ function EditorComponent() {
           </StyledButton>
         </div>
       </StyledLayout>
+      <InputLayout>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <Typography
+              variant="h6"
+              sx={{ fontSize: "1rem", fontWeight: "bold" }}
+            >
+              Input (stdin)
+            </Typography>
+            {stdin.trim() && (
+              <Typography
+                variant="caption"
+                sx={{ color: "text.secondary", fontSize: "0.75rem" }}
+              >
+                (active)
+              </Typography>
+            )}
+          </div>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            {isInputOpen && stdin && (
+              <Button
+                size="small"
+                onClick={() => setStdin("")}
+                startIcon={<FaTrash />}
+                variant="outlined"
+                sx={{ minWidth: "auto", padding: "2px 8px", fontSize: "0.75rem" }}
+              >
+                Clear
+              </Button>
+            )}
+            <Button
+              size="small"
+              onClick={() => setIsInputOpen((prev) => !prev)}
+              variant="outlined"
+              sx={{ minWidth: "auto", padding: "2px 8px", fontSize: "0.75rem" }}
+            >
+              {isInputOpen ? "Hide" : "Show"}
+            </Button>
+          </div>
+        </div>
+        {isInputOpen && (
+          <StyledTextArea
+            aria-label="Standard input"
+            value={stdin}
+            onChange={(e) => setStdin(e.target.value)}
+            placeholder="Provide program input here before running (e.g. for input(), cin, Scanner)"
+            rows={4}
+          />
+        )}
+      </InputLayout>
       <OutputLayout>
         <div className="output-header">
           <Typography
