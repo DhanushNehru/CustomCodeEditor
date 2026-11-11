@@ -1,0 +1,63 @@
+{
+  "header": {
+    "iconAlt": "Custom Code Editor icon",
+    "welcome": "Welcome, {{name}}",
+    "logout": "Logout",
+    "darkMode": "Dark mode",
+    "uiLanguage": "Interface language"
+  },
+  "auth": {
+    "signInPrompt": "Please sign in to use the Code Editor",
+    "googleSignIn": "Login with Google",
+    "googleLogoAlt": "google logo",
+    "githubSignIn": "Login with Github",
+    "githubLogoAlt": "github logo",
+    "useGoogleInstead": "You already have an account with this email using Google. Signing you in with Google now.",
+    "accountExists": "An account already exists with this email. Please sign in using one of the other method"
+  },
+  "editor": {
+    "import": "Import",
+    "importing": "Importing...",
+    "export": "Export",
+    "exporting": "Exporting...",
+    "selectTheme": "Select Editor Theme",
+    "selectLanguage": "Select Language",
+    "settings": "Editor Settings",
+    "lineNumbers": "Line Numbers",
+    "wordWrap": "Word Wrap",
+    "fontSize": "Font Size",
+    "fontSizeValue": "{{value}} pixels",
+    "run": "Run {{language}}"
+  },
+  "output": {
+    "title": "Output",
+    "copy": "Copy",
+    "clear": "Clear",
+    "empty": "No output yet. Run your code to see results!"
+  },
+  "messages": {
+    "loadFailed": "Failed to load saved code. Local storage might be unavailable.",
+    "saveFailed": "Failed to save code automatically. Local storage might be full or unavailable.",
+    "enterValidCode": "Please enter valid code",
+    "submissionFailed": "Failed to create submission. Status code: {{status}}",
+    "checkCode": "Please check the code",
+    "retrieveFailed": "Error retrieving output: {{message}}",
+    "error": "Error: {{message}}",
+    "unsupportedFile": "Unsupported file type",
+    "noOutputToCopy": "No output to copy",
+    "outputCopied": "Output copied to clipboard!",
+    "copyFailed": "Failed to copy output",
+    "outputCleared": "Output cleared"
+  },
+  "stars": {
+    "label": "Stars on GitHub",
+    "count_one": "{{count}} star",
+    "count_other": "{{count}} stars",
+    "loadFailed": "Unable to retrieve repository stars. Please try again later.",
+    "retry": "Retry"
+  },
+  "footer": {
+    "madeWith": "Made with ❤️ by",
+    "share": "Share"
+  }
+}

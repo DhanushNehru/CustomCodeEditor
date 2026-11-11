@@ -1,9 +1,11 @@
 import React from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { useTranslation } from "react-i18next";
 import { EDITOR_THEMES } from "../../constants/constants";
 
 function EditorThemeSelect({ handleEditorThemeChange, defaultEditorTheme }) {
+  const { t } = useTranslation();
   return (
     <Autocomplete
       size="small"
@@ -16,7 +18,7 @@ function EditorThemeSelect({ handleEditorThemeChange, defaultEditorTheme }) {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Select Editor Theme"
+          label={t("editor.selectTheme")}
           variant="outlined"
           sx={{ width: 150 }}
         />

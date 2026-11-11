@@ -1,20 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaStar, FaGithub } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import CircularLoading from "./CircularLoading";
 import { useGetStars } from "../../hooks/useGetStars";
 
 const Stars = () => {
   const { fetchState, repositoryStarts, getStars } = useGetStars();
+  const { t } = useTranslation();
 
   if (fetchState.isLoading) return <CircularLoading />;
 
   if (fetchState.isError)
     return (
       <>
-        <p style={styles.error}>{fetchState.errorMessage}</p>{" "}
+        <p style={styles.error}>{t("stars.loadFailed")}</p>{" "}
         <button style={styles.retry} onClick={getStars}>
-          Retry
+          {t("stars.retry")}
         </button>
       </>
     );
@@ -25,9 +27,9 @@ const Stars = () => {
         <div style={styles.stars}>
           <FaGithub fontSize={24} aria-hidden="true" />
           <div style={styles.starsCount}>
-            <span>Stars on GitHub</span>
+            <span>{t("stars.label")}</span>
             <span style={{ color: "gold" }}>
-              {repositoryStarts} {repositoryStarts > 1 ? "stars" : "star"}{" "}
+              {t("stars.count", { count: repositoryStarts })}{" "}
               <FaStar style={styles.star} color='gold' aria-hidden="true" />
             </span>
           </div>

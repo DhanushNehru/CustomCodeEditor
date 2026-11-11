@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext.js";
 
 const GoogleSignIn = () => {
   const { currentUser, googleSignIn } = useAuth();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -42,9 +44,9 @@ const GoogleSignIn = () => {
         style={{ height: "25px", width: "25px", paddingRight: "6px" }}
         src="https://www.svgrepo.com/show/475656/google-color.svg"
         loading="lazy"
-        alt="google logo"
+        alt={t("auth.googleLogoAlt")}
       />
-      <span> Login with Google</span>
+      <span> {t("auth.googleSignIn")}</span>
     </Button>
   );
 };

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext.js";
 
 const GithubSignIn = () => {
   const { currentUser, githubSignIn } = useAuth();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -43,9 +45,9 @@ const GithubSignIn = () => {
         style={{ height: "25px", width: "25px", paddingRight: "6px" }}
         src="https://www.svgrepo.com/show/452211/github.svg"
         loading="lazy"
-        alt="github logo"
+        alt={t("auth.githubLogoAlt")}
       />
-      <span>Login with Github</span>
+      <span>{t("auth.githubSignIn")}</span>
     </Button>
   );
 };

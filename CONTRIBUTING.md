@@ -14,6 +14,7 @@ The following is a set of guidelines for contributing to Custom Code Editor, hos
     * [Reporting Bugs](#reporting-bugs)
     * [Suggesting Enhancements](#suggesting-enhancements)
     * [Your First Code Contribution](#your-first-code-contribution)
+    * [How to add a language](#how-to-add-a-language)
 4. [Styleguides](#styleguides)
     * [Git Commit Messages](#git-commit-messages)
     * [Documentation Styleguide](#documentation-styleguide)
@@ -107,6 +108,21 @@ As for **how** to contribute to Open Source projects, follow [this guide](https:
 #### Other useful references
 
 * [Open Source Friday](https://opensourcefriday.com/)
+
+### How to add a language
+
+The interface text lives in `src/locales/`, one JSON file per language. `en.json` is the source: every other file uses the same keys.
+
+1. Say which language you're adding on the [i18n issue](https://github.com/DhanushNehru/CustomCodeEditor/issues/247) or on Discord, so two people don't translate the same one.
+2. Copy `src/locales/en.json` to `src/locales/<code>.json`, where `<code>` is the language's code (`fr`, `pt-BR`, `hi`).
+3. Translate the values and leave the keys as they are. Keep anything in `{{double braces}}` unchanged: it's filled in by the code (`"Run {{language}}"` becomes `"Ejecutar {{language}}"`).
+4. Keys ending in `_one` and `_other` are plural forms. Some languages need more forms (`_few`, `_many`). The [i18next plural guide](https://www.i18next.com/translation-function/plurals) lists which ones yours uses.
+5. In `src/i18n.js`, import the file, add it to `resources`, and add the language to `UI_LANGUAGES` with its name written in that language (`{ code: "fr", name: "Français" }`).
+6. Run `npm start`, pick the language in the switcher at the top of the page and check that the text fits.
+
+A key missing from your file shows the English text instead, so a partial translation won't break anything.
+
+When you add or change text in the interface, put it in `en.json` and use `t("key")` from `useTranslation()` in the component. Don't add it to the other languages' files; their translators will.
 
 ## Styleguides
 

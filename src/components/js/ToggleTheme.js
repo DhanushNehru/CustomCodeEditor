@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useColorScheme, styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
+import { useTranslation } from "react-i18next";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -65,6 +66,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 
 function ToggleTheme() {
   const { mode, setMode } = useColorScheme();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const savedMode = localStorage.getItem("themeMode");
@@ -87,7 +89,7 @@ function ToggleTheme() {
       <MaterialUISwitch
         onChange={changeMode}
         checked={mode === "dark"}
-        inputProps={{ "aria-label": "Dark mode" }}
+        inputProps={{ "aria-label": t("header.darkMode") }}
       />
     </>
   );

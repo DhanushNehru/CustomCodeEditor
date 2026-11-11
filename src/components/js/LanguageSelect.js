@@ -1,9 +1,11 @@
 import React from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "../../constants/constants";
 
 function LanguageSelect({ handleLanguageChange, defaultLanguage }) {
+  const { t } = useTranslation();
   return (
     <Autocomplete
       size="small"
@@ -16,7 +18,7 @@ function LanguageSelect({ handleLanguageChange, defaultLanguage }) {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Select Language"
+          label={t("editor.selectLanguage")}
           variant="outlined"
           sx={{ width: 150 }}
         />

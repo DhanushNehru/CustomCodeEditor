@@ -1,6 +1,7 @@
 import { onAuthStateChanged, signOut, fetchSignInMethodsForEmail, signInWithPopup } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import { GithubAuthProvider, GoogleAuthProvider, auth } from "../components/firebase";
+import i18n from "../i18n";
 
 const AuthContext = React.createContext();
 
@@ -30,12 +31,12 @@ export function AuthProvider({ children }) {
         const signInMethods = await fetchSignInMethodsForEmail(auth, email);
         if (signInMethods.includes("google.com")) {
           // If the existing account is Google, sign in with Google instead
-          alert("You already have an account with this email using Google. Signing you in with Google now.");
+          alert(i18n.t("auth.useGoogleInstead"));
           const googleProvider = new GoogleAuthProvider();
           const googleResult = await signInWithPopup(auth, googleProvider);
           return googleResult.user;
         } else {
-          alert("An account already exists with this email. Please sign in using one of the other method");
+          alert(i18n.t("auth.accountExists"));
         }
       }
       throw error;
