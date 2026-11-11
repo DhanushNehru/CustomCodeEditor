@@ -153,13 +153,6 @@ function EditorComponent() {
       console.error("Local storage load error:", e);
     }
     
-    let savedStdin = "";
-    try {
-      savedStdin = localStorage.getItem(`stdin-${selectedLanguage.DEFAULT_LANGUAGE}`) || "";
-    } catch (e) {
-      console.error("Local storage stdin load error:", e);
-    }
-    setStdin(savedStdin);
 
     if (savedCode !== null) {
       setCode(savedCode);
@@ -168,8 +161,16 @@ function EditorComponent() {
     }  }, [currentLanguage, enqueueSnackbar]);
 
   useEffect(() => {
-    if (isImportingRef.current) return;
+    let savedStdin = "";
+    try {
+      savedStdin = localStorage.getItem(`stdin-${currentLanguage}`) || "";
+    } catch (e) {
+      console.error("Local storage stdin load error:", e);
+    }
+    setStdin(savedStdin);
+  }, [currentLanguage]);
 
+  useEffect(() => {
     const handler = setTimeout(() => {
       try {
         if (stdin) {
