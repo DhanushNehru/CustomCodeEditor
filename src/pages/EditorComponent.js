@@ -224,15 +224,15 @@ function EditorComponent() {
           const data = await response.json();
           if (isPending(data.status)) {
             if (attempt >= maxPolls) {
-              setOutput(
-                "The submission is still running. Please try again in a moment."
-              );
+              setOutput([
+                "The submission is still running. Please try again in a moment.",
+              ]);
               setLoading(false);
               return;
             }
-            setOutput(
-              `Running... (${data.status && data.status.description ? data.status.description : "waiting"})`
-            );
+            setOutput([
+              `Running... (${data.status && data.status.description ? data.status.description : "waiting"})`,
+            ]);
             setTimeout(() => pollForResult(attempt + 1), pollInterval);
             return;
           }
