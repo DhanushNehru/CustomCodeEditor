@@ -6,8 +6,13 @@ import EditorComponent from "./pages/EditorComponent";
 import theme from "./theme";
 import SnackbarProvider from "./components/js/SnackbarProvider";
 import { AuthProvider } from "./context/AuthContext";
+
+
+
 function App() {
   return (
+
+ 
     <AuthProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
